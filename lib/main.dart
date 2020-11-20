@@ -1,5 +1,6 @@
 import 'package:dima_test/unity.dart';
 import 'package:flutter/material.dart';
+import 'downloader.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -32,10 +33,11 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: FlatButton(
             child: Text('Open Unity'),
-            onPressed: () {
+            onPressed: () async {
+              String path = await downloadFromURL('http://localhost:8080/capsule');
               Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => UnityScreen()));
+              MaterialPageRoute(builder: (context) => UnityScreen(bundlePath: path,)));
             },
           ),
         )

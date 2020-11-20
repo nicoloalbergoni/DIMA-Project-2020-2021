@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -35,6 +36,14 @@ public class ObjectSpawner : MonoBehaviour {
                 placementIndicator.transform.position, placementIndicator.transform.rotation);
 
         return obj;
+    }
+
+    public void SetupObject(string bundlePath) {
+        Debug.Log ("bundlePath:" + bundlePath);
+        AssetBundle assetBundle = AssetBundle.LoadFromFile(bundlePath);
+        Debug.Log ("bundle loaded correctly:" + (assetBundle != null));
+        objectToSpawn = assetBundle.LoadAsset<GameObject>("Capsule");
+        Debug.Log ("object loaded correctly:" + (objectToSpawn != null));
     }
 
 }

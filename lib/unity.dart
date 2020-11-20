@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 
 class UnityScreen extends StatefulWidget {
+  final String bundlePath;
   @override
   _UnityScreenState createState() => _UnityScreenState();
+
+  UnityScreen({Key key, @required this.bundlePath}) : super(key: key);
 }
 
 class _UnityScreenState extends State<UnityScreen> {
@@ -81,6 +84,15 @@ class _UnityScreenState extends State<UnityScreen> {
     );
   }
 
+  // Communication from Flutter to Unity
+  void setupModelBundle(String bundlePath) {
+    _unityWidgetController.postMessage(
+      'ObjectSpawner',
+      'SetupObject',
+      bundlePath,
+    );
+  }
+
   // Communication from Unity to Flutter
   void onUnityMessage(controller, message) {
     print('Received message from unity: ${message.toString()}');
@@ -89,6 +101,7 @@ class _UnityScreenState extends State<UnityScreen> {
   // Callback that connects the created controller to the unity controller
   void onUnityCreated(controller) {
     this._unityWidgetController = controller;
+    setupModelBundle(widget.bundlePath);
   }
 
   // Communication from Unity when new scene is loaded to Flutter
