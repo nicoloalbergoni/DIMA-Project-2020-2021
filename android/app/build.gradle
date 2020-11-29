@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.polimi.reliteye"
+        applicationId "com.polimi.realiteye"
         minSdkVersion 24
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
@@ -58,47 +58,7 @@ flutter {
     source '../..'
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 dependencies {
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
-    implementation project(':unityLibrary')
-
     implementation project(':unityLibrary')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

@@ -1,5 +1,6 @@
-name: dima_test
-description: A new Flutter application.
+name: realiteye
+description: E-commerce app with AR functionalities. Prototype realized for Polimi DIMA course
+  2020-2021
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -33,6 +34,10 @@ dependencies:
   flutter_downloader: ^1.5.2
   path_provider: ^1.6.24
   permission_handler: ^5.0.1+1
+
+  redux: ^4.0.0+3
+  flutter_redux: ^0.7.0
+  redux_thunk: ^0.3.0
 
 dev_dependencies:
   flutter_test:

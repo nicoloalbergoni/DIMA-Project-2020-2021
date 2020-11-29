@@ -1,7 +1,7 @@
-import 'package:dima_test/unity.dart';
+import 'package:realiteye/ui/screens/unity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'downloader.dart';
+import 'utils/downloader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

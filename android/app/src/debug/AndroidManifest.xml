@@ -1,12 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dima_test">
+    package="com.polimi.realiteye">
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- TODO: Remove android:usesCleartextTraffic="true" to force the app to use only HTTPS -->
-    <application
-
-        android:usesCleartextTraffic="true"
-        ></application>
+    <application android:usesCleartextTraffic="true"></application>
 </manifest>
