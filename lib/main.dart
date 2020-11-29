@@ -1,7 +1,11 @@
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:realiteye/redux/appState.dart';
+import 'package:realiteye/redux/reducers.dart';
+import 'package:realiteye/ui/screens/product.dart';
 import 'package:realiteye/ui/screens/unity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'utils/downloader.dart';
+import 'package:redux/redux.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,45 +13,32 @@ void main() async {
       debug: true // optional: set false to disable printing logs to console
   );
 
-  runApp(MaterialApp(
-    title: 'Navigation Basics',
-    home: MyApp(),
-  ));
+  // Initialize Redux state
+  final _initialState = AppState(cartItems: []);
+  final Store<AppState> _store =
+    Store<AppState>(appReducers, initialState: _initialState);
+
+  runApp(MyApp(store: _store));
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
+class MyApp extends StatelessWidget {
+  final Store<AppState> store;
 
-class _MyAppState extends State<MyApp> {
-  static final GlobalKey<ScaffoldState> _scaffoldKey =
-  GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  MyApp({this.store});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: const Text('Product info'),
-        ),
-        body: Center(
-          child: FlatButton(
-            child: Text('Open Unity'),
-            onPressed: () async {
-              String path = await downloadFromURL('http://192.168.1.5:8000/capsule');
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => UnityScreen(bundlePath: path,)));
-            },
-          ),
-        )
-      );
+    return StoreProvider<AppState>(
+      store: store,
+      child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/': (context) => ProductScreen(),
+          // TODO: modify this to get the correct bundlePath as extra
+          '/unity': (context) => UnityScreen(bundlePath: "TODO"),
+        },
+      ),
+    );
   }
 
 }
