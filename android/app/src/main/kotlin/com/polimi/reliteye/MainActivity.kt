@@ -1,4 +1,4 @@
-package com.example.dima_test
+package com.polimi.reliteye
 
 import io.flutter.embedding.android.FlutterActivity
 
