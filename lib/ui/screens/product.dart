@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/models/cartItem.dart';
@@ -6,7 +7,13 @@ import 'package:realiteye/redux/appState.dart';
 import 'package:realiteye/ui/screens/unity.dart';
 import 'package:realiteye/utils/downloader.dart';
 
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+
 class ProductScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +47,12 @@ class ProductScreen extends StatelessWidget {
                               .dispatch(AddItemAction(cartItem));
                         },
                       ),
-                      Text("Cart items count: ${state.cartItems.length}")
+                      Text("Cart items count: ${state.cartItems.length}"),
+                      FlatButton(onPressed: () {
+                        Navigator.pushNamed(context, "/login");
+                      },
+                          child: Text("Login Page")),
+                      _auth.currentUser == null ? Text("Current user is null") : Text("${_auth.currentUser}")
                     ],
                   ));
             })
