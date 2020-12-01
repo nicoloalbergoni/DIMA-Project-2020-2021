@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:realiteye/redux/appState.dart';
+import 'package:realiteye/redux/actions.dart';
+import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/redux/reducers.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
 import 'package:realiteye/ui/screens/product.dart';
@@ -16,7 +18,7 @@ void main() async {
   );
 
   // Initialize Redux state
-  final _initialState = AppState(cartItems: []);
+  final _initialState = AppState(cartItems: [], firebaseUser: null);
   final Store<AppState> _store =
   Store<AppState>(appReducers, initialState: _initialState);
 
@@ -44,6 +46,12 @@ class MyApp extends StatelessWidget {
         }
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
+          // insert user in state if already present
+          // TODO: login expires automatically?
+          if (FirebaseAuth.instance.currentUser != null) {
+            store.dispatch(ChangeFirebaseUserAction(FirebaseAuth.instance.currentUser));
+          }
+
           return StoreProvider<AppState>(
             store: store,
             child: MaterialApp(

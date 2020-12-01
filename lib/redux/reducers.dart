@@ -1,28 +1,26 @@
-import 'package:realiteye/redux/appState.dart';
+import 'package:realiteye/redux/app_state.dart';
 
 import 'actions.dart';
 import '../models/cartItem.dart';
 
 AppState appReducers(AppState state, dynamic action) {
   if (action is AddItemAction) {
-    return addItem(state.cartItems, action);
+    return addItem(state, action);
   }
-  else if (action is ToggleItemStateAction) {
-    return toggleItemState(state.cartItems, action);
+  else if (action is ChangeFirebaseUserAction) {
+    return changeFirebaseUser(state, action);
   }
 
   return state;
 }
 
-AppState addItem(List<CartItem> items, AddItemAction action) {
-  return AppState(
-      cartItems: List.from(items)..add(action.item)
+AppState addItem(AppState state, AddItemAction action) {
+  return state.copyWith(cartItems: <CartItem>[]
+    ..addAll(state.cartItems)
+    ..add(action.item)
   );
 }
 
-AppState toggleItemState(List<CartItem> items, ToggleItemStateAction action) {
-  return AppState(
-    cartItems: items.map((item) => item.name == action.item.name ?
-      action.item : item).toList()
-  ); // AppState
+AppState changeFirebaseUser(AppState state, ChangeFirebaseUserAction action) {
+  return state.copyWith(firebaseUser: action.firebaseUser);
 }

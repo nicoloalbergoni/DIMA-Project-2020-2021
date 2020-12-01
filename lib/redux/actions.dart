@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../models/cartItem.dart';
 
 class AddItemAction {
@@ -6,8 +8,8 @@ class AddItemAction {
   AddItemAction(this.item);
 }
 
-class ToggleItemStateAction {
-  final CartItem item;
+class ChangeFirebaseUserAction {
+  final User firebaseUser;
 
-  ToggleItemStateAction(this.item);
+  ChangeFirebaseUserAction(this.firebaseUser);
 }
