@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
-
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -19,8 +19,8 @@ class LoginWidget extends StatelessWidget {
           title: const Text('Product info'),
         ),
         body: StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (context, state) {
+            converter: (store) => store.state,
+            builder: (context, state) {
               return Center(
                 child: Column(
                   children: [
@@ -43,20 +43,29 @@ class LoginWidget extends StatelessWidget {
                       },
                       obscureText: true,
                     ),
-                    FlatButton(onPressed: () async {
-                      var user = await _signInWithEmailAndPassword(Scaffold.of(context));
-                      if(user != null) {
-                        StoreProvider.of<AppState>(context)
-                            .dispatch(ChangeFirebaseUserAction(user));
-                      }
-                    },
-                        child: Text("Sign In"))
+                    FlatButton(
+                        onPressed: () async {
+                          User user = await _signInWithEmailAndPassword(
+                              Scaffold.of(context));
+                          if (user != null) {
+                            StoreProvider.of<AppState>(context)
+                                .dispatch(ChangeFirebaseUserAction(user));
+                          }
+                        },
+                        child: Text("Sign In")),
+                    RaisedButton(
+                        onPressed: () async {
+                          User user = await _signInWithGoogle();
+                          if (user != null) {
+                            StoreProvider.of<AppState>(context)
+                                .dispatch(ChangeFirebaseUserAction(user));
+                          }
+                        },
+                        child: Text("Sign In with Google"))
                   ],
                 ),
               );
-          }
-        )
-    );
+            }));
   }
 
   // Example code of how to sign in with email and password.
@@ -65,15 +74,15 @@ class LoginWidget extends StatelessWidget {
       final User user = (await _auth.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
-      )).user;
+      ))
+          .user;
 
       scaffold.showSnackBar(SnackBar(
         content: Text("${user.email} signed in"),
       ));
 
       return user;
-    }
-    catch (e) {
+    } catch (e) {
       scaffold.showSnackBar(SnackBar(
         content: Text("Failed to sign in with Email & Password"),
       ));
@@ -82,5 +91,21 @@ class LoginWidget extends StatelessWidget {
     }
   }
 
-}
+  Future<User> _signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+  }
+}

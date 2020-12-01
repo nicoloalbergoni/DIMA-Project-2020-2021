@@ -9,9 +9,7 @@ import 'package:realiteye/utils/downloader.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
 class ProductScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,39 +21,44 @@ class ProductScreen extends StatelessWidget {
             builder: (context, state) {
               return Center(
                   child: Column(
-                    children: [
-                      FlatButton(
-                        child: Text('Open Unity'),
-                        onPressed: () async {
-                          String path = await downloadFromURL(
-                              'http://192.168.1.5:8000/capsule');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UnityScreen(bundlePath: path)
-                              )
-                          );
-                        },
-                      ),
-                      FlatButton(
-                        child: Text('Try redux state change'),
-                        onPressed: () {
-                          final cartItem = CartItem("a", true);
-                          StoreProvider.of<AppState>(context)
-                              .dispatch(AddItemAction(cartItem));
-                        },
-                      ),
-                      Text("Cart items count: ${state.cartItems.length}"),
-                      FlatButton(onPressed: () {
+                children: [
+                  FlatButton(
+                    child: Text('Open Unity'),
+                    onPressed: () async {
+                      String path = await downloadFromURL(
+                          'http://192.168.1.5:8000/capsule');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  UnityScreen(bundlePath: path)));
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Try redux state change'),
+                    onPressed: () {
+                      final cartItem = CartItem("a", true);
+                      StoreProvider.of<AppState>(context)
+                          .dispatch(AddItemAction(cartItem));
+                    },
+                  ),
+                  Text("Cart items count: ${state.cartItems.length}"),
+                  FlatButton(
+                      onPressed: () {
                         Navigator.pushNamed(context, "/login");
                       },
-                          child: Text("Login Page")
-                      ),
-
-                      state.firebaseUser == null ? Text("Current user is null") : Text("${state.firebaseUser}")
-                    ],
-                  ));
-            })
-    );
+                      child: Text("Login Page")),
+                  state.firebaseUser == null
+                      ? Text("Current user is null")
+                      : Text("${state.firebaseUser}"),
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/register");
+                    },
+                    child: Text("Sign Up"),
+                  )
+                ],
+              ));
+            }));
   }
 }
