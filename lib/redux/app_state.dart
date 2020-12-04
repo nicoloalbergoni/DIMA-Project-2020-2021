@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class AppState {
   final User firebaseUser;
   final List<CartItem> cartItems;
+
   AppState(
       {@required this.cartItems, this.firebaseUser});
 

@@ -6,6 +6,9 @@ import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/ui/screens/unity.dart';
 import 'package:realiteye/utils/downloader.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../../generated/locale_keys.g.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -14,7 +17,7 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Product info'),
+          title: Text(LocaleKeys.title.tr()),
         ),
         body: StoreConnector<AppState, AppState>(
             converter: (store) => store.state,
@@ -56,6 +59,14 @@ class ProductScreen extends StatelessWidget {
                       Navigator.pushNamed(context, "/register");
                     },
                     child: Text("Sign Up"),
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      print(context.locale.countryCode);
+                      context.locale = context.locale == Locale('en', 'US') ? Locale('it', 'IT') : Locale('en', 'US');
+                      print(context.locale.countryCode);
+                    },
+                    child: Text('Change language'),
                   )
                 ],
               ));

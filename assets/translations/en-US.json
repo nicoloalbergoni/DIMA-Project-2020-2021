@@ -1,0 +1,7 @@
+{
+  "title": "Hello",
+  "msg": "Hello {} in the {} world ",
+  "msg_named": "{} are written in the {lang} language",
+  "loading": "Loading...",
+  "error": "Something went wrong"
+}

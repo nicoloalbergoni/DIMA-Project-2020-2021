@@ -12,6 +12,10 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:redux/redux.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:redux_logging/redux_logging.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+
+
+import 'generated/locale_keys.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +29,14 @@ void main() async {
       initialState: _initialState,
       middleware: [new LoggingMiddleware.printer()]);
 
-  runApp(MyApp(store: _store));
+  runApp(
+    EasyLocalization(
+        supportedLocales: [Locale('en', 'US'), Locale('it', 'IT')],
+        path: 'assets/translations',
+        fallbackLocale: Locale('en', 'US'),
+        saveLocale: true,
+        child: MyApp(store: _store)),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,7 +53,8 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         // Check for errors
         if (snapshot.hasError) {
-          return Text("Something went wrong", textDirection: TextDirection.ltr);
+          // TODO: Change TextDirection based on current locale language
+          return Text(LocaleKeys.error.tr(), textDirection: TextDirection.ltr);
         }
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
@@ -56,6 +68,9 @@ class MyApp extends StatelessWidget {
           return StoreProvider<AppState>(
             store: store,
             child: MaterialApp(
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
               initialRoute: '/',
               routes: {
                 '/': (context) => ProductScreen(),
@@ -68,11 +83,8 @@ class MyApp extends StatelessWidget {
           );
         }
         // Otherwise, show something whilst waiting for initialization to complete
-        return Text(
-          "Loading...",
-          textDirection: TextDirection.ltr,
-        );
-      },
+        return Text(LocaleKeys.loading.tr(), textDirection: TextDirection.ltr);
+  },
     );
   }
 }

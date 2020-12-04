@@ -1,0 +1,7 @@
+{
+  "title": "Wewe",
+  "msg": "Ciao {} ",
+  "msg_named": "{} è scritto in {lang}",
+  "loading": "Caricamento...",
+  "error": "Qualcosa è andato storto"
+}
