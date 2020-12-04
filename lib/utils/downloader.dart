@@ -4,11 +4,9 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-  return directory.path;
-}
+final firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
 
 Future<String> _findLocalPath() async {
   final directory = await getExternalStorageDirectory();
@@ -28,9 +26,13 @@ Future<bool> _checkPermission() async {
   return false;
 }
 
-Future<String> downloadFromURL(String url) async {
+Future<String> downloadUnityBundle(String productID) async {
+  //TODO: Check permissions
   bool _permissionReady = await _checkPermission();
-  //final savePath = p.join(await _localPath, 'myBundle');
+
+  //TODO: Check status of the call
+  String downloadURL = await storage.ref('AssetBundles/'+ productID).getDownloadURL();
+
   final pathToSave =
       (await _findLocalPath()) + Platform.pathSeparator + 'Download';
 
@@ -40,14 +42,13 @@ Future<String> downloadFromURL(String url) async {
     savedDir.create();
   }
 
-  final savePath = p.join(pathToSave, 'capsule');
-  final taskId = await FlutterDownloader.enqueue(
-    url: url,
+  final savePath = p.join(pathToSave, productID);
+  await FlutterDownloader.enqueue(
+    fileName: productID,
+    url: downloadURL,
     savedDir: pathToSave,
-    showNotification: true,
-    // show download progress in status bar (for Android)
-    openFileFromNotification:
-        false, // click on notification to open downloaded file (for Android)
+    showNotification: true, // TODO: Set to false in production
+    openFileFromNotification: false
   );
 
   return savePath;

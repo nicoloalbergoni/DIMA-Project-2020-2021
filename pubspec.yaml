@@ -39,6 +39,7 @@ dependencies:
   redux_thunk: ^0.3.0
   firebase_core: ^0.5.2+1
   firebase_auth: ^0.18.3+1
+  firebase_storage: ^5.2.0
   google_sign_in: ^4.5.1
   easy_localization: ^2.3.3
 

@@ -28,8 +28,7 @@ class ProductScreen extends StatelessWidget {
                   FlatButton(
                     child: Text('Open Unity'),
                     onPressed: () async {
-                      String path = await downloadFromURL(
-                          'http://192.168.1.5:8000/capsule');
+                      String path = await downloadUnityBundle('capsule');
                       Navigator.push(
                           context,
                           MaterialPageRoute(
