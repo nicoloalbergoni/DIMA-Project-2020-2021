@@ -11,8 +11,7 @@ class RegistrationWidget extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-  TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
