@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
+import 'package:realiteye/utils/data_service.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -55,7 +56,8 @@ class LoginWidget extends StatelessWidget {
                         child: Text("Sign In")),
                     RaisedButton(
                         onPressed: () async {
-                          User user = await _signInWithGoogle();
+                          User user =
+                              await _signInWithGoogle(Scaffold.of(context));
                           if (user != null) {
                             StoreProvider.of<AppState>(context)
                                 .dispatch(ChangeFirebaseUserAction(user));
@@ -91,21 +93,52 @@ class LoginWidget extends StatelessWidget {
     }
   }
 
-  Future<User> _signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+  Future<User> _signInWithGoogle(scaffold) async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-    // Create a new credential
-    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+      // Create a new credential
+      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-    // Once signed in, return the UserCredential
-    return (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+      User user =
+          (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+
+      List<String> displayNameSplit = user.displayName.split(" ");
+
+      Map<String, dynamic> userData = {
+        'firstname': displayNameSplit[0],
+        'lastname': displayNameSplit[1],
+        'email': user.email,
+        'photoURL': user.photoURL
+      };
+
+      addUser(user, userData);
+
+      scaffold.showSnackBar(SnackBar(
+        content: Text("${user.displayName} Logged in"),
+      ));
+
+      return user;
+    } on FirebaseAuthException catch (e) {
+      print("Error code: ${e.code}");
+      scaffold.showSnackBar(SnackBar(
+        content: Text("Error during authentication"),
+      ));
+      return null;
+    } catch (e) {
+      print(e);
+      scaffold.showSnackBar(SnackBar(
+        content: Text("Error"),
+      ));
+      return null;
+    }
   }
 }

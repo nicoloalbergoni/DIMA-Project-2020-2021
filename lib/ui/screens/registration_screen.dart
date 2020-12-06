@@ -1,17 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
+import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
+final CollectionReference users = FirebaseFirestore.instance.collection('users');
 
+// TODO: Check if i need to convert this into a stateful widget
+// https://stackoverflow.com/questions/51980118/using-textformfield-in-stateless-widget-is-very-difficult-in-flutter
 class RegistrationWidget extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  // TODO: Dispose TextEditingControllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +45,7 @@ class RegistrationWidget extends StatelessWidget {
                           TextFormField(
                             controller: _emailController,
                             decoration:
-                            const InputDecoration(labelText: 'Email'),
+                                const InputDecoration(labelText: 'Email'),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -44,9 +56,31 @@ class RegistrationWidget extends StatelessWidget {
                             },
                           ),
                           TextFormField(
+                            controller: _firstNameController,
+                            decoration:
+                            const InputDecoration(labelText: 'First Name'),
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: _lastNameController,
+                            decoration:
+                            const InputDecoration(labelText: 'Last Name'),
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
                             controller: _passwordController,
                             decoration:
-                            const InputDecoration(labelText: 'Password'),
+                                const InputDecoration(labelText: 'Password'),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -76,12 +110,12 @@ class RegistrationWidget extends StatelessWidget {
                             child: RaisedButton(
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  User user = await _register(
-                                      Scaffold.of(context));
+                                  User user =
+                                      await _register(Scaffold.of(context));
                                   if (user != null) {
                                     StoreProvider.of<AppState>(context)
                                         .dispatch(
-                                        ChangeFirebaseUserAction(user));
+                                            ChangeFirebaseUserAction(user));
                                   }
                                 }
                               },
@@ -97,6 +131,7 @@ class RegistrationWidget extends StatelessWidget {
         ));
   }
 
+  // TODO: Check if passing scaffold is a good practice
   Future<User> _register(scaffold) async {
     try {
       final User user = (await _auth.createUserWithEmailAndPassword(
@@ -105,6 +140,14 @@ class RegistrationWidget extends StatelessWidget {
       ))
           .user;
 
+      Map<String, dynamic> _userData = {
+        'firstname': _firstNameController.text,
+        'lastname': _lastNameController.text,
+        'email': user.email,
+      };
+
+      addUser(user, _userData);
+
       scaffold.showSnackBar(SnackBar(
         content: Text("${user.email} registered"),
       ));
@@ -112,16 +155,16 @@ class RegistrationWidget extends StatelessWidget {
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        print(e.code + ': The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        print(e.code + ': The account already exists for that email.');
       }
       return null;
     } catch (e) {
+      print(e);
       scaffold.showSnackBar(SnackBar(
-        content: Text("Failed to register with Email & Password"),
+        content: Text("Failed to register"),
       ));
-
       return null;
     }
   }
