@@ -71,6 +71,22 @@ class MyApp extends StatelessWidget {
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
               locale: context.locale,
+              theme: ThemeData(
+                brightness: Brightness.light,
+                /* light theme settings */
+                colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
+                primaryColor: Colors.teal[700],
+                accentColor: Colors.tealAccent[400]
+              ),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                /* dark theme settings */
+              ),
+              themeMode: ThemeMode.light,
+              /* ThemeMode.system to follow system theme,
+               ThemeMode.light for light theme,
+               ThemeMode.dark for dark theme
+              */
               initialRoute: '/',
               routes: {
                 '/': (context) => ProductScreen(),
