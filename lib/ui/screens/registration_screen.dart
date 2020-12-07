@@ -8,14 +8,16 @@ import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final CollectionReference users = FirebaseFirestore.instance.collection('users');
+final CollectionReference users =
+    FirebaseFirestore.instance.collection('users');
 
-// TODO: Check if i need to convert this into a stateful widget
-// https://stackoverflow.com/questions/51980118/using-textformfield-in-stateless-widget-is-very-difficult-in-flutter
-class RegistrationWidget extends StatelessWidget {
+class RegistrationWidget extends StatefulWidget {
+  @override
+  _RegistrationWidgetState createState() => _RegistrationWidgetState();
+}
+
+class _RegistrationWidgetState extends State<RegistrationWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  // TODO: Dispose TextEditingControllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -24,6 +26,15 @@ class RegistrationWidget extends StatelessWidget {
   final TextEditingController _lastNameController = TextEditingController();
 
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +69,7 @@ class RegistrationWidget extends StatelessWidget {
                           TextFormField(
                             controller: _firstNameController,
                             decoration:
-                            const InputDecoration(labelText: 'First Name'),
+                                const InputDecoration(labelText: 'First Name'),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -69,7 +80,7 @@ class RegistrationWidget extends StatelessWidget {
                           TextFormField(
                             controller: _lastNameController,
                             decoration:
-                            const InputDecoration(labelText: 'Last Name'),
+                                const InputDecoration(labelText: 'Last Name'),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -130,6 +141,7 @@ class RegistrationWidget extends StatelessWidget {
           },
         ));
   }
+
 
   // TODO: Check if passing scaffold is a good practice
   Future<User> _register(scaffold) async {

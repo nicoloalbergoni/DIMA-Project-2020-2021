@@ -8,69 +8,91 @@ import 'package:realiteye/utils/data_service.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-class LoginWidget extends StatelessWidget {
+class LoginWidget extends StatefulWidget {
+  @override
+  _LoginWidgetState createState() => _LoginWidgetState();
+}
+
+class _LoginWidgetState extends State<LoginWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Product info'),
-        ),
-        body: StoreConnector<AppState, AppState>(
-            converter: (store) => store.state,
-            builder: (context, state) {
-              return Center(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _emailController,
-                      //initialValue: "pippo@paperino.com",
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      validator: (String value) {
-                        if (value.isEmpty) return 'Please enter some text';
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _passwordController,
-                      //initialValue: "12345",
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      validator: (String value) {
-                        if (value.isEmpty) return 'Please enter some text';
-                        return null;
-                      },
-                      obscureText: true,
-                    ),
-                    FlatButton(
-                        onPressed: () async {
-                          User user = await _signInWithEmailAndPassword(
-                              Scaffold.of(context));
-                          if (user != null) {
-                            StoreProvider.of<AppState>(context)
-                                .dispatch(ChangeFirebaseUserAction(user));
-                          }
+      appBar: AppBar(title: Text("Login page")),
+      body: StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          return Center(
+            child: Form(
+              key: _formKey,
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        validator: (String value) {
+                          if (value.isEmpty) return 'Please enter some text';
+                          return null;
                         },
-                        child: Text("Sign In")),
-                    RaisedButton(
-                        onPressed: () async {
-                          User user =
-                              await _signInWithGoogle(Scaffold.of(context));
-                          if (user != null) {
-                            StoreProvider.of<AppState>(context)
-                                .dispatch(ChangeFirebaseUserAction(user));
-                          }
+                      ),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration:
+                            const InputDecoration(labelText: 'Password'),
+                        validator: (String value) {
+                          if (value.isEmpty) return 'Please enter some text';
+                          return null;
                         },
-                        child: Text("Sign In with Google"))
-                  ],
+                        obscureText: true,
+                      ),
+                      RaisedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              User user = await _signInWithEmailAndPassword(
+                                  Scaffold.of(context));
+                              if (user != null) {
+                                StoreProvider.of<AppState>(context)
+                                    .dispatch(ChangeFirebaseUserAction(user));
+                              }
+                            }
+                          },
+                          child: Text("Sign In")),
+                      RaisedButton(
+                          onPressed: () async {
+                            User user =
+                                await _signInWithGoogle(Scaffold.of(context));
+                            if (user != null) {
+                              StoreProvider.of<AppState>(context)
+                                  .dispatch(ChangeFirebaseUserAction(user));
+                            }
+                          },
+                          child: Text("Sign In with Google"))
+                    ],
+                  ),
                 ),
-              );
-            }));
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
-  // Example code of how to sign in with email and password.
   Future<User> _signInWithEmailAndPassword(scaffold) async {
     try {
       final User user = (await _auth.signInWithEmailAndPassword(
@@ -100,7 +122,7 @@ class LoginWidget extends StatelessWidget {
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await googleUser.authentication;
 
       // Create a new credential
       final GoogleAuthCredential credential = GoogleAuthProvider.credential(
