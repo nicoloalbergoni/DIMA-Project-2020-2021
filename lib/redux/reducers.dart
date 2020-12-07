@@ -10,6 +10,9 @@ AppState appReducers(AppState state, dynamic action) {
   else if (action is ChangeFirebaseUserAction) {
     return changeFirebaseUser(state, action);
   }
+  else if (action is SwitchThemeAction) {
+    return switchTheme(state, action);
+  }
 
   return state;
 }
@@ -23,4 +26,8 @@ AppState addItem(AppState state, AddItemAction action) {
 
 AppState changeFirebaseUser(AppState state, ChangeFirebaseUserAction action) {
   return state.copyWith(firebaseUser: action.firebaseUser);
+}
+
+AppState switchTheme(AppState state, SwitchThemeAction action) {
+  return state.copyWith(theme: action.theme);
 }

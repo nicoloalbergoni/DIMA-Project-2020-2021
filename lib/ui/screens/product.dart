@@ -69,6 +69,17 @@ class ProductScreen extends StatelessWidget {
                     },
                     child: Text('Change language'),
                   ),
+                  RaisedButton(
+                    onPressed: () {
+                      var theme = (state.theme == ThemeMode.light) ?
+                        ThemeMode.dark : ThemeMode.light;
+
+                      StoreProvider.of<AppState>(context)
+                        .dispatch(SwitchThemeAction(theme));
+                    },
+                    child: Text('Switch theme'),
+                  ),
+                  Text('${state.theme}'),
                   StreamBuilder<QuerySnapshot>(
                     stream: getUsers(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

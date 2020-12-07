@@ -24,7 +24,8 @@ void main() async {
       );
 
   // Initialize Redux state
-  final _initialState = AppState(cartItems: [], firebaseUser: null);
+  final _initialState = AppState(cartItems: [], firebaseUser: null,
+    theme: ThemeMode.light);
   final Store<AppState> _store = Store<AppState>(appReducers,
       initialState: _initialState,
       middleware: [new LoggingMiddleware.printer()]);
@@ -67,36 +68,40 @@ class MyApp extends StatelessWidget {
 
           return StoreProvider<AppState>(
             store: store,
-            child: MaterialApp(
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              theme: ThemeData(
-                brightness: Brightness.light,
-                /* light theme settings */
-                colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
-                primaryColor: Colors.teal[700],
-                accentColor: Colors.tealAccent[400]
-              ),
-              darkTheme: ThemeData(
-                brightness: Brightness.dark,
-                /* dark theme settings */
-              ),
-              themeMode: ThemeMode.light,
-              /* ThemeMode.system to follow system theme,
-               ThemeMode.light for light theme,
-               ThemeMode.dark for dark theme
-              */
-              initialRoute: '/',
-              routes: {
-                '/': (context) => ProductScreen(),
-                '/login': (context) => LoginWidget(),
-                '/register': (context) => RegistrationWidget(),
-                // TODO: modify this to get the correct bundlePath as extra
-                '/unity': (context) => UnityScreen(bundlePath: "TODO"),
-              },
-            ),
-          );
+            child: StoreConnector<AppState, AppState>(
+                converter: (store) => store.state,
+                builder: (context, state) {
+                  return MaterialApp(
+                    localizationsDelegates: context.localizationDelegates,
+                    supportedLocales: context.supportedLocales,
+                    locale: context.locale,
+                    theme: ThemeData(
+                        brightness: Brightness.light,
+                        /* light theme settings */
+                        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
+                        primaryColor: Colors.teal[700],
+                        accentColor: Colors.tealAccent[400]
+                    ),
+                    darkTheme: ThemeData(
+                      brightness: Brightness.dark,
+                      /* dark theme settings */
+                    ),
+                    themeMode: state.theme,
+                    /* ThemeMode.system to follow system theme,
+                     ThemeMode.light for light theme,
+                     ThemeMode.dark for dark theme
+                    */
+                    initialRoute: '/',
+                    routes: {
+                      '/': (context) => ProductScreen(),
+                      '/login': (context) => LoginWidget(),
+                      '/register': (context) => RegistrationWidget(),
+                      // TODO: modify this to get the correct bundlePath as extra
+                      '/unity': (context) => UnityScreen(bundlePath: "TODO"),
+                    },
+                  );
+                })
+            );
         }
         // Otherwise, show something whilst waiting for initialization to complete
         return Text(LocaleKeys.loading.tr(), textDirection: TextDirection.ltr);
