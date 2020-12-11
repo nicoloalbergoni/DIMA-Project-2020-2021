@@ -40,9 +40,8 @@ class _RegistrationWidgetState extends State<RegistrationWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Registration page")),
-        body: StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (context, state) {
+        body: Builder (
+          builder: (context) {
             return Center(
               child: Form(
                   key: _formKey,

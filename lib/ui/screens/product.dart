@@ -64,43 +64,57 @@ class ProductScreen extends StatelessWidget {
                   RaisedButton(
                     onPressed: () {
                       print(context.locale.countryCode);
-                      context.locale = context.locale == Locale('en', 'US') ? Locale('it', 'IT') : Locale('en', 'US');
+                      context.locale = context.locale == Locale('en', 'US')
+                          ? Locale('it', 'IT')
+                          : Locale('en', 'US');
                       print(context.locale.countryCode);
                     },
                     child: Text('Change language'),
                   ),
                   RaisedButton(
                     onPressed: () {
-                      var theme = (state.theme == ThemeMode.light) ?
-                        ThemeMode.dark : ThemeMode.light;
+                      var theme = (state.theme == ThemeMode.light)
+                          ? ThemeMode.dark
+                          : ThemeMode.light;
 
                       StoreProvider.of<AppState>(context)
-                        .dispatch(SwitchThemeAction(theme));
+                          .dispatch(SwitchThemeAction(theme));
                     },
                     child: Text('Switch theme'),
                   ),
                   Text('${state.theme}'),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: getUsers(),
-                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Something went wrong');
-                      }
+                  Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: getUsers(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('Something went wrong');
+                            }
 
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Text("Loading");
-                      }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Text("Loading");
+                            }
 
-                      return new Column(
-                        children: snapshot.data.docs.map((DocumentSnapshot document) {
-                          return new ListTile(
-                            title: new Text("${document.data()['firstname']} ${document.data()['lastname']}"),
-                            subtitle: new Text(document.data().toString()),
-                          );
-                        }).toList(),
-                      );
-                    }
-                  )
+                            return new ListView.separated(
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.all(8),
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                var document = snapshot.data.docs[index];
+                                return new ListTile(
+                                  title: new Text(
+                                      "${document.data()['firstname']} ${document.data()['lastname']}"),
+                                  subtitle:
+                                      new Text(document.data().toString()),
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const Divider(),
+                            );
+                          })),
                 ],
               ));
             }));

@@ -29,67 +29,66 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login page")),
-      body: StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (context, state) {
-          return Center(
-            child: Form(
-              key: _formKey,
-              child: Card(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(labelText: 'Email'),
-                        validator: (String value) {
-                          if (value.isEmpty) return 'Please enter some text';
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        decoration:
-                            const InputDecoration(labelText: 'Password'),
-                        validator: (String value) {
-                          if (value.isEmpty) return 'Please enter some text';
-                          return null;
-                        },
-                        obscureText: true,
-                      ),
-                      RaisedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              User user = await _signInWithEmailAndPassword(
-                                  Scaffold.of(context));
+        appBar: AppBar(title: Text("Login page")),
+        body: Builder(
+          builder: (context) {
+            return Center(
+              child: Form(
+                key: _formKey,
+                child: Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(labelText: 'Email'),
+                          validator: (String value) {
+                            if (value.isEmpty) return 'Please enter some text';
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration:
+                          const InputDecoration(labelText: 'Password'),
+                          validator: (String value) {
+                            if (value.isEmpty) return 'Please enter some text';
+                            return null;
+                          },
+                          obscureText: true,
+                        ),
+                        RaisedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                User user = await _signInWithEmailAndPassword(
+                                    Scaffold.of(context));
+                                if (user != null) {
+                                  StoreProvider.of<AppState>(context)
+                                      .dispatch(ChangeFirebaseUserAction(user));
+                                }
+                              }
+                            },
+                            child: Text("Sign In")),
+                        RaisedButton(
+                            onPressed: () async {
+                              User user =
+                              await _signInWithGoogle(Scaffold.of(context));
                               if (user != null) {
                                 StoreProvider.of<AppState>(context)
                                     .dispatch(ChangeFirebaseUserAction(user));
                               }
-                            }
-                          },
-                          child: Text("Sign In")),
-                      RaisedButton(
-                          onPressed: () async {
-                            User user =
-                                await _signInWithGoogle(Scaffold.of(context));
-                            if (user != null) {
-                              StoreProvider.of<AppState>(context)
-                                  .dispatch(ChangeFirebaseUserAction(user));
-                            }
-                          },
-                          child: Text("Sign In with Google"))
-                    ],
+                            },
+                            child: Text("Sign In with Google"))
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
-      ),
+            );
+          }
+        )
     );
   }
 
