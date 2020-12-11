@@ -41,7 +41,7 @@ class ProductScreen extends StatelessWidget {
                   FlatButton(
                     child: Text('Try redux state change'),
                     onPressed: () {
-                      final cartItem = CartItem("a", true);
+                      final cartItem = CartItem(null, 5);
                       StoreProvider.of<AppState>(context)
                           .dispatch(AddItemAction(cartItem));
                     },

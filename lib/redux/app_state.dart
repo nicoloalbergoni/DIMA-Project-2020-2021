@@ -7,14 +7,20 @@ class AppState {
   final List<CartItem> cartItems;
   final ThemeMode theme;
 
-  AppState(
-      {@required this.cartItems, this.firebaseUser, this.theme});
+  final bool isFetching;
+  final Exception error;
 
-  AppState copyWith({User firebaseUser, List<CartItem> cartItems, ThemeMode theme}) {
+  AppState({this.cartItems, this.firebaseUser, this.theme,
+        this.isFetching = false, this.error});
+
+  AppState copyWith({User firebaseUser, List<CartItem> cartItems, ThemeMode theme,
+                    bool isFetching, Exception error}) {
     return new AppState(
         firebaseUser: firebaseUser ?? this.firebaseUser,
         cartItems: cartItems ?? this.cartItems,
-        theme: theme ?? this.theme
+        theme: theme ?? this.theme,
+        isFetching: isFetching ?? this.isFetching,
+        error: error ?? this.error
     );
   }
 }

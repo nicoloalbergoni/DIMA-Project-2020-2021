@@ -13,6 +13,18 @@ AppState appReducers(AppState state, dynamic action) {
   else if (action is SwitchThemeAction) {
     return switchTheme(state, action);
   }
+  else if (action is FetchCartAction) {
+    return onCartFetchStart(state, action);
+  }
+  else if (action is FetchCartSucceededAction) {
+    return fetchCartSucceeded(state, action);
+  }
+  else if (action is FetchCartFailedAction) {
+    return fetchCartFailed(state, action);
+  }
+  else {
+    print('Invalid redux action, check reducer');
+  }
 
   return state;
 }
@@ -30,4 +42,16 @@ AppState changeFirebaseUser(AppState state, ChangeFirebaseUserAction action) {
 
 AppState switchTheme(AppState state, SwitchThemeAction action) {
   return state.copyWith(theme: action.theme);
+}
+
+AppState onCartFetchStart(AppState state, FetchCartAction action) {
+  return state.copyWith(isFetching: true, error: null);
+}
+
+AppState fetchCartSucceeded(AppState state, FetchCartSucceededAction action) {
+  return state.copyWith(cartItems: action.fetchedCartItems, isFetching: false);
+}
+
+AppState fetchCartFailed(AppState state, FetchCartFailedAction action) {
+  return state.copyWith(error: action.error, isFetching: false);
 }
