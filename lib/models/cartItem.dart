@@ -1,6 +1,8 @@
-class CartItem {
-  String name;
-  bool checked;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  CartItem(this.name, this.checked);
+class CartItem {
+  DocumentReference productId;
+  int quantity;
+
+  CartItem(this.productId, this.quantity);
 }

@@ -20,3 +20,17 @@ class SwitchThemeAction {
 
   SwitchThemeAction(this.theme);
 }
+
+class FetchCartAction {}
+
+class FetchCartSucceededAction {
+  final List<CartItem> fetchedCartItems;
+
+  FetchCartSucceededAction(this.fetchedCartItems);
+}
+
+class FetchCartFailedAction {
+  final Exception error;
+
+  FetchCartFailedAction(this.error);
+}

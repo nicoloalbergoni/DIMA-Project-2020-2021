@@ -11,6 +11,11 @@ Stream<QuerySnapshot> getUsers() {
   return users.snapshots();
 }
 
+Future<QuerySnapshot> getUserCart(String uid) async {
+  DocumentSnapshot user = await users.doc(uid).get();
+  return user.reference.collection('cart').get();
+}
+
 // Add a user to the users Firestore collection
 void addUser(User user, Map<String, dynamic> userData) async {
   if (user != null && userData != null) {

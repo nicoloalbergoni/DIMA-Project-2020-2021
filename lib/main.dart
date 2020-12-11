@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
+import 'package:realiteye/redux/middlewares.dart';
 import 'package:realiteye/redux/reducers.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
 import 'package:realiteye/ui/screens/product.dart';
@@ -28,7 +29,7 @@ void main() async {
     theme: ThemeMode.light);
   final Store<AppState> _store = Store<AppState>(appReducers,
       initialState: _initialState,
-      middleware: [new LoggingMiddleware.printer()]);
+      middleware: [fetchCartMiddleware, new LoggingMiddleware.printer()]);
 
   runApp(
     EasyLocalization(
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
           if (FirebaseAuth.instance.currentUser != null) {
             store.dispatch(
                 ChangeFirebaseUserAction(FirebaseAuth.instance.currentUser));
+            store.dispatch(FetchCartAction());
           }
 
           return StoreProvider<AppState>(
