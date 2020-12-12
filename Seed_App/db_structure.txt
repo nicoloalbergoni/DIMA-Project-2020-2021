@@ -1,0 +1,47 @@
++ users
+    -> user[fire_id]:
+        - firstname
+        - lastname
+        - email
+        - photoURL
+        - addresses: [
+            - state
+            - city
+            - street
+            - ZIP code
+            ]
+        - payment_methods: [
+            - CC_number
+            - CC_expiry_date
+            ]
+        + cart
+            -> cartItem[a_id]:
+                * product_id
+                - quantity
+        + orders
+            -> order[a_id]:
+                - issue_date
+                - delivery_date
+                - in_progress
+                - total_cost
+                + orderItems
+                    -> orderItem[a_id]:
+                        * product_id
+                        - quantity
+                        - item_cost
+
++ products
+    -> product[a_id]:
+        - name
+        - price
+        - discount // % di sconto
+        - description
+        - rating
+        - categories // array di tags
+
++ reviews
+    -> review[a_id]:
+        - comment
+        - rating
+        * product_id
+        * user_id
