@@ -1,5 +1,5 @@
-import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
+import "package:flutter/material.dart";
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:realiteye/redux/actions.dart';
@@ -29,7 +29,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Login page")),
+        appBar: AppBar(title: Text('Login page')),
         body: Builder(
           builder: (context) {
             return Center(
@@ -88,7 +88,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
             );
           }
-        )
+        ),
     );
   }
 
