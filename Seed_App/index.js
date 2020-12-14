@@ -6,12 +6,13 @@ admin.initializeApp({
   databaseURL: "https://dima-project-polimi.firebaseio.com"
 });
 
-let { seedProducts, seedUsers } = require("./src/seedFunctions");
+let { seedProducts, seedUsers, seedReviews } = require("./src/seedFunctions");
 
 async function main() {
   console.log("Starting DB seeding...");
-  await seedProducts(15);
-  await seedUsers(15);
+  await seedProducts(30);
+  await seedUsers();
+  await seedReviews(50); // This function can lead to multiple reviews from the same user on the same product
   console.log("Finished DB seeding");
 }
 

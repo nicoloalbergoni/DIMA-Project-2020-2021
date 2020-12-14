@@ -1,4 +1,5 @@
 var admin = require("firebase-admin");
+const path = require("path");
 const auth = admin.auth();
 const FileSystem = require("fs");
 
@@ -23,7 +24,7 @@ function createUserRegistrationPromise(userAuthData, outputData) {
   });  
 }
 
-function registerUsers(number) {
+exports.registerUsers = function (number) {
 
   var outputData = {};
   var promises = [];
@@ -47,16 +48,34 @@ function registerUsers(number) {
 }
 
 exports.deleteCollection = async function (collectionRef) {
-  console.log("Starting seed of products collection...");
 
   let snapshot = await collectionRef.get();
   snapshot.forEach(async (element) => {
     await element.ref.delete();
   });
 
-  console.log("Deleted all products");
+  console.log(`Deleted documents in ${collectionRef.id} collection`);
 }
 
-exports.loadJson = function (path) {
-  return obj = JSON.parse(FileSystem.readFileSync(path, 'utf8'));
+exports.loadJson = function (fileName) {
+  let fullPath = path.join(__dirname, '..', fileName);
+  let rawdata = FileSystem.readFileSync(fullPath);
+  return JSON.parse(rawdata);
 }
+
+exports.getAllDocumentReferences = async function(collectionRef) {
+  let referenceList = [];
+  let snapshot = await collectionRef.get();
+  snapshot.forEach(async (element) => {
+    referenceList.push(element);
+  });
+
+  return referenceList;
+}
+
+exports.generateRandomDate = function (start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+
+
