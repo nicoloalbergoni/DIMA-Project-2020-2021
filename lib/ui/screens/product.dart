@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -62,13 +61,11 @@ class ProductScreen extends StatelessWidget {
                     },
                     child: Text("Sign Up"),
                   ),
-                  RaisedButton(
+                  /*RaisedButton(
                     onPressed: () {
-                      print(context.locale.countryCode);
                       context.locale = context.locale == Locale('en', 'US')
                           ? Locale('it', 'IT')
                           : Locale('en', 'US');
-                      print(context.locale.countryCode);
                     },
                     child: Text('Change language'),
                   ),
@@ -82,7 +79,7 @@ class ProductScreen extends StatelessWidget {
                           .dispatch(SwitchThemeAction(theme));
                     },
                     child: Text('Switch theme'),
-                  ),
+                  ),*/
                   Text('${state.theme}'),
                   Expanded(
                       child: StreamBuilder<QuerySnapshot>(
