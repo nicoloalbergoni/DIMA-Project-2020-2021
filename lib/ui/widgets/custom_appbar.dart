@@ -14,12 +14,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Text(title.tr()),
         leading: Builder(
           builder: (context) {
-            return (Navigator.canPop(context)) ?
-            IconButton(icon: Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context))
-                : IconButton(
+            print("Current route:" + ModalRoute.of(context).settings.name);
+            return (ModalRoute.of(context).settings.name == Navigator.defaultRouteName) ?
+            IconButton(
                 icon: new Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer());
+                onPressed: () => Scaffold.of(context).openDrawer())
+            : IconButton(icon: Icon(Icons.arrow_back),
+                onPressed: () => Navigator.pop(context));
           },
         )
     );
