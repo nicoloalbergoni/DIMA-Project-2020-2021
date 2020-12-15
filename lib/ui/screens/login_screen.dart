@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/utils/data_service.dart';
+import 'package:realiteye/utils/utils.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -63,7 +64,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 User user = await _signInWithEmailAndPassword(
-                                    Scaffold.of(context));
+                                    context);
                                 if (user != null) {
                                   StoreProvider.of<AppState>(context)
                                       .dispatch(ChangeFirebaseUserAction(user));
@@ -74,7 +75,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         RaisedButton(
                             onPressed: () async {
                               User user =
-                              await _signInWithGoogle(Scaffold.of(context));
+                              await _signInWithGoogle(context);
                               if (user != null) {
                                 StoreProvider.of<AppState>(context)
                                     .dispatch(ChangeFirebaseUserAction(user));
@@ -92,7 +93,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Future<User> _signInWithEmailAndPassword(scaffold) async {
+  Future<User> _signInWithEmailAndPassword(BuildContext context) async {
     try {
       final User user = (await _auth.signInWithEmailAndPassword(
         email: _emailController.text,
@@ -100,15 +101,11 @@ class _LoginWidgetState extends State<LoginWidget> {
       ))
           .user;
 
-      scaffold.showSnackBar(SnackBar(
-        content: Text("${user.email} signed in"),
-      ));
+      displaySnackbarWithText(context, "${user.email} signed in");
 
       return user;
     } catch (e) {
-      scaffold.showSnackBar(SnackBar(
-        content: Text("Failed to sign in with Email & Password"),
-      ));
+      displaySnackbarWithText(context, "Failed to sign in with Email & Password");
 
       return null;
     }
@@ -143,9 +140,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
       addUser(user, userData);
 
-      scaffold.showSnackBar(SnackBar(
-        content: Text("${user.displayName} Logged in"),
-      ));
+      displaySnackbarWithText(context, "${user.displayName} Logged in");
 
       return user;
     } on FirebaseAuthException catch (e) {
@@ -156,9 +151,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       return null;
     } catch (e) {
       print(e);
-      scaffold.showSnackBar(SnackBar(
-        content: Text("Error"),
-      ));
+      displaySnackbarWithText(context, "Error");
       return null;
     }
   }

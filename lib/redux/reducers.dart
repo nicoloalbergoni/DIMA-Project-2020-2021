@@ -1,7 +1,7 @@
 import 'package:realiteye/redux/app_state.dart';
 
-import 'actions.dart';
 import '../models/cartItem.dart';
+import 'actions.dart';
 
 AppState appReducers(AppState state, dynamic action) {
   if (action is AddItemAction) {
@@ -21,6 +21,9 @@ AppState appReducers(AppState state, dynamic action) {
   }
   else if (action is FetchCartFailedAction) {
     return fetchCartFailed(state, action);
+  }
+  else if (action is FirebaseLogoutAction) {
+    return firebaseLogout(state, action);
   }
   else {
     print('Invalid redux action, check reducer');
@@ -54,4 +57,15 @@ AppState fetchCartSucceeded(AppState state, FetchCartSucceededAction action) {
 
 AppState fetchCartFailed(AppState state, FetchCartFailedAction action) {
   return state.copyWith(error: action.error, isFetching: false);
+}
+
+AppState firebaseLogout(AppState state, FirebaseLogoutAction action) {
+  // copyWith doesn't support null values
+  return new AppState(
+      firebaseUser: null,
+      cartItems: state.cartItems,
+      theme: state.theme,
+      isFetching: state.isFetching,
+      error: state.error
+  );
 }

@@ -34,3 +34,7 @@ class FetchCartFailedAction {
 
   FetchCartFailedAction(this.error);
 }
+
+class FirebaseLogoutAction {
+  FirebaseLogoutAction();
+}

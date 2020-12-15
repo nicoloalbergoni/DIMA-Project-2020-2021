@@ -1,4 +1,8 @@
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
@@ -9,13 +13,8 @@ import 'package:realiteye/ui/screens/login_screen.dart';
 import 'package:realiteye/ui/screens/product.dart';
 import 'package:realiteye/ui/screens/registration_screen.dart';
 import 'package:realiteye/ui/screens/unity.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:redux/redux.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:redux_logging/redux_logging.dart';
-import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-
 
 import 'generated/locale_keys.g.dart';
 
@@ -64,8 +63,7 @@ class MyApp extends StatelessWidget {
           // insert user in state if already present
           // TODO: login expires automatically?
           if (FirebaseAuth.instance.currentUser != null) {
-            store.dispatch(
-                ChangeFirebaseUserAction(FirebaseAuth.instance.currentUser));
+            store.dispatch(ChangeFirebaseUserAction(FirebaseAuth.instance.currentUser));
             store.dispatch(FetchCartAction());
           }
 

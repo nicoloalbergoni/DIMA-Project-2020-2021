@@ -121,7 +121,7 @@ class _RegistrationWidgetState extends State<RegistrationWidget> {
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
                                   User user =
-                                      await _register(Scaffold.of(context));
+                                      await _register(context);
                                   if (user != null) {
                                     StoreProvider.of<AppState>(context)
                                         .dispatch(
@@ -143,7 +143,7 @@ class _RegistrationWidgetState extends State<RegistrationWidget> {
 
 
   // TODO: Check if passing scaffold is a good practice
-  Future<User> _register(scaffold) async {
+  Future<User> _register(BuildContext context) async {
     try {
       final User user = (await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
@@ -159,9 +159,7 @@ class _RegistrationWidgetState extends State<RegistrationWidget> {
 
       addUser(user, _userData);
 
-      scaffold.showSnackBar(SnackBar(
-        content: Text("${user.email} registered"),
-      ));
+      displaySnackbarWithText(context, "${user.email} registered");
 
       return user;
     } on FirebaseAuthException catch (e) {
@@ -173,9 +171,7 @@ class _RegistrationWidgetState extends State<RegistrationWidget> {
       return null;
     } catch (e) {
       print(e);
-      scaffold.showSnackBar(SnackBar(
-        content: Text("Failed to register"),
-      ));
+      displaySnackbarWithText(context, "Failed to register");
       return null;
     }
   }

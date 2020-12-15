@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 @immutable
 class SideMenuViewModel {
   final ThemeMode theme;
-  final Function(ThemeMode) switchThemeCallback;
+  final User firebaseUser;
 
-  SideMenuViewModel({this.theme, this.switchThemeCallback});
+  final Function(ThemeMode) switchThemeCallback;
+  final Function() logoutUser;
+
+  SideMenuViewModel({this.theme, this.firebaseUser,
+    this.switchThemeCallback, this.logoutUser});
 }
