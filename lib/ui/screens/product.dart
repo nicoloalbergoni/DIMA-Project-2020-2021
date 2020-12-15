@@ -19,7 +19,7 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(LocaleKeys.title),
+        appBar: CustomAppBar(LocaleKeys.title, showCartIcon: true,),
         drawer: SideMenu(),
         body: StoreConnector<AppState, AppState>(
             converter: (store) => store.state,

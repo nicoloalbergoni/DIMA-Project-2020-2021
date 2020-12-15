@@ -22,7 +22,7 @@ void fetchCartMiddleware(Store<AppState> store, action, NextDispatcher next) {
           List<CartItem> cartItems = [];
           for (var doc in snapshot.docs) {
             print(doc.data().toString());
-            cartItems.add(CartItem(doc.data()['product'], doc.data()['quantity']));
+            cartItems.add(CartItem(doc.data()['product_id'], doc.data()['quantity']));
           }
 
           store.dispatch(new FetchCartSucceededAction(cartItems));

@@ -4,6 +4,7 @@ import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/redux/middlewares.dart';
 import 'package:realiteye/redux/reducers.dart';
+import 'package:realiteye/ui/screens/cart.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
 import 'package:realiteye/ui/screens/product.dart';
 import 'package:realiteye/ui/screens/registration_screen.dart';
@@ -100,6 +101,7 @@ class MyApp extends StatelessWidget {
                       '/register': (context) => RegistrationWidget(),
                       // TODO: modify this to get the correct bundlePath as extra
                       '/unity': (context) => UnityScreen(bundlePath: "TODO"),
+                      '/cart': (context) => Cart(),
                     },
                   );
                 })

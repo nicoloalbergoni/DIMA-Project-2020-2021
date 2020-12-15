@@ -5,6 +5,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 // Create a CollectionReference called users that references the firestore collection
 final CollectionReference users = FirebaseFirestore.instance.collection('users');
+final CollectionReference products = FirebaseFirestore.instance.collection('products');
 
 Stream<QuerySnapshot> getUsers() {
   // Call the user's CollectionReference to add a new user
@@ -14,6 +15,10 @@ Stream<QuerySnapshot> getUsers() {
 Future<QuerySnapshot> getUserCart(String uid) async {
   DocumentSnapshot user = await users.doc(uid).get();
   return user.reference.collection('cart').get();
+}
+
+Future<DocumentSnapshot> getProductDocument(DocumentReference productId) async {
+  return products.doc(productId.id).get();
 }
 
 // Add a user to the users Firestore collection
