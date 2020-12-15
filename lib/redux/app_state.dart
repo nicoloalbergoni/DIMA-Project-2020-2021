@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:realiteye/models/cartItem.dart';
 import 'package:flutter/material.dart';
+import 'package:realiteye/models/cartItem.dart';
 
+@immutable
 class AppState {
   final User firebaseUser;
   final List<CartItem> cartItems;

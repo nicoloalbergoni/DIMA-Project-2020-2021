@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
+import 'package:realiteye/view_models/side_menu_vm.dart';
 
 class SideMenu extends StatelessWidget {
   @override
@@ -58,9 +59,14 @@ class SideMenu extends StatelessWidget {
             ),
           ),
 
-          StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (context, state) {
+          StoreConnector<AppState, SideMenuViewModel>(
+          converter: (store) {
+            return SideMenuViewModel(
+              theme: store.state.theme,
+              switchThemeCallback: (mode) => store.dispatch(SwitchThemeAction(mode))
+            );
+          },
+          builder: (context, viewModel) {
             return Row(
               children: [
                 IconButton(icon: Image(
@@ -80,15 +86,13 @@ class SideMenu extends StatelessWidget {
                       context.locale = Locale('it', 'IT');
                     }),
                 Spacer(flex: 1),
-                (state.theme == ThemeMode.light) ?
+                (viewModel.theme == ThemeMode.light) ?
                   IconButton(icon: Icon(Icons.wb_sunny), onPressed: () {
-                    StoreProvider.of<AppState>(context)
-                        .dispatch(SwitchThemeAction(ThemeMode.dark));
+                    viewModel.switchThemeCallback(ThemeMode.dark);
                   },
                     padding: EdgeInsets.only(right: 10),)
                     : IconButton(icon: Icon(Icons.wb_sunny_outlined), onPressed: () {
-                  StoreProvider.of<AppState>(context)
-                      .dispatch(SwitchThemeAction(ThemeMode.light));
+                      viewModel.switchThemeCallback(ThemeMode.light);
                 },
                     padding: EdgeInsets.only(right: 10))
               ],
