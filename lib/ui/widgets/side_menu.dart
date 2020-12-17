@@ -39,49 +39,9 @@ class SideMenu extends StatelessWidget {
                   color: Colors.blue,
                 ),
               ),
-              ListTile(
-                title: Text('My account'),
-                leading: Icon(Icons.account_box),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('My orders'),
-                leading: Icon(Icons.monetization_on_rounded),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('Shopping cart'),
-                leading: Icon(Icons.shopping_cart),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              Divider(thickness: 3, indent: 10, endIndent: 10,),
-              ListTile(
-                title: Text('Logout'),
-                leading: Icon(Icons.logout),
-                onTap: () async {
-                  await _auth.signOut();
-                  viewModel.logoutUser();
-                  displaySnackbarWithText(context, 'Logout successfully');
+              ..._buildMenuItems(viewModel, context),
 
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
+
             ],
           ),
         ),
@@ -125,4 +85,66 @@ class SideMenu extends StatelessWidget {
       ]);
     }));
   }
+}
+
+
+List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) {
+  return (viewModel.firebaseUser != null) ?
+  <Widget>[
+    ListTile(
+      title: Text('My account'),
+      leading: Icon(Icons.account_box),
+      onTap: () {
+        // Update the state of the app
+        // ...
+        // Then close the drawer
+        Navigator.pop(context);
+      },
+    ),
+    ListTile(
+      title: Text('My orders'),
+      leading: Icon(Icons.monetization_on_rounded),
+      onTap: () {
+        // Update the state of the app
+        // ...
+        // Then close the drawer
+        Navigator.pop(context);
+      },
+    ),
+    ListTile(
+      title: Text('Shopping cart'),
+      leading: Icon(Icons.shopping_cart),
+      onTap: () {
+        // Update the state of the app
+        // ...
+        // Then close the drawer
+        Navigator.pop(context);
+      },
+    ),
+    Divider(thickness: 3, indent: 10, endIndent: 10,),
+    ListTile(
+      title: Text('Logout'),
+      leading: Icon(Icons.logout),
+      onTap: () async {
+        await _auth.signOut();
+        viewModel.logoutUser();
+        displaySnackbarWithText(context, 'Logout successfully');
+
+        // Then close the drawer
+        Navigator.pop(context);
+      },
+    ),
+  ]
+      : <Widget>[
+    ListTile(
+      title: Text('Login'),
+      leading: Icon(Icons.login),
+      onTap: () async {
+        // Close the drawer
+        Navigator.pop(context);
+
+        Navigator.pushNamed(context, "/login");
+      },
+    ),
+  ];
 }

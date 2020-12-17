@@ -61,26 +61,15 @@ class _LoginWidgetState extends State<LoginWidget> {
                           obscureText: true,
                         ),
                         RaisedButton(
-                            onPressed: () async {
+                            onPressed: () {
                               if (_formKey.currentState.validate()) {
-                                User user = await _signInWithEmailAndPassword(
-                                    context);
-                                if (user != null) {
-                                  StoreProvider.of<AppState>(context)
-                                      .dispatch(ChangeFirebaseUserAction(user));
-                                }
+                                _performSignInWithMethod(_signInWithEmailAndPassword, context);
                               }
                             },
                             child: Text("Sign In")),
                         RaisedButton(
-                            onPressed: () async {
-                              User user =
-                              await _signInWithGoogle(context);
-                              if (user != null) {
-                                StoreProvider.of<AppState>(context)
-                                    .dispatch(ChangeFirebaseUserAction(user));
-                              }
-                            },
+                            onPressed: () =>
+                                _performSignInWithMethod(_signInWithGoogle, context),
                             child: Text("Sign In with Google"))
                       ],
                     ),
@@ -93,6 +82,15 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
+  void _performSignInWithMethod(Future<User> Function(BuildContext) method, BuildContext context) async {
+    User user = await method(context);
+    if (user != null) {
+      StoreProvider.of<AppState>(context)
+          .dispatch(ChangeFirebaseUserAction(user));
+      Navigator.pop(context);
+    }
+  }
+
   Future<User> _signInWithEmailAndPassword(BuildContext context) async {
     try {
       final User user = (await _auth.signInWithEmailAndPassword(
@@ -101,6 +99,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       ))
           .user;
 
+      // TODO: because of Navigator.pop it will not be visible in time
       displaySnackbarWithText(context, "${user.email} signed in");
 
       return user;
@@ -140,6 +139,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
       addUser(user, userData);
 
+      // TODO: because of Navigator.pop it will not be visible in time
       displaySnackbarWithText(context, "${user.displayName} Logged in");
 
       return user;

@@ -124,8 +124,8 @@ class _RegistrationWidgetState extends State<RegistrationWidget> {
                                       await _register(context);
                                   if (user != null) {
                                     StoreProvider.of<AppState>(context)
-                                        .dispatch(
-                                            ChangeFirebaseUserAction(user));
+                                        .dispatch(ChangeFirebaseUserAction(user));
+                                    Navigator.pop(context);
                                   }
                                 }
                               },
@@ -159,6 +159,7 @@ class _RegistrationWidgetState extends State<RegistrationWidget> {
 
       addUser(user, _userData);
 
+      // TODO: because of Navigator.pop it will not be visible in time
       displaySnackbarWithText(context, "${user.email} registered");
 
       return user;
