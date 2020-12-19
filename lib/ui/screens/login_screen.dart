@@ -9,12 +9,12 @@ import 'package:realiteye/utils/utils.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-class LoginWidget extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _LoginWidgetState createState() => _LoginWidgetState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginWidgetState extends State<LoginWidget> {
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -87,7 +87,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     if (user != null) {
       StoreProvider.of<AppState>(context)
           .dispatch(ChangeFirebaseUserAction(user));
-      Navigator.pop(context);
+      Navigator.pop(context, "${user.email} signed in");
     }
   }
 
@@ -100,7 +100,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           .user;
 
       // TODO: because of Navigator.pop it will not be visible in time
-      displaySnackbarWithText(context, "${user.email} signed in");
+      //displaySnackbarWithText(context, "${user.email} signed in");
 
       return user;
     } catch (e) {
@@ -140,7 +140,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       addUser(user, userData);
 
       // TODO: because of Navigator.pop it will not be visible in time
-      displaySnackbarWithText(context, "${user.displayName} Logged in");
+      //displaySnackbarWithText(context, "${user.displayName} Logged in");
 
       return user;
     } on FirebaseAuthException catch (e) {

@@ -140,10 +140,13 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
       title: Text('Login'),
       leading: Icon(Icons.login),
       onTap: () async {
+        final message = await Navigator.pushNamed(context, "/login");
+        if (message != null) {
+          displaySnackbarWithText(context, message);
+        }
+
         // Close the drawer
         Navigator.pop(context);
-
-        Navigator.pushNamed(context, "/login");
       },
     ),
   ];

@@ -8,11 +8,12 @@ import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/redux/middlewares.dart';
 import 'package:realiteye/redux/reducers.dart';
-import 'package:realiteye/ui/screens/cart.dart';
+import 'package:realiteye/ui/screens/cart_screen.dart';
+import 'package:realiteye/ui/screens/home_screen.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
-import 'package:realiteye/ui/screens/product.dart';
+import 'package:realiteye/ui/screens/product_screen.dart';
 import 'package:realiteye/ui/screens/registration_screen.dart';
-import 'package:realiteye/ui/screens/unity.dart';
+import 'package:realiteye/ui/screens/unity_screen.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 
@@ -94,12 +95,13 @@ class MyApp extends StatelessWidget {
                     */
                     initialRoute: '/',
                     routes: {
-                      '/': (context) => ProductScreen(),
-                      '/login': (context) => LoginWidget(),
-                      '/register': (context) => RegistrationWidget(),
+                      '/': (context) => HomeScreen(),
+                      '/product': (context) => ProductScreen(),
+                      '/login': (context) => LoginScreen(),
+                      '/register': (context) => RegistrationScreen(),
                       // TODO: modify this to get the correct bundlePath as extra
                       '/unity': (context) => UnityScreen(bundlePath: "TODO"),
-                      '/cart': (context) => Cart(),
+                      '/cart': (context) => CartScreen(),
                     },
                   );
                 })

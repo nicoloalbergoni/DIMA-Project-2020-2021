@@ -11,12 +11,12 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final CollectionReference users =
     FirebaseFirestore.instance.collection('users');
 
-class RegistrationWidget extends StatefulWidget {
+class RegistrationScreen extends StatefulWidget {
   @override
-  _RegistrationWidgetState createState() => _RegistrationWidgetState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _RegistrationWidgetState extends State<RegistrationWidget> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();

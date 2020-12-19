@@ -7,6 +7,7 @@ bool validateEmail(String email) {
 void displaySnackbarWithText(BuildContext context, String message) {
   Scaffold.of(context)
     ..removeCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(message),
-  ));
+    ..showSnackBar(SnackBar(
+        content: Text(message)
+    ));
 }
