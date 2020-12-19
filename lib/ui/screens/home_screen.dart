@@ -1,15 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
-import 'package:realiteye/models/cartItem.dart';
-import 'package:realiteye/redux/actions.dart';
-import 'package:realiteye/redux/app_state.dart';
-import 'package:realiteye/ui/screens/unity_screen.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
-import 'package:realiteye/utils/data_service.dart';
-import 'package:realiteye/utils/downloader.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -17,107 +10,67 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppBar(LocaleKeys.title, showCartIcon: true),
         drawer: SideMenu(),
-        body: StoreConnector<AppState, AppState>(
-            converter: (store) => store.state,
-            builder: (context, state) {
-              return Center(
-                  child: Column(
-                    children: [
-                      FlatButton(
-                        child: Text('Open Unity'),
-                        onPressed: () async {
-                          String path = await downloadUnityBundle('capsule');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      UnityScreen(bundlePath: path)));
-                        },
-                      ),
-                      FlatButton(
-                        child: Text('Try redux state change'),
-                        onPressed: () {
-                          final cartItem = CartItem(null, 5);
-                          StoreProvider.of<AppState>(context)
-                              .dispatch(AddItemAction(cartItem));
-                        },
-                      ),
-                      Text("Cart items count: ${state.cartItems.length}"),
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/login");
-                          },
-                          child: Text("Login Page")),
-                      state.firebaseUser == null
-                          ? Text("Current user is null")
-                          : Text("${state.firebaseUser}"),
-                      RaisedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/register");
-                        },
-                        child: Text("Sign Up"),
-                      ),
-                      /*RaisedButton(
-                    onPressed: () {
-                      context.locale = context.locale == Locale('en', 'US')
-                          ? Locale('it', 'IT')
-                          : Locale('en', 'US');
-                    },
-                    child: Text('Change language'),
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      var theme = (state.theme == ThemeMode.light)
-                          ? ThemeMode.dark
-                          : ThemeMode.light;
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // TODO: refine this and refactor it in as a separated custom parametrized widget
+            Container(
+                child: Column(
+                  children: [
+                    Text(
+                      'Hot Deals',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                    Row(
+                      children: [
+                        Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 80,
+                                  width: 100,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(height: 5,),
+                                Text('Product name'),
+                                Row(
+                                  children: [
+                                    RatingBarIndicator(
+                                      rating: 4.4,
+                                      itemBuilder: (context, index) => Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      itemCount: 5,
+                                      itemSize: 16.0,
+                                      direction: Axis.horizontal,
+                                    ),
+                                    Text('1234',
+                                      style: Theme.of(context).textTheme.caption,
+                                    )
+                                  ],
+                                ),
+                                SizedBox(height: 5,),
+                                Text('Price: 99.99\$'),
+                              ],
+                            ),
+                          )
+                        )
+                      ],
+                    ),
+                  ],
+                )
+            ),
+            // TODO: should be of same type of group above
+            Text(
+              'Popular',
+              style: Theme.of(context).textTheme.headline4,
+            ),
 
-                      StoreProvider.of<AppState>(context)
-                          .dispatch(SwitchThemeAction(theme));
-                    },
-                    child: Text('Switch theme'),
-                  ),*/
-                      Text('${state.theme}'),
-                      Expanded(
-                          child: StreamBuilder<QuerySnapshot>(
-                              stream: getUsers(),
-                              builder:
-                                  (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('Something went wrong');
-                                }
-
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Text("Loading");
-                                }
-
-                                return new ListView.separated(
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(8),
-                                  itemCount: snapshot.data.docs.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    var document = snapshot.data.docs[index];
-                                    return new ListTile(
-                                      title: new Text(
-                                          "${document.data()['firstname']} ${document.data()['lastname']}"),
-                                      subtitle:
-                                      new Text(document.data().toString()),
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) =>
-                                  const Divider(),
-                                );
-                              })),
-                    ],
-                  ));
-            })
-        // body: Column(
-        //   children: [
-        //     Text('Hot Deals'),
-        //     Text('Popular')
-        //   ],
-        // )
+          ],
+        )
     );
   }
 }

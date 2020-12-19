@@ -40,8 +40,14 @@ class SideMenu extends StatelessWidget {
                 ),
               ),
               ..._buildMenuItems(viewModel, context),
-
-
+              ListTile(
+                title: Text('Access debug'),
+                leading: Icon(Icons.bug_report),
+                onTap: () async {
+                  // Close the drawer and open new screen
+                  Navigator.popAndPushNamed(context, "/debug");
+                },
+              ),
             ],
           ),
         ),
@@ -115,10 +121,8 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
       title: Text('Shopping cart'),
       leading: Icon(Icons.shopping_cart),
       onTap: () {
-        // Update the state of the app
-        // ...
-        // Then close the drawer
-        Navigator.pop(context);
+        // Close the drawer and open new screen
+        Navigator.popAndPushNamed(context, '/cart');
       },
     ),
     Divider(thickness: 3, indent: 10, endIndent: 10,),

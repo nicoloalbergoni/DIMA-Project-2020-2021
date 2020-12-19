@@ -9,6 +9,7 @@ import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/redux/middlewares.dart';
 import 'package:realiteye/redux/reducers.dart';
 import 'package:realiteye/ui/screens/cart_screen.dart';
+import 'package:realiteye/ui/screens/debug_screen.dart';
 import 'package:realiteye/ui/screens/home_screen.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
 import 'package:realiteye/ui/screens/product_screen.dart';
@@ -102,6 +103,7 @@ class MyApp extends StatelessWidget {
                       // TODO: modify this to get the correct bundlePath as extra
                       '/unity': (context) => UnityScreen(bundlePath: "TODO"),
                       '/cart': (context) => CartScreen(),
+                      '/debug': (context) => DebugScreen(),
                     },
                   );
                 })

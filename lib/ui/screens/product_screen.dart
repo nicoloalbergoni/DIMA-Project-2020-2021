@@ -43,7 +43,8 @@ class ProductScreen extends StatelessWidget {
                               direction: Axis.horizontal,
                             ),
                             Text('1234',
-                                style: Theme.of(context).textTheme.caption)
+                                style: Theme.of(context).textTheme.caption,
+                            )
                           ],
                         ),
                         Row(
