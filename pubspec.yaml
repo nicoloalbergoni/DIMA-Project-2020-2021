@@ -44,6 +44,8 @@ dependencies:
   google_sign_in: ^4.5.1
   easy_localization: ^2.3.3
   path: ^1.7.0
+  carousel_slider: ^2.3.1
+  flutter_rating_bar: ^3.2.0+1
 
 dev_dependencies:
   flutter_test:
