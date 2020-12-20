@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
+import 'package:realiteye/ui/widgets/discount_chip.dart';
 import 'package:realiteye/ui/widgets/image_carousel.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 
@@ -51,16 +52,7 @@ class ProductScreen extends StatelessWidget {
                           children: [
                             Text('Price: 99.99\$'),
                             SizedBox(width: 20,),
-                            Chip(
-                              backgroundColor: Colors.black,
-                              label: Text(
-                                '20% OFF',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12
-                                ),
-                              ),
-                            )
+                            DiscountChip(20),
                           ],
                         ),
                         Row(
