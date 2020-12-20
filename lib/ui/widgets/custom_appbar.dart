@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showCartIcon;
-  CustomAppBar(this.title, {this.showCartIcon = false}) : preferredSize = Size.fromHeight(kToolbarHeight);
+  final bool showSearchIcon;
+  CustomAppBar(this.title, {this.showCartIcon = false, this.showSearchIcon = false}) : preferredSize = Size.fromHeight(kToolbarHeight);
 
   @override
   final Size preferredSize; // default is 56.0
@@ -25,8 +26,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
         actions: [
+          showSearchIcon ? IconButton(icon: Icon(Icons.search), onPressed: () => Navigator.pushNamed(context, '/search')) :
+          Container(),
           showCartIcon ? IconButton(icon: Icon(Icons.shopping_cart), onPressed: () => Navigator.pushNamed(context, '/cart')) :
-              Container()
+              Container(),
         ],
     );
   }

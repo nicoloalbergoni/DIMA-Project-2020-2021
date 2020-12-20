@@ -14,6 +14,7 @@ import 'package:realiteye/ui/screens/home_screen.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
 import 'package:realiteye/ui/screens/product_screen.dart';
 import 'package:realiteye/ui/screens/registration_screen.dart';
+import 'package:realiteye/ui/screens/search_screen.dart';
 import 'package:realiteye/ui/screens/unity_screen.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
@@ -104,6 +105,7 @@ class MyApp extends StatelessWidget {
                       '/unity': (context) => UnityScreen(bundlePath: "TODO"),
                       '/cart': (context) => CartScreen(),
                       '/debug': (context) => DebugScreen(),
+                      '/search': (context) => SearchScreen(),
                     },
                   );
                 })
