@@ -4,13 +4,19 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:realiteye/ui/widgets/discount_chip.dart';
 
 class ProductCard extends StatelessWidget {
+
+  final String name;
+
+
+  ProductCard(this.name);
+
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
           splashColor: Colors.green.withAlpha(30),
           onTap: () {
-            print('Card tapped.');
+            Navigator.pushNamed(context, '/product');
           },
           child: Padding(
             padding: EdgeInsets.all(10),
@@ -35,7 +41,7 @@ class ProductCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('A product name',
+                      Text(name,
                           style: Theme.of(context).textTheme.headline5),
                       Row(
                         children: [
@@ -59,7 +65,7 @@ class ProductCard extends StatelessWidget {
                         height: 6,
                       ),
                       Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                        'Lorem ipsum dolor   sit amet, consectetur adipiscing elit.'
                         ' Suspendisse quis metus at libero gravida egestas quis sit amet arcu.'
                         ' Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisi.'
                         ' Pellentesque in faucibus nisl. Suspendisse et enim cursus, vehicula.',
