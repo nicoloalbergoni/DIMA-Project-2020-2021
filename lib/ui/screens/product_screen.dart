@@ -1,12 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/discount_chip.dart';
 import 'package:realiteye/ui/widgets/image_carousel.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
-
-import '../../generated/locale_keys.g.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -14,7 +14,7 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(LocaleKeys.title),
+        appBar: CustomAppBar(LocaleKeys.product_title.tr()),
         drawer: SideMenu(),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 6.0),
@@ -48,6 +48,7 @@ class ProductScreen extends StatelessWidget {
                             )
                           ],
                         ),
+                        SizedBox(height: 10,),
                         Row(
                           children: [
                             Text('Price: 99.99\$'),
@@ -68,6 +69,7 @@ class ProductScreen extends StatelessWidget {
                             )
                           ],
                         ),
+                        SizedBox(height: 16,),
                         Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
                             ' Suspendisse quis metus at libero gravida egestas quis sit amet arcu.'
                             ' Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisi.'

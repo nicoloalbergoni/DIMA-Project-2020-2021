@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/models/cartItem.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
@@ -11,7 +13,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Cart"),
+      appBar: CustomAppBar(LocaleKeys.cart_title.tr()),
       drawer: SideMenu(),
       body: StoreConnector<AppState, AppState>(
         converter: (store) => store.state,

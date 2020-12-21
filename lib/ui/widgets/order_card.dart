@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 
 class OrderCard extends StatelessWidget {
   @override
@@ -10,15 +12,15 @@ class OrderCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Order id: 1234',
+              Text('${LocaleKeys.orders_id.tr()}: 1234',
                 style: Theme.of(context).textTheme.headline5,
               ),
-              Text('ordered: 12/04/2020'),
-              Text('expected delivery:'),
+              Text('${LocaleKeys.orders_start.tr()}: 12/04/2020'),
+              Text('${LocaleKeys.orders_expected.tr()}:'),
               SizedBox(height: 6,),
               Align(
                 alignment: Alignment.bottomRight,
-                child: Text('Total: 19.99\$'),
+                child: Text('${LocaleKeys.orders_total.tr()}: 19.99\$'),
               )
             ],
           ),

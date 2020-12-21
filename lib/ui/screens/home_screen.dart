@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
@@ -11,7 +12,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: CustomAppBar(
-          LocaleKeys.title,
+          'Realiteye',
           showCartIcon: true,
           showSearchIcon: true,
         ),
@@ -24,14 +25,14 @@ class HomeScreen extends StatelessWidget {
             ),
             Flexible(
               flex: 5,
-              child: HomeProductShowcase('Hot Deals', testList),
+              child: HomeProductShowcase(LocaleKeys.home_deals.tr(), testList),
             ),
             Spacer(
               flex: 1,
             ),
             Flexible(
               flex: 5,
-              child: HomeProductShowcase('Popular', testList),
+              child: HomeProductShowcase(LocaleKeys.home_popular.tr(), testList),
             ),
             Spacer(
               flex: 1,

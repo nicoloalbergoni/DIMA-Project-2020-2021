@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/utils/utils.dart';
@@ -41,7 +42,7 @@ class SideMenu extends StatelessWidget {
               ),
               ..._buildMenuItems(viewModel, context),
               ListTile(
-                title: Text('Access debug'),
+                title: Text(LocaleKeys.drawer_debug.tr()),
                 leading: Icon(Icons.bug_report),
                 onTap: () async {
                   // Close the drawer and open new screen
@@ -98,7 +99,7 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
   return (viewModel.firebaseUser != null) ?
   <Widget>[
     ListTile(
-      title: Text('My account'),
+      title: Text(LocaleKeys.drawer_account.tr()),
       leading: Icon(Icons.account_box),
       onTap: () {
         // Close the drawer and open new screen
@@ -106,7 +107,7 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
       },
     ),
     ListTile(
-      title: Text('My orders'),
+      title: Text(LocaleKeys.drawer_orders.tr()),
       leading: Icon(Icons.monetization_on_rounded),
       onTap: () {
         // Close the drawer and open new screen
@@ -114,7 +115,7 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
       },
     ),
     ListTile(
-      title: Text('Shopping cart'),
+      title: Text(LocaleKeys.drawer_cart.tr()),
       leading: Icon(Icons.shopping_cart),
       onTap: () {
         // Close the drawer and open new screen
@@ -123,7 +124,7 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
     ),
     Divider(thickness: 3, indent: 10, endIndent: 10,),
     ListTile(
-      title: Text('Logout'),
+      title: Text(LocaleKeys.drawer_logout.tr()),
       leading: Icon(Icons.logout),
       onTap: () async {
         await _auth.signOut();
@@ -137,7 +138,7 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
   ]
       : <Widget>[
     ListTile(
-      title: Text('Login'),
+      title: Text(LocaleKeys.drawer_login),
       leading: Icon(Icons.login),
       onTap: () async {
         final message = await Navigator.pushNamed(context, "/login");

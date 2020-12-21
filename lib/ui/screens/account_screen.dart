@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
@@ -8,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
-          LocaleKeys.title,
+          LocaleKeys.account_title.tr(),
           showCartIcon: true,
         ),
         drawer: SideMenu(),
@@ -32,22 +33,22 @@ class ProfileScreen extends StatelessWidget {
               ),
               SizedBox(height: 30,),
               Text('Email: asd@gmail.com'),
-              Text('Birthday: 24/02/1994'),
+              Text('${LocaleKeys.account_birthday.tr()}: 24/02/1994'),
               SizedBox(height: 20,),
-              Text('Address information',
+              Text(LocaleKeys.account_address_title.tr(),
                 style: Theme.of(context).textTheme.subtitle2,
               ),
               SizedBox(height: 6,),
-              Text('State:'),
-              Text('City:'),
-              Text('Street:'),
+              Text('${LocaleKeys.account_address_state.tr()}: '),
+              Text('${LocaleKeys.account_address_city.tr()}: '),
+              Text('${LocaleKeys.account_address_street.tr()}: '),
               SizedBox(height: 20,),
-              Text('Payment information',
+              Text(LocaleKeys.account_payment_title.tr(),
                 style: Theme.of(context).textTheme.subtitle2,
               ),
               SizedBox(height: 6,),
-              Text('Card number:'),
-              Text('Expiration date:'),
+              Text('${LocaleKeys.account_payment_card.tr()}: '),
+              Text('${LocaleKeys.account_payment_expiration.tr()}: '),
             ],
           ),
         )

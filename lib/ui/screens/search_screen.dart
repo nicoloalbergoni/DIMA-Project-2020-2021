@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/search_box.dart';
 import 'package:realiteye/ui/widgets/search_listview_builder.dart';
@@ -23,7 +25,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Product Search"),
+      appBar: CustomAppBar(LocaleKeys.search_title.tr()),
       drawer: SideMenu(),
       body: Padding(
         padding: EdgeInsets.all(7),

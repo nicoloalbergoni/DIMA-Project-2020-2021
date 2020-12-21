@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/ui/widgets/order_card.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -13,8 +15,8 @@ class OrderScreen extends StatelessWidget {
             title: Text('Orders'),
             bottom: TabBar(
               tabs: [
-                Tab(text: 'In progress',),
-                Tab(text: 'Completed',),
+                Tab(text: LocaleKeys.orders_tab_progress.tr(),),
+                Tab(text: LocaleKeys.orders_tab_completed.tr(),),
               ],
             ),
           ),

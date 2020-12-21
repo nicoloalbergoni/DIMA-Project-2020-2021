@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_unity_widget/flutter_unity_widget.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 
 class UnityScreen extends StatefulWidget {
   final String bundlePath;
@@ -24,7 +26,7 @@ class _UnityScreenState extends State<UnityScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Unity screen'),
+        title: Text(LocaleKeys.unity_title.tr()),
       ),
         body: Card(
           margin: const EdgeInsets.all(8),
