@@ -12,6 +12,7 @@ import 'package:realiteye/ui/screens/cart_screen.dart';
 import 'package:realiteye/ui/screens/debug_screen.dart';
 import 'package:realiteye/ui/screens/home_screen.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
+import 'package:realiteye/ui/screens/order_screen.dart';
 import 'package:realiteye/ui/screens/product_screen.dart';
 import 'package:realiteye/ui/screens/profile_screen.dart';
 import 'package:realiteye/ui/screens/registration_screen.dart';
@@ -107,7 +108,8 @@ class MyApp extends StatelessWidget {
                       '/cart': (context) => CartScreen(),
                       '/debug': (context) => DebugScreen(),
                       '/search': (context) => SearchScreen(),
-                      '/profile': (context) => ProfileScreen()
+                      '/profile': (context) => ProfileScreen(),
+                      '/orders': (context) => OrderScreen()
                     },
                   );
                 })

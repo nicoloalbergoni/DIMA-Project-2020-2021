@@ -109,10 +109,8 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
       title: Text('My orders'),
       leading: Icon(Icons.monetization_on_rounded),
       onTap: () {
-        // Update the state of the app
-        // ...
-        // Then close the drawer
-        Navigator.pop(context);
+        // Close the drawer and open new screen
+        Navigator.popAndPushNamed(context, '/orders');
       },
     ),
     ListTile(

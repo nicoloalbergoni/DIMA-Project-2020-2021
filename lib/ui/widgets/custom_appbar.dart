@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Text(title.tr()),
         leading: Builder(
           builder: (context) {
-            print("Current route:" + ModalRoute.of(context).settings.name);
+            //print("Current route:" + ModalRoute.of(context).settings.name);
             return (ModalRoute.of(context).settings.name == Navigator.defaultRouteName) ?
             IconButton(
                 icon: new Icon(Icons.menu),
