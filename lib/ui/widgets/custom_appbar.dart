@@ -26,7 +26,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
         actions: [
-          showSearchIcon ? IconButton(icon: Icon(Icons.search), onPressed: () => Navigator.pushNamed(context, '/search')) :
+          showSearchIcon ? IconButton(icon: Icon(Icons.search), onPressed: () {
+            Navigator.pushNamed(context, '/search');
+          }) :
           Container(),
           showCartIcon ? IconButton(icon: Icon(Icons.shopping_cart), onPressed: () => Navigator.pushNamed(context, '/cart')) :
               Container(),

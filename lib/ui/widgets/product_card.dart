@@ -19,7 +19,7 @@ class ProductCard extends StatelessWidget {
             Navigator.pushNamed(context, '/product');
           },
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(7),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
