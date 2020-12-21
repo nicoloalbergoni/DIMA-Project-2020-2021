@@ -101,10 +101,8 @@ List<Widget> _buildMenuItems(SideMenuViewModel viewModel, BuildContext context) 
       title: Text('My account'),
       leading: Icon(Icons.account_box),
       onTap: () {
-        // Update the state of the app
-        // ...
-        // Then close the drawer
-        Navigator.pop(context);
+        // Close the drawer and open new screen
+        Navigator.popAndPushNamed(context, '/profile');
       },
     ),
     ListTile(
