@@ -5,7 +5,6 @@ class FirebaseDocFutureBuilder extends StatelessWidget {
   final Future<DocumentSnapshot> future;
   final Widget Function(Map<String, dynamic>) dataWidget;
 
-
   FirebaseDocFutureBuilder(this.future, this.dataWidget);
 
   @override
