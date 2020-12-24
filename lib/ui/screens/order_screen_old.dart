@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/order_card.dart';
@@ -52,7 +53,7 @@ class _OrderScreenOldState extends State<OrderScreenOld> {
                       scrollDirection: Axis.vertical,
                       itemCount: _testList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return OrderCard();
+                        return OrderCard('aaa', Timestamp.now(), Timestamp.now(), 99.99);
                       }),
                 )
             ),
@@ -77,7 +78,7 @@ class _OrderScreenOldState extends State<OrderScreenOld> {
                       scrollDirection: Axis.vertical,
                       itemCount: _testList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return OrderCard();
+                        return OrderCard('aaa', Timestamp.now(), Timestamp.now(), 99.99);
                       }),
                 )
             )

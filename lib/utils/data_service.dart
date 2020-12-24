@@ -28,3 +28,13 @@ void addUser(User user, Map<String, dynamic> userData) async {
     print('User ${user.email} correctly registered on the database');
   }
 }
+
+Future<QuerySnapshot> getUserInProgressOrders(String uid) async {
+  DocumentSnapshot user = await users.doc(uid).get();
+  return user.reference.collection('orders').where('in_progress', isEqualTo: true).get();
+}
+
+Future<QuerySnapshot> getUserCompletedOrders(String uid) async {
+  DocumentSnapshot user = await users.doc(uid).get();
+  return user.reference.collection('orders').where('in_progress', isEqualTo: false).get();
+}

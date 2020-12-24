@@ -1,8 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 
 class OrderCard extends StatelessWidget {
+  final String id;
+  final Timestamp issueTimestamp;
+  final Timestamp deliveryTimestamp;
+  final double totalCost;
+
+  OrderCard(this.id, this.issueTimestamp, this.deliveryTimestamp, this.totalCost);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -12,15 +20,15 @@ class OrderCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('${LocaleKeys.orders_id.tr()}: 1234',
-                style: Theme.of(context).textTheme.headline5,
+              Text('${LocaleKeys.orders_id.tr()}: $id',
+                style: Theme.of(context).textTheme.headline6,
               ),
-              Text('${LocaleKeys.orders_start.tr()}: 12/04/2020'),
-              Text('${LocaleKeys.orders_expected.tr()}:'),
+              Text('${LocaleKeys.orders_start.tr()}: ${issueTimestamp.toDate()}'),
+              Text('${LocaleKeys.orders_expected.tr()}: ${deliveryTimestamp.toDate()}'),
               SizedBox(height: 6,),
               Align(
                 alignment: Alignment.bottomRight,
-                child: Text('${LocaleKeys.orders_total.tr()}: 19.99\$'),
+                child: Text('${LocaleKeys.orders_total.tr()}: $totalCost\$'),
               )
             ],
           ),
