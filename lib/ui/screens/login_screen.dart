@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
 
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -45,7 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextFormField(
-                          controller: _emailController,
+                          // TODO: Remove initial value in production
+                          controller: _emailController..text = "Elsie_Crona55@example.com",
                           decoration: const InputDecoration(labelText: 'Email'),
                           validator: (String value) {
                             if (value.isEmpty) return 'Please enter some text';
@@ -53,9 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         TextFormField(
-                          controller: _passwordController,
-                          decoration:
-                          const InputDecoration(labelText: 'Password'),
+                          // TODO: Remove initial value in production
+                          controller: _passwordController..text = "R5Z3IDE8lkaofwu",
+                          decoration: const InputDecoration(labelText: 'Password'),
                           validator: (String value) {
                             if (value.isEmpty) return 'Please enter some text';
                             return null;

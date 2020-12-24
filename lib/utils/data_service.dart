@@ -29,6 +29,11 @@ void addUser(User user, Map<String, dynamic> userData) async {
   }
 }
 
+Future<DocumentSnapshot> getUserDocument(String userUID) async {
+  // TODO: Handle error cases
+   return users.doc(userUID).get();
+}
+
 Future<QuerySnapshot> getUserInProgressOrders(String uid) async {
   DocumentSnapshot user = await users.doc(uid).get();
   return user.reference.collection('orders').where('in_progress', isEqualTo: true).get();
