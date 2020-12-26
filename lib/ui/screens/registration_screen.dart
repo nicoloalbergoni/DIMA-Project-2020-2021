@@ -40,6 +40,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Registration page")),
+        resizeToAvoidBottomInset: false,
         body: Builder (
           builder: (context) {
             return Center(
