@@ -24,8 +24,39 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
     _getData();
   }
 
-  Future<void> _getData() async {
+  @override
+  Widget build(BuildContext context) {
 
+    return RefreshIndicator(
+      child: ListView.builder(
+        shrinkWrap: true,
+        controller: controller,
+        itemCount: _data.length + 1,
+        itemBuilder: (_, int index) {
+          if (index < _data.length) {
+            final DocumentSnapshot document = _data[index];
+            return ProductCard(document['name']);
+          }
+          return Center(
+            child: Opacity(
+              opacity: _isLoading ? 1.0 : 0.0,
+              child: SizedBox(
+                  width: 32.0,
+                  height: 32.0,
+                  child: CircularProgressIndicator()),
+            ),
+          );
+        },
+      ),
+      onRefresh: () async{
+        _data.clear();
+        _lastVisible = null;
+        await _getData();
+      },
+    );
+  }
+
+  Future<void> _getData() async {
     QuerySnapshot data;
     if (_lastVisible == null)
       data = await products
@@ -51,38 +82,6 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
       setState(() => _isLoading = false);
       displaySnackbarWithText(context, "No more items were found");
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return RefreshIndicator(
-        child: ListView.builder(
-          shrinkWrap: true,
-          controller: controller,
-          itemCount: _data.length + 1,
-          itemBuilder: (_, int index) {
-            if (index < _data.length) {
-              final DocumentSnapshot document = _data[index];
-              return ProductCard(document['name']);
-            }
-            return Center(
-              child: Opacity(
-                opacity: _isLoading ? 1.0 : 0.0,
-                child: SizedBox(
-                    width: 32.0,
-                    height: 32.0,
-                    child: CircularProgressIndicator()),
-              ),
-            );
-          },
-        ),
-        onRefresh: () async{
-          _data.clear();
-          _lastVisible = null;
-          await _getData();
-        },
-    );
   }
 
   @override

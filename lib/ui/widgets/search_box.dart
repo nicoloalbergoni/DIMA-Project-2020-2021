@@ -17,6 +17,8 @@ class SearchBox extends StatelessWidget {
     return TextField(
       controller: controller,
       focusNode: _focus,
+      textInputAction: TextInputAction.search,
+      onSubmitted: (_) => _performSearch(),
       decoration: InputDecoration(
           fillColor: Colors.grey.withOpacity(0.2),
           filled: true,

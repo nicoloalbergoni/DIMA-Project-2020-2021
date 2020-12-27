@@ -15,11 +15,16 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocus = FocusNode();
   List history;
-  bool hasFocus = false;
-  bool showSearchResult = false;
+  bool showHistory;
+  bool showSearchResult;
 
-  _SearchScreenState() {
-    _searchController.addListener(_onFocusChange);
+  @override
+  void initState() {
+    super.initState();
+    showHistory = false;
+    showSearchResult = false;
+    history = ["Item 1", "Item 2"];
+    _searchFocus.addListener(_onFocusChange);
   }
 
   @override
@@ -30,10 +35,9 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Padding(
         padding: EdgeInsets.all(7),
         child: Column(
-          //mainAxisSize: MainAxisSize.max,
           children: [
             SearchBox(_searchController, _searchFocus, _searchPressed),
-            (hasFocus || history.length == 0)
+            (showHistory || history.length == 0)
                 ? Flexible(child: _buildHistoryList())
                 : Container(),
             showSearchResult ? Expanded(child: SearchListViewBuilder()) : Container(),
@@ -49,27 +53,25 @@ class _SearchScreenState extends State<SearchScreen> {
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
           title: Text(history[index]),
-          onTap: () => _searchController.text = history[index],
+          onTap: () {
+            _searchController.text = history[index];
+            _searchPressed();
+          },
           leading: Icon(Icons.history),
         );
       },
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    history = ["Item 1", "Item 2"];
-    _searchFocus.addListener(_onFocusChange);
-  }
-
+  //TODO: Handle display of search results when unfocus
   void _onFocusChange() {
     setState(() {
       if (_searchFocus.hasFocus) {
-        hasFocus = true;
+        showHistory = true;
         showSearchResult = false;
       } else {
-        hasFocus = false;
+        //showSearchResult = true;
+        showHistory = false;
       }
     });
   }
@@ -78,11 +80,11 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       if (_searchController.text.isNotEmpty && !history.contains(_searchController.text))
         history.add(_searchController.text);
-      
+
       _searchFocus.unfocus();
-      _searchController.clear();
-      hasFocus = false;
-      showSearchResult = true;
+      //_searchController.clear();
+      showHistory = false;
+      showSearchResult = _searchController.text.isNotEmpty;
     });
   }
 
