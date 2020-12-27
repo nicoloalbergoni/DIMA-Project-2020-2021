@@ -210,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<User> _signInWithGoogle(scaffold) async {
+  Future<User> _signInWithGoogle(BuildContext context) async {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
@@ -245,12 +245,12 @@ class _LoginScreenState extends State<LoginScreen> {
       return user;
     } on FirebaseAuthException catch (e) {
       print("Error code: ${e.code}");
-      scaffold.showSnackBar(SnackBar(
-        content: Text("Error during authentication"),
-      ));
+      displaySnackbarWithText(context, "Error during authentication");
       return null;
     } catch (e) {
       print(e);
+      /* TODO: more meaningful message or show no snackbar at all,
+      *   it seems is triggered by back button */
       displaySnackbarWithText(context, "Error");
       return null;
     }
