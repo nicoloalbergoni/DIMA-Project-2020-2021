@@ -184,8 +184,9 @@ class _LoginScreenState extends State<LoginScreen> {
       Future<User> Function(BuildContext) method, BuildContext context) async {
     User user = await method(context);
     if (user != null) {
-      StoreProvider.of<AppState>(context)
-          .dispatch(ChangeFirebaseUserAction(user));
+      var store = StoreProvider.of<AppState>(context);
+      store.dispatch(ChangeFirebaseUserAction(user));
+      store.dispatch(FetchCartAction());
       Navigator.pop(context, "${user.email} signed in");
     }
   }
@@ -197,9 +198,6 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       ))
           .user;
-
-      // TODO: because of Navigator.pop it will not be visible in time
-      //displaySnackbarWithText(context, "${user.email} signed in");
 
       return user;
     } catch (e) {
@@ -238,9 +236,6 @@ class _LoginScreenState extends State<LoginScreen> {
       };
 
       addUser(user, userData);
-
-      // TODO: because of Navigator.pop it will not be visible in time
-      //displaySnackbarWithText(context, "${user.displayName} Logged in");
 
       return user;
     } on FirebaseAuthException catch (e) {

@@ -63,7 +63,7 @@ AppState firebaseLogout(AppState state, FirebaseLogoutAction action) {
   // copyWith doesn't support null values
   return new AppState(
       firebaseUser: null,
-      cartItems: state.cartItems,
+      cartItems: [],
       theme: state.theme,
       isFetching: state.isFetching,
       error: state.error

@@ -124,8 +124,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   User user =
                                       await _register(context);
                                   if (user != null) {
-                                    StoreProvider.of<AppState>(context)
-                                        .dispatch(ChangeFirebaseUserAction(user));
+                                    var store = StoreProvider.of<AppState>(context);
+                                    store.dispatch(ChangeFirebaseUserAction(user));
+                                    store.dispatch(FetchCartAction());
                                     Navigator.pop(context);
                                   }
                                 }
