@@ -46,11 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
               width: double.infinity,
               height: 200,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage("https://image.shutterstock.com/image-vector/global-camera-eye-logo-photo-600w-383758570.jpg"),
-                  fit: BoxFit.fitWidth
-                )
-              ),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          "https://image.shutterstock.com/image-vector/global-camera-eye-logo-photo-600w-383758570.jpg"),
+                      fit: BoxFit.fitWidth)),
             ),
             Form(
               key: _formKey,
@@ -74,6 +73,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                     ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     TextFormField(
                       // TODO: Remove initial value in production
                       controller: _passwordController..text = "R5Z3IDE8lkaofwu",
@@ -86,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 25,
                     ),
                     SizedBox(
                       width: double.infinity,
@@ -110,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 5, bottom: 15, left: 15),
+              padding: EdgeInsets.only(top: 30, bottom: 5, left: 15),
               //TODO: Add to localization
               child: Text(
                 "Or sign in with a social account:",
@@ -118,33 +120,44 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Flexible(
-                      child: SignInButton(
-                    Buttons.Google,
-                    text: "Google Sign In",
-                    onPressed: () =>
-                        _performSignInWithMethod(_signInWithGoogle, context),
-                  )),
                   SizedBox(
-                    width: 20,
+                    width: 130,
+                    child: SignInButton(
+                      Buttons.Google,
+                      text: "Google",
+                      onPressed: () =>
+                          _performSignInWithMethod(_signInWithGoogle, context),
+                    ),
                   ),
-                  Flexible(
-                      child: SignInButton(
-                    Buttons.Facebook,
-                    text: "Facebook Sign In",
-                    //TODO: Add support for facebook login
-                    onPressed: () => print('Sign in with facebook'),
-                  )),
+                  SizedBox(
+                    width: 130,
+                    child: SignInButton(
+                      Buttons.Facebook,
+                      text: "Facebook",
+                      //TODO: Add support for facebook login
+                      onPressed: () => print('Sign in with facebook'),
+                    ),
+                  )
+                  // SizedBox(
+                  //   width: 120,
+                  // ),
+                  // Flexible(
+                  //     child: SignInButton(
+                  //   Buttons.Facebook,
+                  //   text: "Facebook",
+                  //   //TODO: Add support for facebook login
+                  //   onPressed: () => print('Sign in with facebook'),
+                  // )),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 10),
+              padding: EdgeInsets.only(top: 0, bottom: 10),
               child: Divider(
                 thickness: 1,
                 indent: 15,
