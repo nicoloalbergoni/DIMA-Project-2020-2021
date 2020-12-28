@@ -33,7 +33,8 @@ class CartScreen extends StatelessWidget {
                             title: Text(docData['name']),
                             subtitle: new Text(document.quantity.toString()),
                             onTap: () {
-                              Navigator.pushNamed(context, '/product');
+                              Navigator.pushNamed(context, '/product',
+                                  arguments: {'productId': document.productId});
                             },
                           );
                         });

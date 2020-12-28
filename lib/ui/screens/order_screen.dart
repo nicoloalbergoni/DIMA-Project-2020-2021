@@ -27,12 +27,12 @@ class OrderScreen extends StatelessWidget {
             children: [
               FirebaseQueryFutureBuilder(getUserInProgressOrders(uid),
                   (docId, data) {
-                    return OrderCard(docId, data['issue_date'],
+                    return OrderCard(docId.id, data['issue_date'],
                       data['delivery_date'], double.parse(data['total_cost']));
                   }),
               FirebaseQueryFutureBuilder(getUserCompletedOrders(uid),
                       (docId, data) {
-                    return OrderCard(docId, data['issue_date'],
+                    return OrderCard(docId.id, data['issue_date'],
                         data['delivery_date'], double.parse(data['total_cost']));
                   }),
             ],
