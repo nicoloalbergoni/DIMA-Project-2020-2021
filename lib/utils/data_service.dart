@@ -44,3 +44,11 @@ Future<QuerySnapshot> getUserCompletedOrders(String uid) async {
   DocumentSnapshot user = await users.doc(uid).get();
   return user.reference.collection('orders').where('in_progress', isEqualTo: false).get();
 }
+
+Future<QuerySnapshot> getHotDeals() async {
+  return products.where('hot_deal', isEqualTo: true).get();
+}
+
+Future<QuerySnapshot> getPopulars() async {
+  return products.where('popular', isEqualTo: true).get();
+}

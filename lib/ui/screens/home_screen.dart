@@ -4,6 +4,7 @@ import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/home_product_showcase.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
+import 'package:realiteye/utils/data_service.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -25,14 +26,14 @@ class HomeScreen extends StatelessWidget {
             ),
             Flexible(
               flex: 5,
-              child: HomeProductShowcase(LocaleKeys.home_deals.tr(), testList),
+              child: HomeProductShowcase(LocaleKeys.home_deals.tr(), getHotDeals())
             ),
             Spacer(
               flex: 1,
             ),
             Flexible(
               flex: 5,
-              child: HomeProductShowcase(LocaleKeys.home_popular.tr(), testList),
+              child: HomeProductShowcase(LocaleKeys.home_popular.tr(), getPopulars()),
             ),
             Spacer(
               flex: 1,
