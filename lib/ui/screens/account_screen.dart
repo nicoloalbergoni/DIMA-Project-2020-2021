@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
@@ -85,13 +84,13 @@ Widget _buildAddressCardContent(Map<String, dynamic> address) {
 }
 
 Widget _buildPaymentCardContent(Map<String, dynamic> payment) {
-  Timestamp expiryDate = payment['CC_expiry_date'];
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text('${LocaleKeys.account_payment_card.tr()}: ${payment['CC_number']}'),
       SizedBox(height: _textPadding,),
-      Text('${LocaleKeys.account_payment_expiration.tr()}: ${expiryDate.toDate()}'),
+      Text('${LocaleKeys.account_payment_expiration.tr()}: '
+          '${formatDate(payment['CC_expiry_date'])}'),
     ],
   );
 }
@@ -100,6 +99,7 @@ List<Widget> _buildInfoWidgets(Map<String, dynamic> data) {
   return <Widget>[
     Text('Email: ${data['email']}'),
     SizedBox(height: _textPadding,),
-    Text('${LocaleKeys.account_birthday.tr()}: 24/02/1994'),
+    Text('${LocaleKeys.account_birthday.tr()}: '
+        '${formatDate(data['birth_date'])}'),
   ];
 }
