@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
+import 'package:realiteye/ui/widgets/filter_bar.dart';
 import 'package:realiteye/ui/widgets/search_box.dart';
 import 'package:realiteye/ui/widgets/search_listview_builder.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
@@ -37,6 +38,8 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           children: [
             SearchBox(_searchController, _searchFocus, _searchPressed),
+            SizedBox(height: 5,),
+            FilterBar(),
             (showHistory || history.length == 0)
                 ? Flexible(child: _buildHistoryList())
                 : Container(),

@@ -28,25 +28,28 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
   Widget build(BuildContext context) {
 
     return RefreshIndicator(
-      child: ListView.builder(
-        shrinkWrap: true,
-        controller: controller,
-        itemCount: _data.length + 1,
-        itemBuilder: (_, int index) {
-          if (index < _data.length) {
-            final DocumentSnapshot document = _data[index];
-            return ProductCard(document['name']);
-          }
-          return Center(
-            child: Opacity(
-              opacity: _isLoading ? 1.0 : 0.0,
-              child: SizedBox(
-                  width: 32.0,
-                  height: 32.0,
-                  child: CircularProgressIndicator()),
-            ),
-          );
-        },
+      //TODO: Style Scrollbar
+      child: Scrollbar(
+        child: ListView.builder(
+          shrinkWrap: true,
+          controller: controller,
+          itemCount: _data.length + 1,
+          itemBuilder: (_, int index) {
+            if (index < _data.length) {
+              final DocumentSnapshot document = _data[index];
+              return ProductCard(document['name']);
+            }
+            return Center(
+              child: Opacity(
+                opacity: _isLoading ? 1.0 : 0.0,
+                child: SizedBox(
+                    width: 32.0,
+                    height: 32.0,
+                    child: CircularProgressIndicator()),
+              ),
+            );
+          },
+        ),
       ),
       onRefresh: () async{
         _data.clear();
