@@ -25,6 +25,7 @@
   "account_address_state": "State",
   "account_address_city": "City",
   "account_address_street": "Street",
+  "account_address_zip": "Zip code",
   "account_payment_title": "Payment information",
   "account_payment_card": "Card number",
   "account_payment_expiration": "Expiration date",

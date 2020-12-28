@@ -7,6 +7,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final CollectionReference users = FirebaseFirestore.instance.collection('users');
 final CollectionReference products = FirebaseFirestore.instance.collection('products');
 
+// TODO: just for testing real time streams, eliminate in future
 Stream<QuerySnapshot> getUsers() {
   // Call the user's CollectionReference to add a new user
   return users.snapshots();
@@ -29,9 +30,9 @@ void addUser(User user, Map<String, dynamic> userData) async {
   }
 }
 
-Future<DocumentSnapshot> getUserDocument(String userUID) async {
+Future<DocumentSnapshot> getUserDocument(String uid) async {
   // TODO: Handle error cases
-   return users.doc(userUID).get();
+   return users.doc(uid).get();
 }
 
 Future<QuerySnapshot> getUserInProgressOrders(String uid) async {

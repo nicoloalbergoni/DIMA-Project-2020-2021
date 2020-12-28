@@ -27,6 +27,7 @@ abstract class  LocaleKeys {
   static const account_address_state = 'account_address_state';
   static const account_address_city = 'account_address_city';
   static const account_address_street = 'account_address_street';
+  static const account_address_zip = 'account_address_zip';
   static const account_payment_title = 'account_payment_title';
   static const account_payment_card = 'account_payment_card';
   static const account_payment_expiration = 'account_payment_expiration';
