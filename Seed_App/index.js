@@ -10,9 +10,9 @@ let { seedProducts, seedUsers, seedReviews } = require("./src/seedFunctions");
 
 async function main() {
   console.log("Starting DB seeding...");
-  await seedProducts(30);
+  await seedProducts(40);
   await seedUsers();
-  await seedReviews(50); // This function can lead to multiple reviews from the same user on the same product
+  await seedReviews(50); // This function can leads to multiple reviews from the same user on the same product
   console.log("Finished DB seeding");
 }
 

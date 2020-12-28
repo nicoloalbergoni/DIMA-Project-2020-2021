@@ -4,6 +4,7 @@
         - lastname
         - email
         - photoURL
+        - birth_date
         - addresses: [
             - state
             - city
@@ -38,7 +39,9 @@
         - description
         - rating
         - categories // array di tags
-
+        - hot_deal
+        - popular
+        
 + reviews
     -> review[a_id]:
         - comment

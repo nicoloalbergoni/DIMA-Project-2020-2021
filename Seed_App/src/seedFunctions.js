@@ -27,7 +27,9 @@ exports.seedProducts = async function (number) {
       "discount": faker.random.number({min:0, max:100}),
       "description": faker.commerce.productDescription(),
       "rating": faker.random.number({min:0, max:5}),
-      "categories": categories
+      "categories": categories,
+      "hot_deal": (Math.random() > 0.5) ? true : false,
+      "popular": (Math.random() > 0.5) ? true : false,
     };
 
     await products.add(data);
@@ -54,25 +56,32 @@ exports.seedUsers = async function () {
   for(var i = usersUID.length - 1; i>=0; i--) {
     // Extract and then remove a random element from the array
     let uid = usersUID.splice(Math.floor(Math.random()*usersUID.length), 1)[0];
+    
+    let addresses = [];
+    let payment_methods = [];
+    for (let i = 0; i < getRandomInt(1, 5); i++) {
+      addresses.push({
+          "state": faker.address.state(),
+          "city": faker.address.city(),
+          "street": faker.address.streetName(),
+          "zip_code": faker.address.zipCode()
+        });     
+    }
+    for (let i = 0;  i < getRandomInt(1, 5); i++) {
+      payment_methods.push({
+          "CC_number": faker.finance.creditCardCVV(),
+          "CC_expiry_date": generateRandomDate(new Date(2016, 0), new Date(2025, 11)),
+        });    
+    }
+
     let data = {
       "firstname": faker.name.firstName(),
       "lastname": faker.name.lastName(),
       "email": usersAuthData[uid].email,
       "photoURL": faker.image.imageUrl(), // Check if the generated links work
-      "addresses": [
-        {
-          "state": faker.address.state(),
-          "city": faker.address.city(),
-          "street": faker.address.streetName(),
-          "zip_code": faker.address.zipCode()
-        }
-      ],
-      "payment_methods": [
-        {
-          "CC_number": faker.finance.creditCardCVV(),
-          "CC_expiry_date": new Date(),
-        }
-      ]      
+      "addresses": addresses,
+      "payment_methods": payment_methods,
+      "birth_date": generateRandomDate(new Date(1950, 0), new Date(2002, 11, 31)),     
     };
     
     await users.doc(uid).set(data);
