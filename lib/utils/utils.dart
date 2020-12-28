@@ -24,3 +24,8 @@ String formatDate(Timestamp ts) {
   DateTime date = ts.toDate();
   return DateFormat('dd/MM/yyyy').format(date);
 }
+
+String computePriceString(double price, int discount) {
+  double discountedPrice = price * (1 - (discount / 100));
+  return discountedPrice.toStringAsFixed(2);
+}
