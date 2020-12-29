@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 
 class FilterBar extends StatefulWidget {
   @override
@@ -6,7 +8,7 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  String dropdownValue = 'Newest First';
+  String dropdownValue = LocaleKeys.filter_newest_first.tr();
   bool showFilters;
   bool showAROnly;
   RangeValues priceRangeValues = const RangeValues(10, 500);
@@ -55,7 +57,7 @@ class _FilterBarState extends State<FilterBar> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: 5, left: 0),
-                    child: Text("Order by: "),
+                    child: Text(LocaleKeys.filter_order_by.tr()),
                   ),
                   DropdownButton<String>(
                     value: dropdownValue,
@@ -66,10 +68,11 @@ class _FilterBarState extends State<FilterBar> {
                         dropdownValue = newValue;
                       });
                     },
+                    //TODO: When changing language the Dropdown isn't able to build the new items
                     items: <String>[
-                      'Newest First',
-                      'Cheapest First',
-                      'Expensive First'
+                      "Newest First",
+                      "Cheapest First",
+                      "Expensive First"
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -85,7 +88,7 @@ class _FilterBarState extends State<FilterBar> {
                       });
                     },
                     child: Text(
-                      "FILTER",
+                      LocaleKeys.filter_button_text.tr(),
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.blueAccent),
                     ),
@@ -100,7 +103,7 @@ class _FilterBarState extends State<FilterBar> {
                     Row(
                       children: [
                         Icon(Icons.remove_red_eye),
-                        Text(" AR Available"),
+                        Text(LocaleKeys.filter_AR_toggle_text.tr()),
                         Switch(
                             value: showAROnly,
                             onChanged: (value) {
@@ -112,7 +115,7 @@ class _FilterBarState extends State<FilterBar> {
                     ),
                     Row(
                       children: [
-                        Text("Price range: "),
+                        Text(LocaleKeys.filter_price_range_text.tr()),
                         Expanded(
                           child: RangeSlider(
                             values: priceRangeValues,
@@ -138,7 +141,7 @@ class _FilterBarState extends State<FilterBar> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 5),
-                            child: Text("Categories: "),
+                            child: Text(LocaleKeys.filter_categories_text.tr()),
                           ),
                           Flexible(child: _buildFilterChips()),
                         ],

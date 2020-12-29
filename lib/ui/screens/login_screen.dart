@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //TODO: Sample logo of the app added to occupy space
+            //Sample logo of the app added to occupy space
             Container(
               width: double.infinity,
               height: 200,
@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
-                          child: Text("Sign In")),
+                          child: Text(LocaleKeys.login_button.tr())),
                     ),
                   ],
                 ),
@@ -113,9 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Padding(
               padding: EdgeInsets.only(top: 30, bottom: 5, left: 15),
-              //TODO: Add to localization
               child: Text(
-                "Or sign in with a social account:",
+                LocaleKeys.login_text.tr(),
                 style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
@@ -142,17 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       //TODO: Add support for facebook login
                       onPressed: () => print('Sign in with facebook'),
                     ),
-                  )
-                  // SizedBox(
-                  //   width: 120,
-                  // ),
-                  // Flexible(
-                  //     child: SignInButton(
-                  //   Buttons.Facebook,
-                  //   text: "Facebook",
-                  //   //TODO: Add support for facebook login
-                  //   onPressed: () => print('Sign in with facebook'),
-                  // )),
+                  ),
                 ],
               ),
             ),
@@ -173,11 +162,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 RichText(
                   text: TextSpan(
-                    text: "Not registered? ",
+                    text: LocaleKeys.login_not_registered.tr(),
                     style: DefaultTextStyle.of(context).style,
                     children: [
                       TextSpan(
-                          text: 'Sign Up',
+                          text: LocaleKeys.login_signup_link.tr(),
                           style: TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () =>

@@ -51,7 +51,7 @@ class CartScreen extends StatelessWidget {
         onPressed: () {
           // Add your onPressed code here!
         },
-        label: Text('Buy'),
+        label: Text(LocaleKeys.cart_buy_button.tr()),
         icon: Icon(Icons.shopping_cart_rounded)
       ),
     );

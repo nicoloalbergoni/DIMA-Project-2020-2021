@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 
 class SearchBox extends StatelessWidget {
   final TextEditingController controller;
@@ -22,7 +24,7 @@ class SearchBox extends StatelessWidget {
       decoration: InputDecoration(
           fillColor: Colors.grey.withOpacity(0.2),
           filled: true,
-          hintText: 'Search',
+          hintText: LocaleKeys.search_box_hint.tr(),
           enabledBorder: _defaultBorderStyle,
           border: _defaultBorderStyle,
           suffixIcon: IconButton(onPressed: _performSearch, icon: Icon(Icons.search))),

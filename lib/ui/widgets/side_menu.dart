@@ -72,7 +72,7 @@ class SideMenu extends StatelessWidget {
                                 child: Text(
                                   viewModel.firebaseUser != null
                                       ? viewModel.firebaseUser.email
-                                      : 'Guest',
+                                      : LocaleKeys.drawer_avatar_subtitle.tr(),
                                   style: TextStyle(color: Colors.white,),
                                 ))
                           ],

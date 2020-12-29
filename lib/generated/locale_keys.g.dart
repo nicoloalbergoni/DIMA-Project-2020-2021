@@ -8,9 +8,18 @@ abstract class  LocaleKeys {
   static const error = 'error';
   static const price = 'price';
   static const login_title = 'login_title';
+  static const login_button = 'login_button';
+  static const login_text = 'login_text';
+  static const login_not_registered = 'login_not_registered';
+  static const login_signup_link = 'login_signup_link';
   static const registration_title = 'registration_title';
+  static const registration_name = 'registration_name';
+  static const registration_surname = 'registration_surname';
+  static const registration_confirm_password = 'registration_confirm_password';
+  static const registration_button = 'registration_button';
   static const orders_title = 'orders_title';
   static const cart_title = 'cart_title';
+  static const cart_buy_button = 'cart_buy_button';
   static const search_title = 'search_title';
   static const unity_title = 'unity_title';
   static const account_title = 'account_title';
@@ -24,6 +33,7 @@ abstract class  LocaleKeys {
   static const drawer_logout = 'drawer_logout';
   static const drawer_login = 'drawer_login';
   static const drawer_debug = 'drawer_debug';
+  static const drawer_avatar_subtitle = 'drawer_avatar_subtitle';
   static const account_birthday = 'account_birthday';
   static const account_address_title = 'account_address_title';
   static const account_address_state = 'account_address_state';
@@ -39,5 +49,14 @@ abstract class  LocaleKeys {
   static const orders_total = 'orders_total';
   static const orders_tab_progress = 'orders_tab_progress';
   static const orders_tab_completed = 'orders_tab_completed';
+  static const filter_order_by = 'filter_order_by';
+  static const filter_newest_first = 'filter_newest_first';
+  static const filter_cheapest_first = 'filter_cheapest_first';
+  static const filter_expensive_first = 'filter_expensive_first';
+  static const filter_button_text = 'filter_button_text';
+  static const filter_AR_toggle_text = 'filter_AR_toggle_text';
+  static const filter_price_range_text = 'filter_price_range_text';
+  static const filter_categories_text = 'filter_categories_text';
+  static const search_box_hint = 'search_box_hint';
 
 }

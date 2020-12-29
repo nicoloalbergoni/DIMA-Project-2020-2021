@@ -6,6 +6,8 @@ import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final CollectionReference users =
@@ -25,7 +27,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -39,9 +40,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Registration page")),
+        appBar: AppBar(title: Text(LocaleKeys.registration_title.tr())),
         resizeToAvoidBottomInset: false,
-        body: Builder (
+        body: Builder(
           builder: (context) {
             return Center(
               child: Form(
@@ -55,8 +56,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         children: <Widget>[
                           TextFormField(
                             controller: _emailController,
-                            decoration:
-                                const InputDecoration(labelText: 'Email'),
+                            decoration: InputDecoration(labelText: 'Email'),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -68,8 +68,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           TextFormField(
                             controller: _firstNameController,
-                            decoration:
-                                const InputDecoration(labelText: 'First Name'),
+                            decoration: InputDecoration(
+                                labelText: LocaleKeys.registration_name.tr()),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -79,8 +79,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           TextFormField(
                             controller: _lastNameController,
-                            decoration:
-                                const InputDecoration(labelText: 'Last Name'),
+                            decoration: InputDecoration(
+                                labelText:
+                                    LocaleKeys.registration_surname.tr()),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -90,8 +91,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           TextFormField(
                             controller: _passwordController,
-                            decoration:
-                                const InputDecoration(labelText: 'Password'),
+                            decoration: InputDecoration(labelText: 'Password'),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -102,8 +102,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           TextFormField(
                             controller: _confirmPasswordController,
-                            decoration: const InputDecoration(
-                                labelText: 'Confirm Password'),
+                            decoration: InputDecoration(
+                                labelText: LocaleKeys
+                                    .registration_confirm_password
+                                    .tr()),
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Please enter some text';
@@ -121,17 +123,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: RaisedButton(
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  User user =
-                                      await _register(context);
+                                  User user = await _register(context);
                                   if (user != null) {
-                                    var store = StoreProvider.of<AppState>(context);
-                                    store.dispatch(ChangeFirebaseUserAction(user));
+                                    var store =
+                                        StoreProvider.of<AppState>(context);
+                                    store.dispatch(
+                                        ChangeFirebaseUserAction(user));
                                     store.dispatch(FetchCartAction());
                                     Navigator.pop(context);
                                   }
                                 }
                               },
-                              child: Text("Submit"),
+                              child: Text(LocaleKeys.registration_button.tr()),
                             ),
                           ),
                         ],
@@ -143,8 +146,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ));
   }
 
-
-  // TODO: Check if passing scaffold is a good practice
   Future<User> _register(BuildContext context) async {
     try {
       final User user = (await _auth.createUserWithEmailAndPassword(
