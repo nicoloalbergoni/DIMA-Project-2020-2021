@@ -16,7 +16,7 @@ class FirebaseQueryFutureBuilder extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
-          return ListView.builder(
+          return Scrollbar(child: ListView.builder(
               scrollDirection: listScrollDirection,
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
@@ -25,7 +25,7 @@ class FirebaseQueryFutureBuilder extends StatelessWidget {
 
                 return dataWidget(docId, data);
               }
-          );
+          ));
         });
   }
 }
