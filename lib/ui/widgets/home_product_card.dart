@@ -15,15 +15,17 @@ class HomeProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: InkWell(
-            splashColor: Colors.green.withAlpha(30),
-            onTap: () {
-              Navigator.pushNamed(context, '/product',
-                  arguments: { 'productId': productId });
-            },
+    return SizedBox(
+      width: 131,
+      child: Card(
+        child: InkWell(
+          splashColor: Colors.green.withAlpha(30),
+          onTap: () {
+            Navigator.pushNamed(context, '/product',
+                arguments: { 'productId': productId });
+          },
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -32,10 +34,13 @@ class HomeProductCard extends StatelessWidget {
                   width: 100,
                   color: Colors.green,
                 ),
-                SizedBox(height: 5,),
+                SizedBox(height: 6,),
                 Text(productName,
                   style: Theme.of(context).textTheme.subtitle2,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                SizedBox(height: 2,),
                 Row(
                   children: [
                     RatingBarIndicator(
@@ -57,17 +62,18 @@ class HomeProductCard extends StatelessWidget {
                 Text('${computePriceString(price, discount)}\$'),
                 SizedBox(height: 4,),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('$price\$',
                         style: TextStyle(decoration: TextDecoration.lineThrough)),
-                    SizedBox(width: 10,),
-                    DiscountChip(discount, fontSize: 11,)
+                    DiscountChip(discount, fontSize: 10,)
                   ],
                 ),
               ],
             ),
           ),
-        )
+          )
+      ),
     );
   }
 }

@@ -21,23 +21,8 @@ class HomeScreen extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Spacer(
-              flex: 1,
-            ),
-            Flexible(
-              flex: 5,
-              child: HomeProductShowcase(LocaleKeys.home_deals.tr(), getHotDeals())
-            ),
-            Spacer(
-              flex: 1,
-            ),
-            Flexible(
-              flex: 5,
-              child: HomeProductShowcase(LocaleKeys.home_popular.tr(), getPopulars()),
-            ),
-            Spacer(
-              flex: 1,
-            ),
+            HomeProductShowcase(LocaleKeys.home_deals.tr(), getHotDeals()),
+            HomeProductShowcase(LocaleKeys.home_popular.tr(), getPopulars()),
           ],
         ));
   }

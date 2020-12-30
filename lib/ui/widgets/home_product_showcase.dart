@@ -18,9 +18,12 @@ class HomeProductShowcase extends StatelessWidget {
           title,
           style: Theme.of(context).textTheme.headline4,
         ),
-        Expanded(child: FirebaseQueryFutureBuilder(
+        SizedBox(
+          height: 214,
+          width: double.infinity,
+          child: FirebaseQueryFutureBuilder(
             future,
-            (docId, data) {
+                (docId, data) {
               return HomeProductCard(data['name'], double.parse(data['price']),
                   data['discount'], docId);
             },
