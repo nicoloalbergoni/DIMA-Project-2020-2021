@@ -1,14 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:realiteye/ui/widgets/discount_chip.dart';
+import 'package:realiteye/utils/utils.dart';
 
 class ProductCard extends StatelessWidget {
 
-  final String name;
+  final DocumentSnapshot productDocument;
 
-
-  ProductCard(this.name);
+  ProductCard(this.productDocument);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,8 @@ class ProductCard extends StatelessWidget {
       child: InkWell(
           splashColor: Colors.green.withAlpha(30),
           onTap: () {
-            Navigator.pushNamed(context, '/product');
+            Navigator.pushNamed(context, '/product',
+                arguments: {'productId': productDocument.reference});
           },
           child: Padding(
             padding: EdgeInsets.all(7),
@@ -41,12 +43,12 @@ class ProductCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name,
+                      Text(productDocument['name'],
                           style: Theme.of(context).textTheme.headline5),
                       Row(
                         children: [
                           RatingBarIndicator(
-                            rating: 4.4,
+                            rating: double.parse(productDocument['rating'].toString()),
                             itemBuilder: (context, index) => Icon(
                               Icons.star,
                               color: Colors.amber,
@@ -65,10 +67,11 @@ class ProductCard extends StatelessWidget {
                         height: 6,
                       ),
                       Text(
-                        'Lorem ipsum dolor   sit amet, consectetur adipiscing elit.'
-                        ' Suspendisse quis metus at libero gravida egestas quis sit amet arcu.'
-                        ' Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisi.'
-                        ' Pellentesque in faucibus nisl. Suspendisse et enim cursus, vehicula.',
+                        productDocument['description'],
+                        // 'Lorem ipsum dolor   sit amet, consectetur adipiscing elit.'
+                        // ' Suspendisse quis metus at libero gravida egestas quis sit amet arcu.'
+                        // ' Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisi.'
+                        // ' Pellentesque in faucibus nisl. Suspendisse et enim cursus, vehicula.',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -79,13 +82,13 @@ class ProductCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            'Price: 99.99\$',
+                            '${computePriceString(double.parse(productDocument['price']), productDocument['discount'])}\$',
                             style: TextStyle(fontSize: 12),
                           ),
                           SizedBox(
                             width: 20,
                           ),
-                          DiscountChip(20)
+                          DiscountChip(productDocument['discount'])
                         ],
                       ),
                     ],

@@ -37,7 +37,7 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
           itemBuilder: (_, int index) {
             if (index < _data.length) {
               final DocumentSnapshot document = _data[index];
-              return ProductCard(document['name']);
+              return ProductCard(document);
             }
             return Center(
               child: Opacity(

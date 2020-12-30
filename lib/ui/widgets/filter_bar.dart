@@ -8,7 +8,7 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  String dropdownValue = LocaleKeys.filter_newest_first.tr();
+  String dropdownValue = LocaleKeys.filter_newest_first;
   bool showFilters;
   bool showAROnly;
   RangeValues priceRangeValues = const RangeValues(10, 500);
@@ -65,18 +65,18 @@ class _FilterBarState extends State<FilterBar> {
                     iconSize: 24,
                     onChanged: (String newValue) {
                       setState(() {
+                        print(newValue);
                         dropdownValue = newValue;
                       });
                     },
-                    //TODO: When changing language the Dropdown isn't able to build the new items
                     items: <String>[
-                      "Newest First",
-                      "Cheapest First",
-                      "Expensive First"
+                      LocaleKeys.filter_newest_first,
+                      LocaleKeys.filter_cheapest_first,
+                      LocaleKeys.filter_expensive_first,
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(value.tr()),
                       );
                     }).toList(),
                   ),
