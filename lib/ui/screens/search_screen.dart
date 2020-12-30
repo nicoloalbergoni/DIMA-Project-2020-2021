@@ -6,6 +6,9 @@ import 'package:realiteye/ui/widgets/filter_bar.dart';
 import 'package:realiteye/ui/widgets/search_box.dart';
 import 'package:realiteye/ui/widgets/search_listview_builder.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
+import 'package:realiteye/utils/search_filters.dart';
+import 'package:realiteye/utils/search_filters_callbacks.dart';
+
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -18,6 +21,8 @@ class _SearchScreenState extends State<SearchScreen> {
   List history;
   bool showHistory;
   bool showSearchResult;
+  SearchFilters _searchState;
+  SearchFiltersCallbacks _searchFiltersCallbacks;
 
   @override
   void initState() {
@@ -26,6 +31,13 @@ class _SearchScreenState extends State<SearchScreen> {
     showSearchResult = false;
     history = ["Item 1", "Item 2"];
     _searchFocus.addListener(_onFocusChange);
+    _searchState = SearchFilters();
+    _searchFiltersCallbacks = SearchFiltersCallbacks(
+        _onDropdownChanged,
+        _onFilterButtonPressed,
+        _onARToggleChanged,
+        _onPriceSliderChanged,
+        _onCategoriesSelected);
   }
 
   @override
@@ -37,13 +49,28 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: EdgeInsets.all(7),
         child: Column(
           children: [
-            SearchBox(_searchController, _searchFocus, _searchPressed),
-            SizedBox(height: 5,),
-            FilterBar(),
+            SearchBox(
+              _searchController,
+              _searchFocus,
+              _searchPressed,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            FilterBar(
+              _searchState.dropdownValue,
+              _searchState.showFilters,
+              _searchState.showAROnly,
+              _searchState.priceRangeValues,
+              _searchState.categoriesBool,
+              _searchFiltersCallbacks,
+            ),
             (showHistory || history.length == 0)
                 ? Flexible(child: _buildHistoryList())
                 : Container(),
-            showSearchResult ? Expanded(child: SearchListViewBuilder()) : Container(),
+            showSearchResult
+                ? Expanded(child: SearchListViewBuilder(_searchState))
+                : Container(),
           ],
         ),
       ),
@@ -81,7 +108,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _searchPressed() {
     setState(() {
-      if (_searchController.text.isNotEmpty && !history.contains(_searchController.text))
+      _searchState.queryText = _searchController.text;
+      if (_searchController.text.isNotEmpty &&
+          !history.contains(_searchController.text))
         history.add(_searchController.text);
 
       _searchFocus.unfocus();
@@ -96,5 +125,36 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchFocus.dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onDropdownChanged(String newValue) {
+    setState(() {
+      _searchState.dropdownValue = newValue;
+    });
+  }
+
+  void _onFilterButtonPressed() {
+    setState(() {
+      _searchState.showFilters = !_searchState.showFilters;
+    });
+  }
+
+  void _onARToggleChanged(bool value) {
+    setState(() {
+      _searchState.showAROnly = value;
+    });
+  }
+
+  void _onPriceSliderChanged(RangeValues values) {
+    setState(() {
+      _searchState.priceRangeValues = values;
+    });
+  }
+
+  void _onCategoriesSelected(String category) {
+    setState(() {
+      _searchState.categoriesBool[category] =
+      !_searchState.categoriesBool[category];
+    });
   }
 }

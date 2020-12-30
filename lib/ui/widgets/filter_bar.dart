@@ -1,32 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
+import 'package:realiteye/utils/search_filters_callbacks.dart';
 
-class FilterBar extends StatefulWidget {
-  @override
-  _FilterBarState createState() => _FilterBarState();
-}
+class FilterBar extends StatelessWidget {
 
-class _FilterBarState extends State<FilterBar> {
-  String dropdownValue = LocaleKeys.filter_newest_first;
-  bool showFilters;
-  bool showAROnly;
-  RangeValues priceRangeValues = const RangeValues(10, 500);
+  final String dropdownValue;
+  final bool showFilters;
+  final bool showAROnly;
+  final RangeValues priceRangeValues;
+  final Map<String, bool> categoriesBool;
+  final SearchFiltersCallbacks callbacks;
 
-  Map<String, bool> categoriesBool = {
-    "Cat1": false,
-    "Cat2": false,
-    "Cat3": false,
-    "Cat4": false,
-    "Cat5": false
-  };
-
-  @override
-  void initState() {
-    super.initState();
-    showFilters = false;
-    showAROnly = false;
-  }
+  FilterBar(this.dropdownValue, this.showFilters, this.showAROnly,
+      this.priceRangeValues, this.categoriesBool, this.callbacks);
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +50,7 @@ class _FilterBarState extends State<FilterBar> {
                     value: dropdownValue,
                     icon: Icon(Icons.arrow_drop_down_sharp),
                     iconSize: 24,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        print(newValue);
-                        dropdownValue = newValue;
-                      });
-                    },
+                    onChanged: callbacks.onDropdownChangedCallback,
                     items: <String>[
                       LocaleKeys.filter_newest_first,
                       LocaleKeys.filter_cheapest_first,
@@ -82,11 +64,7 @@ class _FilterBarState extends State<FilterBar> {
                   ),
                   Spacer(),
                   FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        showFilters = !showFilters;
-                      });
-                    },
+                    onPressed: callbacks.onFilterButtonPressedCallback,
                     child: Text(
                       LocaleKeys.filter_button_text.tr(),
                       textAlign: TextAlign.center,
@@ -106,11 +84,8 @@ class _FilterBarState extends State<FilterBar> {
                         Text(LocaleKeys.filter_AR_toggle_text.tr()),
                         Switch(
                             value: showAROnly,
-                            onChanged: (value) {
-                              setState(() {
-                                showAROnly = value;
-                              });
-                            }),
+                            onChanged: callbacks.onARToggleChangedCallback,
+                        ),
                       ],
                     ),
                     Row(
@@ -126,11 +101,7 @@ class _FilterBarState extends State<FilterBar> {
                             min: 0,
                             max: 500,
                             divisions: 500,
-                            onChanged: (values) {
-                              setState(() {
-                                priceRangeValues = values;
-                              });
-                            },
+                            onChanged: callbacks.onPriceSliderChangedCallback,
                           ),
                         ),
                       ],
@@ -169,12 +140,7 @@ class _FilterBarState extends State<FilterBar> {
           return FilterChip(
             label: Text(categories[index]),
             selected: categoriesBool[categories[index]],
-            onSelected: (_) {
-              setState(() {
-                categoriesBool[categories[index]] =
-                    !categoriesBool[categories[index]];
-              });
-            },
+            onSelected: (_) => callbacks.onCategoriesSelectedCallback(categories[index]),
           );
         },
         separatorBuilder: (BuildContext context, _) => SizedBox(

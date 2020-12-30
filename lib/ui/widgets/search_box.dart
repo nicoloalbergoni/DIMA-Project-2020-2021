@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 
 class SearchBox extends StatelessWidget {
+
   final TextEditingController controller;
   final FocusNode _focus;
   final Function() _performSearch;

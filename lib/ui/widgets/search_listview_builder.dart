@@ -1,16 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/ui/widgets/product_card.dart';
+import 'package:realiteye/utils/data_service.dart';
+import 'package:realiteye/utils/search_filters.dart';
 import 'package:realiteye/utils/utils.dart';
 
 final CollectionReference products = FirebaseFirestore.instance.collection('products');
 
 class SearchListViewBuilder extends StatefulWidget {
+
+  final SearchFilters _searchFilters;
+  SearchListViewBuilder(this._searchFilters);
+
   @override
   _SearchListViewBuilderState createState() => _SearchListViewBuilderState();
 }
 
 class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
+
   ScrollController controller;
   DocumentSnapshot _lastVisible;
   bool _isLoading;
@@ -60,18 +67,7 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
   }
 
   Future<void> _getData() async {
-    QuerySnapshot data;
-    if (_lastVisible == null)
-      data = await products
-          .orderBy('name', descending: true)
-          .limit(5)
-          .get();
-    else
-      data = await products
-          .orderBy('name', descending: true)
-          .startAfter([_lastVisible['name']])
-          .limit(5)
-          .get();
+    QuerySnapshot data = await getSearchQueryResult(_lastVisible, widget._searchFilters.dropdownValue);
 
     if (data != null && data.docs.length > 0) {
       _lastVisible = data.docs[data.docs.length - 1];
