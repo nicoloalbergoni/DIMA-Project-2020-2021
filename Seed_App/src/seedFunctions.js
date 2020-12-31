@@ -1,4 +1,4 @@
-var admin = require("firebase-admin");
+let admin = require("firebase-admin");
 const faker = require('faker');
 
 const db = admin.firestore();
@@ -8,36 +8,55 @@ const reviews = db.collection('reviews');
 
 let { getRandomInt, deleteCollection, loadJson, getAllDocumentReferences, generateRandomDate } = require('./utils');
 
+let possibleCategories = ['Furniture', 'Design', 'Electronic', 'Handmade', 'Rustic', 'Practical', 'Unbranded',
+    'Ergonomic', 'Mechanical', 'Wood', 'Iron', 'Plastic'];
 
-exports.seedProducts = async function (number) { 
+let arPackages = ['AssetBundles/capsule'];
+
+
+exports.seedProducts = async function (productCount) {
   console.log('Starting seed of product collection...');
+  await deleteCollection(products);
+  console.log('Previous products deleted');
 
-  let count = 0;
-  await deleteCollection(products);  
-
-  for (let i = 0; i < number; i++) {
+  for (let i = 0; i < productCount; i++) {
     let categories = [];
     for (let j = 0; j < getRandomInt(1, 5); j++) {
-      categories.push(faker.commerce.productAdjective());      
+      categories.push(possibleCategories[getRandomInt(0, possibleCategories.length)]);
     }
 
-    var data = {
+    let images = [];
+    for (let j = 0; j < getRandomInt(1, 8); j++) {
+      images.push(faker.image.imageUrl())
+    }
+
+    let price = faker.random.number({min: 0, max: 1000, precision: 0.01});
+    let discount = faker.random.number({min: 0, max: 95});
+    let discountedPrice = Math.fround(price * (1 - discount / 100)) + 0.09;
+    let has_AR = Math.random() < 0.8;
+
+    let data = {
       "name": faker.commerce.productName(),
-      "price": faker.commerce.price(),
-      "discount": faker.random.number({min:0, max:100}),
+      "price": price,
+      "discount": discount,
+      "discounted_price": discountedPrice,
       "description": faker.commerce.productDescription(),
-      "rating": faker.random.number({min:0, max:5}),
+      "rating": faker.random.number({min: 1, max: 5, precision: 0.1}),
       "categories": categories,
-      "hot_deal": (Math.random() > 0.5) ? true : false,
-      "popular": (Math.random() > 0.5) ? true : false,
+      "hot_deal": Math.random() > 0.5,
+      "popular": Math.random() > 0.5,
+      "has_AR": has_AR,
+      "thumbnail": faker.image.imageUrl(400, 400),
+      "images": images,
+      "created_at": generateRandomDate(new Date(2019, 0), new Date(2021, 1))
     };
-
+    if (has_AR) {
+      data.ar_package = arPackages[getRandomInt(0, arPackages.length)];
+    }
     await products.add(data);
-
-    count++;    
   }
-  console.log(`Added ${count} products`);
-}
+  console.log(`Added ${productCount} products`);
+};
 
 exports.seedUsers = async function () {
   console.log('Starting seed of users collection...');
@@ -49,17 +68,17 @@ exports.seedUsers = async function () {
   // Remember to delete the entire collection from the firebase console in order to perform a true seed.
   // await deleteCollection(users); 
   let usersAuthData = loadJson("userData.json");
-  for(var i in usersAuthData) {
+  for(let i in usersAuthData) {
     usersUID.push(i);
   }
 
-  for(var i = usersUID.length - 1; i>=0; i--) {
+  for(let i = usersUID.length - 1; i>=0; i--) {
     // Extract and then remove a random element from the array
     let uid = usersUID.splice(Math.floor(Math.random()*usersUID.length), 1)[0];
     
     let addresses = [];
     let payment_methods = [];
-    for (let i = 0; i < getRandomInt(1, 5); i++) {
+    for (let j = 0; j < getRandomInt(1, 5); j++) {
       addresses.push({
           "state": faker.address.state(),
           "city": faker.address.city(),
@@ -67,11 +86,11 @@ exports.seedUsers = async function () {
           "zip_code": faker.address.zipCode()
         });     
     }
-    for (let i = 0;  i < getRandomInt(1, 5); i++) {
+    for (let j = 0;  j < getRandomInt(1, 5); j++) {
       payment_methods.push({
           "CC_number": faker.finance.creditCardCVV(),
           "CC_expiry_date": generateRandomDate(new Date(2016, 0), new Date(2025, 11)),
-        });    
+      });
     }
 
     let data = {
@@ -92,10 +111,9 @@ exports.seedUsers = async function () {
   }  
   
   console.log(`Added ${count} users`);
-}
+};
 
 async function seedCart(userDocRef, number, productsReferences) {
-
   for (let i = 0; i < number; i++) {
     let randomProductDoc = productsReferences[getRandomInt(0, productsReferences.length)];
     let data = {
@@ -113,7 +131,7 @@ async function seedOrders(userDocRef, number, productsReferences) {
     let orderData = {
       "issue_date": issue_date,
       "delivery_date": generateRandomDate(issue_date, new Date(issue_date.getFullYear(), 11, 31)),
-      "in_progress": (Math.random() > 0.5) ? true : false,
+      "in_progress": Math.random() > 0.5,
       "total_cost": faker.commerce.price()
     };
     
@@ -161,5 +179,5 @@ exports.seedReviews = async function(number) {
   }
 
   console.log(`Added ${count} reviews`);
-}
+};
 

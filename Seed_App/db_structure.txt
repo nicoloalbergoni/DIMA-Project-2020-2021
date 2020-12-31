@@ -41,6 +41,10 @@
         - categories // array di tags
         - hot_deal
         - popular
+        - has_AR
+        - thumbnail
+        - images
+        - created_at
         
 + reviews
     -> review[a_id]:

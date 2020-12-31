@@ -9,21 +9,20 @@ import 'package:realiteye/utils/data_service.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var testList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
     return Scaffold(
-        appBar: CustomAppBar(
-          'Realiteye',
-          showCartIcon: true,
-          showSearchIcon: true,
-        ),
-        drawer: SideMenu(),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            HomeProductShowcase(LocaleKeys.home_deals.tr(), getHotDeals()),
-            HomeProductShowcase(LocaleKeys.home_popular.tr(), getPopulars()),
-          ],
-        ));
+      appBar: CustomAppBar(
+        'Realiteye',
+        showCartIcon: true,
+        showSearchIcon: true,
+      ),
+      drawer: SideMenu(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          HomeProductShowcase(LocaleKeys.home_deals.tr(), getHotDeals()),
+          HomeProductShowcase(LocaleKeys.home_popular.tr(), getPopulars()),
+        ],
+      )
+    );
   }
 }
