@@ -67,7 +67,7 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
   }
 
   Future<void> _getData() async {
-    QuerySnapshot data = await getSearchQueryResult(_lastVisible, widget._searchFilters.dropdownValue);
+    QuerySnapshot data = await getSearchQueryResult(widget._searchFilters, _lastVisible);
 
     if (data != null && data.docs.length > 0) {
       _lastVisible = data.docs[data.docs.length - 1];

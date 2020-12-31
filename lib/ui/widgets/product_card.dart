@@ -82,7 +82,7 @@ class ProductCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            '${computePriceString(double.parse(productDocument['price']), productDocument['discount'])}\$',
+                            '${computePriceString(productDocument['price'], productDocument['discount'])}\$',
                             style: TextStyle(fontSize: 12),
                           ),
                           SizedBox(

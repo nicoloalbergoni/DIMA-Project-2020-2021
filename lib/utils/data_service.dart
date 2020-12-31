@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
+import 'package:realiteye/utils/search_filters.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -64,35 +65,41 @@ Future<QuerySnapshot> getPopulars() async {
 
 Map<String, Map<String, dynamic>> orderDict = {
   LocaleKeys.filter_newest_first: {
-    "orderField": "creation_date",
+    "orderField": "created_at",
     "descending": true
   },
   LocaleKeys.filter_cheapest_first: {
-    "orderField": "price",
+    "orderField": "discounted_price",
     "descending": false
   },
   LocaleKeys.filter_expensive_first: {
-    "orderField": "price",
+    "orderField": "discounted_price",
     "descending": true
   },
 };
 
 Future<QuerySnapshot> getSearchQueryResult(
-  DocumentSnapshot lastVisible,
-  String orderField,
-) async {
-  var orderObj = orderDict[orderField];
+    SearchFilters searchFilters, DocumentSnapshot lastVisible) async {
+  Map<String, dynamic> orderObj = orderDict[searchFilters.dropdownValue];
+  String capitalizedQueryText = searchFilters.queryText[0].toUpperCase() +
+      searchFilters.queryText.substring(1);
+
+  print(searchFilters.priceRangeValues.start);
+  print(searchFilters.priceRangeValues.end);
+
+  Query baseQuery = products
+      .where("discounted_price",
+          isGreaterThanOrEqualTo: searchFilters.priceRangeValues.start)
+      .where("discounted_price", isLessThanOrEqualTo: searchFilters.priceRangeValues.end)
+      .orderBy(orderObj["orderField"], descending: orderObj["descending"]);
+
+  //.where("name", isGreaterThan: capitalizedQueryText)
+  //.where("name", isLessThan: capitalizedQueryText + 'z')
+  print(searchFilters.showAROnly);
+  if(searchFilters.showAROnly) baseQuery = baseQuery.where("has_AR", isEqualTo: true);
 
   if (lastVisible == null)
-    return await products
-        .orderBy(orderObj["orderField"], descending: orderObj["descending"])
-        .limit(5)
-        .get();
+    return await baseQuery.limit(5).get();
   else
-    return await products
-        .orderBy(orderObj["orderField"], descending: orderObj["descending"])
-        //.startAfter([lastVisible['name']])
-        .startAfterDocument(lastVisible)
-        .limit(5)
-        .get();
+    return await baseQuery.startAfterDocument(lastVisible).limit(5).get();
 }

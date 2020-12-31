@@ -62,7 +62,7 @@ class ProductScreen extends StatelessWidget {
                             children: [
                               Text('${LocaleKeys.price.tr()}:'
                                   ' ${computePriceString(
-                                  double.parse(data['price']),
+                                  data['price'],
                                   data['discount'])}\$'),
                               SizedBox(width: 20,),
                               DiscountChip(data['discount']),
