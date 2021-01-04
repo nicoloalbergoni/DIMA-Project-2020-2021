@@ -11,6 +11,7 @@ final CollectionReference users =
 final CollectionReference products =
     FirebaseFirestore.instance.collection('products');
 
+final int queryLimit = 5;
 // TODO: just for testing real time streams, eliminate in future
 Stream<QuerySnapshot> getUsers() {
   // Call the user's CollectionReference to add a new user
@@ -63,43 +64,48 @@ Future<QuerySnapshot> getPopulars() async {
   return products.where('popular', isEqualTo: true).get();
 }
 
-Map<String, Map<String, dynamic>> orderDict = {
-  LocaleKeys.filter_newest_first: {
-    "orderField": "created_at",
-    "descending": true
-  },
-  LocaleKeys.filter_cheapest_first: {
-    "orderField": "discounted_price",
-    "descending": false
-  },
-  LocaleKeys.filter_expensive_first: {
-    "orderField": "discounted_price",
-    "descending": true
-  },
+Map<String, bool> orderDict = {
+  LocaleKeys.filter_cheapest_first: false,
+  LocaleKeys.filter_expensive_first: true,
 };
 
-Future<QuerySnapshot> getSearchQueryResult(
+Future<List<DocumentSnapshot>> getSearchQueryResult(
     SearchFilters searchFilters, DocumentSnapshot lastVisible) async {
-  Map<String, dynamic> orderObj = orderDict[searchFilters.dropdownValue];
-  String capitalizedQueryText = searchFilters.queryText[0].toUpperCase() +
-      searchFilters.queryText.substring(1);
 
-  print(searchFilters.priceRangeValues.start);
-  print(searchFilters.priceRangeValues.end);
+  QuerySnapshot queryResult;
+  List<DocumentSnapshot> documentList = [];
+  List<String> selectedCategories = [];
+
+  searchFilters.categoriesBool.forEach((key, value) {
+    if(value) selectedCategories.add(key);
+  });
 
   Query baseQuery = products
       .where("discounted_price",
           isGreaterThanOrEqualTo: searchFilters.priceRangeValues.start)
       .where("discounted_price", isLessThanOrEqualTo: searchFilters.priceRangeValues.end)
-      .orderBy(orderObj["orderField"], descending: orderObj["descending"]);
+      .where("categories", arrayContainsAny: selectedCategories)
+      .orderBy("discounted_price", descending: orderDict[searchFilters.dropdownValue]);
 
-  //.where("name", isGreaterThan: capitalizedQueryText)
-  //.where("name", isLessThan: capitalizedQueryText + 'z')
-  print(searchFilters.showAROnly);
+
   if(searchFilters.showAROnly) baseQuery = baseQuery.where("has_AR", isEqualTo: true);
 
-  if (lastVisible == null)
-    return await baseQuery.limit(5).get();
-  else
-    return await baseQuery.startAfterDocument(lastVisible).limit(5).get();
+
+  do {
+    if (lastVisible == null)
+      queryResult = await baseQuery.limit(queryLimit).get();
+    else
+      queryResult = await baseQuery.startAfterDocument(lastVisible).limit(queryLimit).get();
+
+    if (queryResult.docs.length == 0) break;
+
+    documentList.addAll(queryResult.docs.where((element) {
+      String productName = element.data()['name'].toString().toLowerCase();
+      return productName.contains(searchFilters.queryText.toLowerCase());
+    }).toList());
+
+    lastVisible = queryResult.docs.last;
+  }  while(documentList.length < queryLimit);
+
+  return documentList;
 }

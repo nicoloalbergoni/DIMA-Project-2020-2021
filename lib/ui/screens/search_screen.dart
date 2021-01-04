@@ -8,6 +8,7 @@ import 'package:realiteye/ui/widgets/search_listview_builder.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/search_filters.dart';
 import 'package:realiteye/utils/search_filters_callbacks.dart';
+import 'package:realiteye/utils/utils.dart';
 
 
 class SearchScreen extends StatefulWidget {
@@ -151,10 +152,20 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  void _onCategoriesSelected(String category) {
-    setState(() {
-      _searchState.categoriesBool[category] =
-      !_searchState.categoriesBool[category];
-    });
+  void _onCategoriesSelected(String category, BuildContext context) {
+    bool isCategorySelected = _searchState.categoriesBool[category];
+    int categoryCount = 0;
+    if (!isCategorySelected) {
+      _searchState.categoriesBool.forEach((_, value) {
+        if (value) categoryCount++;
+      });
+    }
+
+    if (categoryCount < 10) {
+      setState(() {
+        _searchState.categoriesBool[category] = !_searchState.categoriesBool[category];
+      });
+    }
+    else displaySnackbarWithText(context, "You can select up to 10 categories");
   }
 }

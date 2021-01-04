@@ -10,17 +10,26 @@ class SearchFilters {
   Map<String, bool> categoriesBool;
 
   SearchFilters({
-    this.queryText = "",
-    this.dropdownValue = LocaleKeys.filter_cheapest_first,
-    this.showFilters = false,
-    this.showAROnly = false,
-    this.priceRangeValues = const RangeValues(10, 500),
-    this.categoriesBool = const {
-      "Cat1": false,
-      "Cat2": false,
-      "Cat3": false,
-      "Cat4": false,
-      "Cat5": false
-    },
-  });
+      this.queryText = "",
+      this.dropdownValue = LocaleKeys.filter_cheapest_first,
+      this.showFilters = false,
+      this.showAROnly = false,
+      this.priceRangeValues = const RangeValues(10, 1000),
+      Map<String, bool> categoriesBool}) {
+    this.categoriesBool = categoriesBool ??
+        {
+          "Furniture": false,
+          "Design": false,
+          "Electronic": false,
+          "Handmade": false,
+          "Rustic": false,
+          "Practical": false,
+          "Unbranded": false,
+          "Ergonomic": false,
+          "Mechanical": false,
+          "Wood": false,
+          "Iron": false,
+          "Plastic": false,
+        };
+  }
 }

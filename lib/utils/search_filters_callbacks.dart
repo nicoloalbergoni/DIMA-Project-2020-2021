@@ -5,7 +5,7 @@ class SearchFiltersCallbacks {
   Function() onFilterButtonPressedCallback;
   Function(bool) onARToggleChangedCallback;
   Function(RangeValues) onPriceSliderChangedCallback;
-  Function(String) onCategoriesSelectedCallback;
+  Function(String, BuildContext) onCategoriesSelectedCallback;
 
   SearchFiltersCallbacks(
       this.onDropdownChangedCallback,

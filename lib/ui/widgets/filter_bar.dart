@@ -52,7 +52,6 @@ class FilterBar extends StatelessWidget {
                     iconSize: 24,
                     onChanged: callbacks.onDropdownChangedCallback,
                     items: <String>[
-                      LocaleKeys.filter_newest_first,
                       LocaleKeys.filter_cheapest_first,
                       LocaleKeys.filter_expensive_first,
                     ].map<DropdownMenuItem<String>>((String value) {
@@ -99,8 +98,8 @@ class FilterBar extends StatelessWidget {
                               priceRangeValues.end.round().toString(),
                             ),
                             min: 0,
-                            max: 500,
-                            divisions: 500,
+                            max: 1000,
+                            divisions: 200,
                             onChanged: callbacks.onPriceSliderChangedCallback,
                           ),
                         ),
@@ -129,7 +128,21 @@ class FilterBar extends StatelessWidget {
   }
 
   Widget _buildFilterChips() {
-    List categories = ["Cat1", "Cat2", "Cat3", "Cat4", "Cat5"];
+    
+    List<List<String>> categories = [
+      [LocaleKeys.categories_furniture, 'Furniture'],
+      [LocaleKeys.categories_design, 'Design'],
+      [LocaleKeys.categories_electronic, 'Electronic'],
+      [LocaleKeys.categories_handmade, 'Handmade'],
+      [LocaleKeys.categories_rustic, 'Rustic'],
+      [LocaleKeys.categories_practical, 'Practical'],
+      [LocaleKeys.categories_unbranded, 'Unbranded'],
+      [LocaleKeys.categories_ergonomic, 'Ergonomic'],
+      [LocaleKeys.categories_mechanical, 'Mechanical'],
+      [LocaleKeys.categories_wood, 'Wood'],
+      [LocaleKeys.categories_iron, 'Iron'],
+      [LocaleKeys.categories_plastic, 'Plastic'],
+    ];
 
     //TODO: Style Scrollbar
     return Scrollbar(
@@ -138,9 +151,9 @@ class FilterBar extends StatelessWidget {
         itemCount: categories.length,
         itemBuilder: (BuildContext context, int index) {
           return FilterChip(
-            label: Text(categories[index]),
-            selected: categoriesBool[categories[index]],
-            onSelected: (_) => callbacks.onCategoriesSelectedCallback(categories[index]),
+            label: Text(categories[index][0].tr()),
+            selected: categoriesBool[categories[index][1]],
+            onSelected: (_) => callbacks.onCategoriesSelectedCallback(categories[index][1], context),
           );
         },
         separatorBuilder: (BuildContext context, _) => SizedBox(

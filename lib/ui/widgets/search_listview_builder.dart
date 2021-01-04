@@ -67,14 +67,14 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
   }
 
   Future<void> _getData() async {
-    QuerySnapshot data = await getSearchQueryResult(widget._searchFilters, _lastVisible);
+    List<DocumentSnapshot> data = await getSearchQueryResult(widget._searchFilters, _lastVisible);
 
-    if (data != null && data.docs.length > 0) {
-      _lastVisible = data.docs[data.docs.length - 1];
+    if (data != null && data.length > 0) {
+      _lastVisible = data[data.length - 1];
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _data.addAll(data.docs);
+          _data.addAll(data);
         });
       }
     } else {
