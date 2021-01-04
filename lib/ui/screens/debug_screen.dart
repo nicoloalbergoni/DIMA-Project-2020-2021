@@ -10,12 +10,13 @@ import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/downloader.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DebugScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(LocaleKeys.title, showCartIcon: true),
+        appBar: CustomAppBar(LocaleKeys.title.tr(), showCartIcon: true),
         drawer: SideMenu(),
         body: StoreConnector<AppState, AppState>(
             converter: (store) => store.state,

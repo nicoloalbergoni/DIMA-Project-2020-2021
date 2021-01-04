@@ -15,7 +15,7 @@ class OrderScreen extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Orders'),
+            title: Text(LocaleKeys.orders_title.tr()),
             bottom: TabBar(
               tabs: [
                 Tab(text: LocaleKeys.orders_tab_progress.tr(),),
