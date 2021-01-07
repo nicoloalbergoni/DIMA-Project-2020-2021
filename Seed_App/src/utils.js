@@ -9,11 +9,12 @@ const FileSystem = require("fs");
  * @param max
  * @returns {number}
  */
-exports.getRandomInt = function (min, max) {
+function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min);
-};
+}
+exports.getRandomInt = getRandomInt;
 
 function createUserRegistrationPromise(userAuthData, outputData) {
   return new Promise((resolve, reject) => {
@@ -81,6 +82,11 @@ exports.getAllDocumentReferences = async function(collectionRef) {
 
 exports.generateRandomDate = function (start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+};
+
+exports.generateRandomImageUrl = function(width = 640, height = 480) {
+  let id = getRandomInt(1, 1000);
+  return `https://picsum.photos/id/${id}/${width}/${height}`;
 };
 
 

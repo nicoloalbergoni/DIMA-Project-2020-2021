@@ -77,19 +77,21 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
   List<String> selectedCategories = [];
 
   searchFilters.categoriesBool.forEach((key, value) {
-    if(value) selectedCategories.add(key);
+    if (value)
+      selectedCategories.add(key);
   });
 
   Query baseQuery = products
       .where("discounted_price",
           isGreaterThanOrEqualTo: searchFilters.priceRangeValues.start)
       .where("discounted_price", isLessThanOrEqualTo: searchFilters.priceRangeValues.end)
-      .where("categories", arrayContainsAny: selectedCategories)
       .orderBy("discounted_price", descending: orderDict[searchFilters.dropdownValue]);
 
+  if (searchFilters.showAROnly)
+    baseQuery = baseQuery.where("has_AR", isEqualTo: true);
 
-  if(searchFilters.showAROnly) baseQuery = baseQuery.where("has_AR", isEqualTo: true);
-
+  if (selectedCategories.length > 0)
+    baseQuery = baseQuery.where("categories", arrayContainsAny: selectedCategories);
 
   do {
     if (lastVisible == null)
@@ -105,7 +107,7 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
     }).toList());
 
     lastVisible = queryResult.docs.last;
-  }  while(documentList.length < queryLimit);
+  }  while (documentList.length < queryLimit);
 
   return documentList;
 }

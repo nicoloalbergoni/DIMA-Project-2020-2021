@@ -27,11 +27,15 @@ class ProductCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    'https://picsum.photos/250?image=9',
-                    height: 120.0,
-                    width: 120.0,
-                    //fit: BoxFit.fill,
+                  child: Container(
+                    height: 120,
+                    width: 120,
+                    child: Image.network(
+                      productDocument['thumbnail'],
+                      fit: BoxFit.cover,
+                      loadingBuilder: onImageLoad,
+                      errorBuilder: onImageError,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -82,7 +86,7 @@ class ProductCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            '${computePriceString(productDocument['price'], productDocument['discount'])}\$',
+                            '${computePriceString(productDocument['price'] / 1.0, productDocument['discount'])}\$',
                             style: TextStyle(fontSize: 12),
                           ),
                           SizedBox(

@@ -29,7 +29,7 @@ class ProductScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Flexible(
-                      child: ImageCarousel(),
+                      child: ImageCarousel(data['images']),
                       flex: 1
                   ),
                   Flexible(
@@ -62,7 +62,7 @@ class ProductScreen extends StatelessWidget {
                             children: [
                               Text('${LocaleKeys.price.tr()}:'
                                   ' ${computePriceString(
-                                  data['price'],
+                                  data['price'] / 1.0,
                                   data['discount'])}\$'),
                               SizedBox(width: 20,),
                               DiscountChip(data['discount']),

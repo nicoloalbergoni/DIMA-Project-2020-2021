@@ -24,8 +24,8 @@ class HomeProductShowcase extends StatelessWidget {
           child: FirebaseQueryFutureBuilder(
             future,
                 (docId, data) {
-              return HomeProductCard(data['name'], data['price'],
-                  data['discount'], docId);
+              return HomeProductCard(data['name'], data['price'] / 1.0,
+                  data['discount'], data['thumbnail'], docId);
             },
             listScrollDirection: Axis.horizontal,
           ),

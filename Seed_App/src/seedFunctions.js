@@ -6,7 +6,8 @@ const products = db.collection('products');
 const users = db.collection('users');
 const reviews = db.collection('reviews');
 
-let { getRandomInt, deleteCollection, loadJson, getAllDocumentReferences, generateRandomDate } = require('./utils');
+let { getRandomInt, deleteCollection, loadJson, getAllDocumentReferences,
+  generateRandomDate, generateRandomImageUrl } = require('./utils');
 
 let possibleCategories = ['Furniture', 'Design', 'Electronic', 'Handmade', 'Rustic', 'Practical', 'Unbranded',
     'Ergonomic', 'Mechanical', 'Wood', 'Iron', 'Plastic'];
@@ -27,7 +28,7 @@ exports.seedProducts = async function (productCount) {
 
     let images = [];
     for (let j = 0; j < getRandomInt(1, 8); j++) {
-      images.push(faker.image.imageUrl())
+      images.push(generateRandomImageUrl());
     }
 
     let price = faker.random.number({min: 0, max: 1000, precision: 0.01});
@@ -46,13 +47,14 @@ exports.seedProducts = async function (productCount) {
       "hot_deal": Math.random() > 0.5,
       "popular": Math.random() > 0.5,
       "has_AR": has_AR,
-      "thumbnail": faker.image.imageUrl(400, 400),
+      "thumbnail": generateRandomImageUrl(400, 400),
       "images": images,
       "created_at": generateRandomDate(new Date(2019, 0), new Date(2021, 1))
     };
     if (has_AR) {
       data.ar_package = arPackages[getRandomInt(0, arPackages.length)];
     }
+
     await products.add(data);
   }
   console.log(`Added ${productCount} products`);
@@ -97,7 +99,7 @@ exports.seedUsers = async function () {
       "firstname": faker.name.firstName(),
       "lastname": faker.name.lastName(),
       "email": usersAuthData[uid].email,
-      "photoURL": faker.image.imageUrl(), // Check if the generated links work
+      "photoURL": faker.image.imageUrl(),
       "addresses": addresses,
       "payment_methods": payment_methods,
       "birth_date": generateRandomDate(new Date(1950, 0), new Date(2002, 11, 31)),     

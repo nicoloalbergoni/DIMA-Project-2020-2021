@@ -9,9 +9,11 @@ class HomeProductCard extends StatelessWidget {
   final String productName;
   final double price;
   final int discount;
+  final String thumbnailUrl;
   final DocumentReference productId;
 
-  HomeProductCard(this.productName, this.price, this.discount, this.productId);
+  HomeProductCard(this.productName, this.price, this.discount,
+      this.thumbnailUrl, this.productId);
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +33,13 @@ class HomeProductCard extends StatelessWidget {
               children: [
                 Container(
                   height: 80,
-                  width: 100,
-                  color: Colors.green,
+                  width: 106,
+                  //color: Colors.green,
+                  child: Image.network(thumbnailUrl, fit: BoxFit.cover,
+                    width: 106,
+                    loadingBuilder: onImageLoad,
+                    errorBuilder: onImageError,
+                  ),
                 ),
                 SizedBox(height: 6,),
                 Text(productName,

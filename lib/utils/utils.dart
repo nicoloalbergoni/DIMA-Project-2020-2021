@@ -29,3 +29,18 @@ String computePriceString(double price, int discount) {
   double discountedPrice = price * (1 - (discount / 100));
   return discountedPrice.toStringAsFixed(2);
 }
+
+Widget onImageLoad(BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+  if (loadingProgress == null) return child;
+    return Center(
+      child: CircularProgressIndicator(
+      value: loadingProgress.expectedTotalBytes != null ?
+      loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+          : null,
+    ),
+  );
+}
+
+Widget onImageError(BuildContext context, Object error, StackTrace stackTrace) {
+  return Image.asset('assets/images/image-not-found.jpg', fit: BoxFit.cover);
+}
