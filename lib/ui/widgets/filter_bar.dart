@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/utils/search_filters_callbacks.dart';
 
@@ -17,22 +17,18 @@ class FilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-      child: Container(
+    return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10)),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey,
-              offset: Offset(0.0, 1.0), //(x,y)
-              blurRadius: 6.0,
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey,
+          //     offset: Offset(0.0, 1.0), //(x,y)
+          //     blurRadius: 6.0,
+          //   ),
+          // ],
         ),
         child: Padding(
           padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -120,15 +116,14 @@ class FilterBar extends StatelessWidget {
                   ],
                 ),
               ),
+              Divider(thickness: 2,),
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildFilterChips() {
-    
     List<List<String>> categories = [
       [LocaleKeys.categories_furniture, 'Furniture'],
       [LocaleKeys.categories_design, 'Design'],
@@ -146,6 +141,7 @@ class FilterBar extends StatelessWidget {
 
     //TODO: Style Scrollbar
     return Scrollbar(
+      thickness: 3,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
