@@ -1,5 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:realiteye/redux/app_state.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -12,6 +13,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var user;
+    if (showCartIcon) {
+      user = StoreProvider.of<AppState>(context).state.firebaseUser;
+    }
+
     return AppBar(
         title: Text(title),
         leading: Builder(
@@ -30,7 +36,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.pushNamed(context, '/search');
           }) :
           Container(),
-          showCartIcon ? IconButton(icon: Icon(Icons.shopping_cart), onPressed: () => Navigator.pushNamed(context, '/cart')) :
+          (showCartIcon && user != null) ? IconButton(icon: Icon(Icons.shopping_cart), onPressed: () => Navigator.pushNamed(context, '/cart')) :
               Container(),
         ],
     );
