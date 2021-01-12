@@ -13,6 +13,9 @@ AppState appReducers(AppState state, dynamic action) {
   else if (action is SwitchThemeAction) {
     return switchTheme(state, action);
   }
+  else if (action is AddHistoryItemAction) {
+    return addHistoryItem(state, action);
+  }
   else if (action is FetchCartAction) {
     return onCartFetchStart(state, action);
   }
@@ -45,6 +48,12 @@ AppState changeFirebaseUser(AppState state, ChangeFirebaseUserAction action) {
 
 AppState switchTheme(AppState state, SwitchThemeAction action) {
   return state.copyWith(theme: action.theme);
+}
+
+AppState addHistoryItem(AppState state, AddHistoryItemAction action) {
+  return state.copyWith(searchHistory: <String>[]
+    ..addAll(state.searchHistory)
+    ..add(action.searchedString));
 }
 
 AppState onCartFetchStart(AppState state, FetchCartAction action) {

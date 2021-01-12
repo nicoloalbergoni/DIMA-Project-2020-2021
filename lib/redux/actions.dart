@@ -21,6 +21,12 @@ class SwitchThemeAction {
   SwitchThemeAction(this.theme);
 }
 
+class AddHistoryItemAction {
+  final String searchedString;
+
+  AddHistoryItemAction(this.searchedString);
+}
+
 class FetchCartAction {}
 
 class FetchCartSucceededAction {

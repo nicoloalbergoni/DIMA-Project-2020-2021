@@ -27,11 +27,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
-      );
+  );
 
   // Initialize Redux state
   final _initialState = AppState(cartItems: [], firebaseUser: null,
-    theme: ThemeMode.light);
+    theme: ThemeMode.light, searchHistory: ['item 1']);
   final Store<AppState> _store = Store<AppState>(appReducers,
       initialState: _initialState,
       middleware: [fetchCartMiddleware, new LoggingMiddleware.printer()]);
