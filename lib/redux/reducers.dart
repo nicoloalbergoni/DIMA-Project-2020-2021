@@ -4,8 +4,11 @@ import '../models/cartItem.dart';
 import 'actions.dart';
 
 AppState appReducers(AppState state, dynamic action) {
-  if (action is AddItemAction) {
-    return addItem(state, action);
+  if (action is AddCartItemAction) {
+    return addCartItem(state, action);
+  }
+  else if (action is RemoveCartItemAction) {
+    return removeCartItem(state, action);
   }
   else if (action is ChangeFirebaseUserAction) {
     return changeFirebaseUser(state, action);
@@ -35,10 +38,17 @@ AppState appReducers(AppState state, dynamic action) {
   return state;
 }
 
-AppState addItem(AppState state, AddItemAction action) {
+AppState addCartItem(AppState state, AddCartItemAction action) {
   return state.copyWith(cartItems: <CartItem>[]
     ..addAll(state.cartItems)
     ..add(action.item)
+  );
+}
+
+AppState removeCartItem(AppState state, RemoveCartItemAction action) {
+  return state.copyWith(cartItems: <CartItem>[]
+    ..addAll(state.cartItems)
+    ..removeWhere((item) => item.productId == action.productId)
   );
 }
 

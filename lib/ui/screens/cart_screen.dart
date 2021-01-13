@@ -27,17 +27,18 @@ class CartScreen extends StatelessWidget {
                   itemCount: state.cartItems.length,
                   itemBuilder: (BuildContext context, int index) {
                     CartItem document = state.cartItems[index];
-                    return FirebaseDocFutureBuilder(getProductDocument(document.productId),
-                        (docData) {
-                          return ListTile(
-                            title: Text(docData['name']),
-                            subtitle: new Text(document.quantity.toString()),
-                            onTap: () {
-                              Navigator.pushNamed(context, '/product',
-                                  arguments: {'productId': document.productId});
-                            },
-                          );
-                        });
+                    return FirebaseDocFutureBuilder(
+                      getProductDocument(document.productId),
+                      (docData) {
+                        return ListTile(
+                          title: Text(docData['name']),
+                          subtitle: new Text(document.quantity.toString()),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/product',
+                                arguments: {'productId': document.productId});
+                          },
+                        );
+                      });
                   },
                   separatorBuilder: (BuildContext context, int index) =>
                       const Divider(),

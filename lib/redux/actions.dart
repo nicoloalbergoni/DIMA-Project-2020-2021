@@ -1,12 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../models/cartItem.dart';
 
-class AddItemAction {
+class AddCartItemAction {
   final CartItem item;
 
-  AddItemAction(this.item);
+  AddCartItemAction(this.item);
+}
+
+class RemoveCartItemAction {
+  final DocumentReference productId;
+
+  RemoveCartItemAction(this.productId);
 }
 
 class ChangeFirebaseUserAction {

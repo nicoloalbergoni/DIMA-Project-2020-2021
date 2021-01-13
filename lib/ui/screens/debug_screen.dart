@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
@@ -10,7 +11,6 @@ import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/downloader.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class DebugScreen extends StatelessWidget {
   @override
@@ -40,7 +40,7 @@ class DebugScreen extends StatelessWidget {
                         onPressed: () {
                           final cartItem = CartItem(null, 5);
                           StoreProvider.of<AppState>(context)
-                              .dispatch(AddItemAction(cartItem));
+                              .dispatch(AddCartItemAction(cartItem));
                         },
                       ),
                       Text("Cart items count: ${state.cartItems.length}"),
