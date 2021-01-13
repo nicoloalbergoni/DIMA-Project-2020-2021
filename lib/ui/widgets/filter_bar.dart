@@ -76,10 +76,11 @@ class FilterBar extends StatelessWidget {
                     Row(
                       children: [
                         Icon(Icons.remove_red_eye),
+                        SizedBox(width: 4,),
                         Text(LocaleKeys.filter_AR_toggle_text.tr()),
                         Switch(
-                            value: showAROnly,
-                            onChanged: callbacks.onARToggleChangedCallback,
+                          value: showAROnly,
+                          onChanged: callbacks.onARToggleChangedCallback,
                         ),
                       ],
                     ),
