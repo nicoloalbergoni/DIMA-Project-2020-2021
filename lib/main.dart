@@ -77,40 +77,55 @@ class MyApp extends StatelessWidget {
             child: StoreConnector<AppState, AppState>(
                 converter: (store) => store.state,
                 builder: (context, state) {
-                  return MaterialApp(
-                    localizationsDelegates: context.localizationDelegates,
-                    supportedLocales: context.supportedLocales,
-                    locale: context.locale,
-                    theme: ThemeData(
-                        brightness: Brightness.light,
-                        /* light theme settings */
-                        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
-                        primaryColor: Colors.teal[700],
-                        accentColor: Colors.tealAccent[400]
-                    ),
-                    darkTheme: ThemeData(
-                      brightness: Brightness.dark,
-                      /* dark theme settings */
-                    ),
-                    themeMode: state.theme,
-                    /* ThemeMode.system to follow system theme,
-                     ThemeMode.light for light theme,
-                     ThemeMode.dark for dark theme
-                    */
-                    initialRoute: '/',
-                    routes: {
-                      '/': (context) => HomeScreen(),
-                      '/product': (context) => ProductScreen(),
-                      '/login': (context) => LoginScreen(),
-                      '/register': (context) => RegistrationScreen(),
-                      // TODO: modify this to get the correct bundlePath as extra
-                      '/unity': (context) => UnityScreen(bundlePath: "TODO"),
-                      '/cart': (context) => CartScreen(),
-                      '/debug': (context) => DebugScreen(),
-                      '/search': (context) => SearchScreen(),
-                      '/profile': (context) => ProfileScreen(),
-                      '/orders': (context) => OrderScreen()
+                  /* This gesture handler allows to unfocus any focused widget
+                  in any screen of the app when user taps outside a focusable widget,
+                  giving the application a better user experience.
+                  See: https://flutterigniter.com/dismiss-keyboard-form-lose-focus/
+                   */
+                  return GestureDetector(
+                    onTap: () {
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+
+                      if (!currentFocus.hasPrimaryFocus &&
+                          currentFocus.focusedChild != null) {
+                        currentFocus.focusedChild.unfocus();
+                      }
                     },
+                    child: MaterialApp(
+                      localizationsDelegates: context.localizationDelegates,
+                      supportedLocales: context.supportedLocales,
+                      locale: context.locale,
+                      theme: ThemeData(
+                          brightness: Brightness.light,
+                          /* light theme settings */
+                          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
+                          primaryColor: Colors.teal[700],
+                          accentColor: Colors.tealAccent[400]
+                      ),
+                      darkTheme: ThemeData(
+                        brightness: Brightness.dark,
+                        /* dark theme settings */
+                      ),
+                      themeMode: state.theme,
+                      /* ThemeMode.system to follow system theme,
+                      ThemeMode.light for light theme,
+                      ThemeMode.dark for dark theme
+                      */
+                      initialRoute: '/',
+                      routes: {
+                        '/': (context) => HomeScreen(),
+                        '/product': (context) => ProductScreen(),
+                        '/login': (context) => LoginScreen(),
+                        '/register': (context) => RegistrationScreen(),
+                        // TODO: modify this to get the correct bundlePath as extra
+                        '/unity': (context) => UnityScreen(bundlePath: "TODO"),
+                        '/cart': (context) => CartScreen(),
+                        '/debug': (context) => DebugScreen(),
+                        '/search': (context) => SearchScreen(),
+                        '/profile': (context) => ProfileScreen(),
+                        '/orders': (context) => OrderScreen()
+                      },
+                    ),
                   );
                 })
             );
