@@ -6,7 +6,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showCartIcon;
   final bool showSearchIcon;
-  CustomAppBar(this.title, {this.showCartIcon = false, this.showSearchIcon = false}) : preferredSize = Size.fromHeight(kToolbarHeight);
+  final List<Widget> additionalActions;
+
+  CustomAppBar(this.title, {this.showCartIcon = false, this.showSearchIcon = false,
+    this.additionalActions = const []}) : preferredSize = Size.fromHeight(kToolbarHeight);
 
   @override
   final Size preferredSize; // default is 56.0
@@ -36,8 +39,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.pushNamed(context, '/search');
           }) :
           Container(),
-          (showCartIcon && user != null) ? IconButton(icon: Icon(Icons.shopping_cart), onPressed: () => Navigator.pushNamed(context, '/cart')) :
-              Container(),
+          (showCartIcon && user != null) ? IconButton(icon: Icon(Icons.shopping_cart),
+              onPressed: () => Navigator.pushNamed(context, '/cart'))
+              : Container(),
+          // add any additional action passed to the widget constructor
+          ...additionalActions,
         ],
     );
   }
