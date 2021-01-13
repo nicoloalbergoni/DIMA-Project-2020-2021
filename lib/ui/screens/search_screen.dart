@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -9,6 +10,7 @@ import 'package:realiteye/ui/widgets/filter_bar.dart';
 import 'package:realiteye/ui/widgets/search_box.dart';
 import 'package:realiteye/ui/widgets/search_listview_builder.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
+import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/search_filters.dart';
 import 'package:realiteye/utils/search_filters_callbacks.dart';
 import 'package:realiteye/utils/utils.dart';
@@ -25,9 +27,12 @@ class _SearchScreenState extends State<SearchScreen> {
   final FocusNode _searchFocus = FocusNode();
   bool showHistory;
   bool showSearchResult;
-  SearchFilters _searchState;
+  SearchFilters _searchFilters;
   SearchFiltersCallbacks _searchFiltersCallbacks;
   SearchScreenViewModel vm;
+  List<DocumentSnapshot> retrievedDocs = new List<DocumentSnapshot>();
+
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -35,7 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
     showHistory = false;
     showSearchResult = false;
     _searchFocus.addListener(_onFocusChange);
-    _searchState = SearchFilters();
+    _searchFilters = SearchFilters();
     _searchFiltersCallbacks = SearchFiltersCallbacks(
         _onDropdownChanged,
         _onFilterButtonPressed,
@@ -47,6 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: CustomAppBar(LocaleKeys.search_title.tr()),
       drawer: SideMenu(),
       body: StoreConnector<AppState, SearchScreenViewModel>(
@@ -72,18 +78,19 @@ class _SearchScreenState extends State<SearchScreen> {
                     height: 5,
                   ),
                   FilterBar(
-                    _searchState.dropdownValue,
-                    _searchState.showFilters,
-                    _searchState.showAROnly,
-                    _searchState.priceRangeValues,
-                    _searchState.categoriesBool,
+                    _searchFilters.dropdownValue,
+                    _searchFilters.showFilters,
+                    _searchFilters.showAROnly,
+                    _searchFilters.priceRangeValues,
+                    _searchFilters.categoriesBool,
                     _searchFiltersCallbacks,
                   ),
                   (showHistory || viewModel.searchHistory.length == 0)
                       ? Flexible(child: _buildHistoryList())
                       : Container(),
-                  showSearchResult
-                      ? Expanded(child: SearchListViewBuilder(_searchState))
+                  (showSearchResult && retrievedDocs.length > 0)
+                      ? Expanded(child: SearchListViewBuilder(retrievedDocs,
+                          _getFilteredProductDocs, _onSearchDataRefresh))
                       : Container(),
                 ],
               ),
@@ -117,26 +124,60 @@ class _SearchScreenState extends State<SearchScreen> {
         showHistory = true;
         showSearchResult = false;
       } else {
-        //showSearchResult = true;
+        showSearchResult = true;
         showHistory = false;
       }
     });
   }
 
-  void _searchPressed() {
+  void _searchPressed() async {
     List<String> history = vm.searchHistory;
+    String searchText = _searchController.text;
 
     setState(() {
-      _searchState.queryText = _searchController.text;
-      if (_searchController.text.isNotEmpty &&
-          !history.contains(_searchController.text))
-        vm.addHistoryItemCallback(_searchController.text);
-
-      _searchFocus.unfocus();
-      //_searchController.clear();
-      showHistory = false;
-      showSearchResult = _searchController.text.isNotEmpty;
+      retrievedDocs = [];
     });
+    print('Previous product docs data deleted');
+
+    _searchFilters.queryText = searchText;
+    if (searchText.isNotEmpty && !history.contains(searchText)) {
+      vm.addHistoryItemCallback(searchText);
+    }
+    _searchFocus.unfocus();
+
+    await _getFilteredProductDocs();
+
+    setState(() {
+      showHistory = false;
+      showSearchResult = true;
+    });
+  }
+
+  Future<void> _getFilteredProductDocs() async {
+    DocumentSnapshot lastVisible = (retrievedDocs.length > 0)
+        ? retrievedDocs.last : null;
+    List<DocumentSnapshot> data = await getSearchQueryResult(_searchFilters, lastVisible);
+
+    if (data != null && data.length > 0) {
+      setState(() {
+        retrievedDocs.addAll(data);
+      });
+      print('New product docs added');
+    }
+    else {
+      // TODO: workaround to avoid context propagation
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('No more items were found')));
+    }
+  }
+
+  void _onSearchDataRefresh() async {
+    // TODO: this cause the blank section flash during refresh, how to improve it?
+    setState(() {
+      retrievedDocs = [];
+    });
+    print('Previous product docs data deleted');
+    await _getFilteredProductDocs();
   }
 
   @override
@@ -148,40 +189,40 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _onDropdownChanged(String newValue) {
     setState(() {
-      _searchState.dropdownValue = newValue;
+      _searchFilters.dropdownValue = newValue;
     });
   }
 
   void _onFilterButtonPressed() {
     setState(() {
-      _searchState.showFilters = !_searchState.showFilters;
+      _searchFilters.showFilters = !_searchFilters.showFilters;
     });
   }
 
   void _onARToggleChanged(bool value) {
     setState(() {
-      _searchState.showAROnly = value;
+      _searchFilters.showAROnly = value;
     });
   }
 
   void _onPriceSliderChanged(RangeValues values) {
     setState(() {
-      _searchState.priceRangeValues = values;
+      _searchFilters.priceRangeValues = values;
     });
   }
 
   void _onCategoriesSelected(String category, BuildContext context) {
-    bool isCategorySelected = _searchState.categoriesBool[category];
+    bool isCategorySelected = _searchFilters.categoriesBool[category];
     int categoryCount = 0;
     if (!isCategorySelected) {
-      _searchState.categoriesBool.forEach((_, value) {
+      _searchFilters.categoriesBool.forEach((_, value) {
         if (value) categoryCount++;
       });
     }
 
     if (categoryCount < 10) {
       setState(() {
-        _searchState.categoriesBool[category] = !_searchState.categoriesBool[category];
+        _searchFilters.categoriesBool[category] = !_searchFilters.categoriesBool[category];
       });
     }
     else displaySnackbarWithText(context, "You can select up to 10 categories");

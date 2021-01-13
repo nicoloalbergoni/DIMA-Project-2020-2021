@@ -1,49 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/ui/widgets/product_card.dart';
-import 'package:realiteye/utils/data_service.dart';
-import 'package:realiteye/utils/search_filters.dart';
-import 'package:realiteye/utils/utils.dart';
 
 final CollectionReference products = FirebaseFirestore.instance.collection('products');
 
 class SearchListViewBuilder extends StatefulWidget {
+  final List<DocumentSnapshot> _data;
+  final Function() getNewDataCallback;
+  final Function() refreshDataCallback;
 
-  final SearchFilters _searchFilters;
-  SearchListViewBuilder(this._searchFilters);
+  SearchListViewBuilder(this._data, this.getNewDataCallback, this.refreshDataCallback);
 
   @override
   _SearchListViewBuilderState createState() => _SearchListViewBuilderState();
 }
 
 class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
-
   ScrollController controller;
-  DocumentSnapshot _lastVisible;
-  bool _isLoading;
-  List<DocumentSnapshot> _data = new List<DocumentSnapshot>();
+  bool _isLoading = false;
 
   @override
   void initState() {
     controller = new ScrollController()..addListener(_scrollListener);
     super.initState();
-    _isLoading = true;
-    _getData();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return RefreshIndicator(
       //TODO: Style Scrollbar
       child: Scrollbar(
         child: ListView.builder(
           shrinkWrap: true,
           controller: controller,
-          itemCount: _data.length + 1,
+          itemCount: widget._data.length + 1,
           itemBuilder: (_, int index) {
-            if (index < _data.length) {
-              final DocumentSnapshot document = _data[index];
+            if (index < widget._data.length) {
+              final DocumentSnapshot document = widget._data[index];
               return ProductCard(document);
             }
             return Center(
@@ -58,29 +51,13 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
           },
         ),
       ),
-      onRefresh: () async{
-        _data.clear();
-        _lastVisible = null;
-        await _getData();
+      onRefresh: () async {
+        if (!_isLoading) {
+          setState(() => _isLoading = true);
+          await widget.refreshDataCallback();
+        }
       },
     );
-  }
-
-  Future<void> _getData() async {
-    List<DocumentSnapshot> data = await getSearchQueryResult(widget._searchFilters, _lastVisible);
-
-    if (data != null && data.length > 0) {
-      _lastVisible = data[data.length - 1];
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _data.addAll(data);
-        });
-      }
-    } else {
-      setState(() => _isLoading = false);
-      displaySnackbarWithText(context, "No more items were found");
-    }
   }
 
   @override
@@ -89,11 +66,12 @@ class _SearchListViewBuilderState extends State<SearchListViewBuilder> {
     super.dispose();
   }
 
-  void _scrollListener() {
+  void _scrollListener() async {
     if (!_isLoading) {
       if (controller.position.pixels == controller.position.maxScrollExtent) {
         setState(() => _isLoading = true);
-        _getData();
+        await widget.getNewDataCallback();
+        setState(() => _isLoading = false);
       }
     }
   }
