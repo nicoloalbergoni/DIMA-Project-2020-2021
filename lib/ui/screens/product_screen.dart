@@ -9,10 +9,10 @@ import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/discount_chip.dart';
-import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
 import 'package:realiteye/ui/widgets/image_carousel.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
-import 'package:realiteye/utils/data_service.dart';
+import 'package:realiteye/utils/downloader.dart';
+import 'package:realiteye/utils/product_screen_args.dart';
 import 'package:realiteye/utils/utils.dart';
 import 'package:realiteye/view_models/product_screen_appbar_vm.dart';
 
@@ -20,7 +20,7 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // contains only field productId, of type DocumentReference
-    final Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;
+    final ProductScreenArgs args = ModalRoute.of(context).settings.arguments;
 
     return StoreConnector<AppState, ProductScreenAppbarViewModel>(
       converter: (store) {
@@ -37,103 +37,105 @@ class ProductScreen extends StatelessWidget {
             LocaleKeys.product_title.tr(),
             additionalActions: [
               Builder(builder: (context) =>
-                  _buildCartAction(args['productId'], viewModel, context),
+                  _buildCartAction(args.productId, viewModel, context),
               ),
             ],
           ),
           drawer: SideMenu(),
-          body: FirebaseDocFutureBuilder(
-              getProductDocument(args['productId']),
-                  (data) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: [
-                      Flexible(
-                          child: ImageCarousel(data['images']),
-                          flex: 1
-                      ),
-                      Flexible(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text('${data['name']}',
-                                        style: Theme.of(context).textTheme.headline5
-                                    ),
-                                    Spacer(flex: 1,),
-                                    RatingBarIndicator(
-                                      rating: 4.4,
-                                      itemBuilder: (context, index) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      itemCount: 5,
-                                      itemSize: 16.0,
-                                      direction: Axis.horizontal,
-                                    ),
-                                    Text('1234',
-                                      style: Theme.of(context).textTheme.caption,
-                                    )
-                                  ],
-                                ),
-                                SizedBox(height: 10,),
-                                Row(
-                                  children: [
-                                    Text('${LocaleKeys.price.tr()}:'
-                                        ' ${computePriceString(
-                                        data['price'] / 1.0,
-                                        data['discount'])}\$'),
-                                    SizedBox(width: 20,),
-                                    DiscountChip(data['discount']),
-                                  ],
-                                ),
-                                // Row(
-                                //   children: [
-                                //     Chip(
-                                //       avatar: Icon(Icons.shopping_bag),
-                                //       label: Text('On sale'),
-                                //     ),
-                                //     SizedBox(width: 10,),
-                                //     Chip(
-                                //       avatar: Icon(Icons.card_giftcard),
-                                //       label: Text('Gifts'),
-                                //     )
-                                //   ],
-                                // ),
-                                SizedBox(height: 50,
-                                  child: ListView.separated(
-                                    itemCount: data['categories'].length,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return Chip(
-                                        avatar: Icon(Icons.shopping_bag),
-                                        label: Text('${data['categories'][index]}'),
-                                      );
-                                    },
-                                    separatorBuilder: (BuildContext context, int index) =>
-                                        SizedBox(width: 6,),
-                                  ),
-                                ),
-                                SizedBox(height: 16,),
-                                Text('${data['description']}')
-                              ]
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              children: [
+                Flexible(
+                    child: ImageCarousel(args.data['images']),
+                    flex: 1
+                ),
+                Flexible(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(args.data['name'],
+                              style: Theme.of(context).textTheme.headline5
                           ),
-                          flex: 2
-                      ),
-                    ],
-                  ),
-                );
-              }
+                          Row(
+                            children: [
+                              RatingBarIndicator(
+                                rating: args.data['rating'] / 1.0,
+                                itemBuilder: (context, index) => Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                itemCount: 5,
+                                itemSize: 16.0,
+                                direction: Axis.horizontal,
+                              ),
+                              Text('1234',
+                                style: Theme.of(context).textTheme.caption,
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 8,),
+                          Row(
+                            children: [
+                              Text('${LocaleKeys.price.tr()}:'
+                                  ' ${computePriceString(
+                                  args.data['price'] / 1.0,
+                                  args.data['discount'])}\$'),
+                              SizedBox(width: 20,),
+                              DiscountChip(args.data['discount']),
+                            ],
+                          ),
+                          // Row(
+                          //   children: [
+                          //     Chip(
+                          //       avatar: Icon(Icons.shopping_bag),
+                          //       label: Text('On sale'),
+                          //     ),
+                          //     SizedBox(width: 10,),
+                          //     Chip(
+                          //       avatar: Icon(Icons.card_giftcard),
+                          //       label: Text('Gifts'),
+                          //     )
+                          //   ],
+                          // ),
+                          SizedBox(height: 50,
+                            child: ListView.separated(
+                              itemCount: args.data['categories'].length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Chip(
+                                  avatar: Icon(Icons.shopping_bag),
+                                  label: Text('${args.data['categories'][index]}'),
+                                );
+                              },
+                              separatorBuilder: (BuildContext context, int index) =>
+                                  SizedBox(width: 6,),
+                            ),
+                          ),
+                          SizedBox(height: 16,),
+                          Text(args.data['description'])
+                        ]
+                    ),
+                    flex: 2
+                ),
+              ],
+            ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-              onPressed: () {
-                // Add your onPressed code here!
-              },
-              label: Text('${LocaleKeys.product_AR.tr()}'),
+          floatingActionButton: (args.data['has_AR'])
+            ? FloatingActionButton.extended(
+                onPressed: () async {
+                  String bundlePath = await downloadUnityBundle(args.data['ar_package']);
+                  Navigator.pushNamed(context, '/unity',
+                      arguments: {'bundlePath': bundlePath});
+                },
+                label: Text('${LocaleKeys.product_AR.tr()}'),
+                icon: Icon(Icons.visibility)
+              )
+            : FloatingActionButton.extended(
+              onPressed: null,
+              label: Text('No AR model available'),
               icon: Icon(Icons.visibility)
-          ),
+            ),
         );
       },
     );

@@ -117,8 +117,7 @@ class MyApp extends StatelessWidget {
                         '/product': (context) => ProductScreen(),
                         '/login': (context) => LoginScreen(),
                         '/register': (context) => RegistrationScreen(),
-                        // TODO: modify this to get the correct bundlePath as extra
-                        '/unity': (context) => UnityScreen(bundlePath: "TODO"),
+                        '/unity': (context) => UnityScreen(),
                         '/cart': (context) => CartScreen(),
                         '/debug': (context) => DebugScreen(),
                         '/search': (context) => SearchScreen(),

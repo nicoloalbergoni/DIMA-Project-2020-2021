@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:realiteye/ui/widgets/discount_chip.dart';
+import 'package:realiteye/utils/product_screen_args.dart';
 import 'package:realiteye/utils/utils.dart';
 
 class ProductCard extends StatelessWidget {
-
   final DocumentSnapshot productDocument;
 
   ProductCard(this.productDocument);
@@ -18,7 +18,7 @@ class ProductCard extends StatelessWidget {
           splashColor: Colors.green.withAlpha(30),
           onTap: () {
             Navigator.pushNamed(context, '/product',
-                arguments: {'productId': productDocument.reference});
+                arguments: ProductScreenArgs(productDocument.reference, productDocument.data()));
           },
           child: Padding(
             padding: EdgeInsets.all(7),
@@ -72,10 +72,6 @@ class ProductCard extends StatelessWidget {
                       ),
                       Text(
                         productDocument['description'],
-                        // 'Lorem ipsum dolor   sit amet, consectetur adipiscing elit.'
-                        // ' Suspendisse quis metus at libero gravida egestas quis sit amet arcu.'
-                        // ' Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla facilisi.'
-                        // ' Pellentesque in faucibus nisl. Suspendisse et enim cursus, vehicula.',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

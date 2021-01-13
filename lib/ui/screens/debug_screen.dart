@@ -6,7 +6,6 @@ import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/models/cartItem.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
-import 'package:realiteye/ui/screens/unity_screen.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/data_service.dart';
@@ -27,12 +26,9 @@ class DebugScreen extends StatelessWidget {
                       FlatButton(
                         child: Text('Open Unity'),
                         onPressed: () async {
-                          String path = await downloadUnityBundle('capsule');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      UnityScreen(bundlePath: path)));
+                          String path = await downloadUnityBundle('AssetBundles/capsule');
+                          Navigator.pushNamed(context, '/unity',
+                            arguments: {'bundlePath': path});
                         },
                       ),
                       FlatButton(

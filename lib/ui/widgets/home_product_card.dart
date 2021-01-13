@@ -1,19 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:realiteye/utils/product_screen_args.dart';
 import 'package:realiteye/utils/utils.dart';
 
 import 'discount_chip.dart';
 
 class HomeProductCard extends StatelessWidget {
-  final String productName;
-  final double price;
-  final int discount;
-  final String thumbnailUrl;
+  final Map<String, dynamic> data;
   final DocumentReference productId;
 
-  HomeProductCard(this.productName, this.price, this.discount,
-      this.thumbnailUrl, this.productId);
+  HomeProductCard(this.data, this.productId);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +21,7 @@ class HomeProductCard extends StatelessWidget {
           splashColor: Colors.green.withAlpha(30),
           onTap: () {
             Navigator.pushNamed(context, '/product',
-                arguments: { 'productId': productId });
+                arguments: ProductScreenArgs(productId, data));
           },
           child: Padding(
             padding: EdgeInsets.all(8.0),
@@ -35,14 +32,14 @@ class HomeProductCard extends StatelessWidget {
                   height: 80,
                   width: 106,
                   //color: Colors.green,
-                  child: Image.network(thumbnailUrl, fit: BoxFit.cover,
+                  child: Image.network(data['thumbnail'], fit: BoxFit.cover,
                     width: 106,
                     loadingBuilder: onImageLoad,
                     errorBuilder: onImageError,
                   ),
                 ),
                 SizedBox(height: 6,),
-                Text(productName,
+                Text(data['name'],
                   style: Theme.of(context).textTheme.subtitle2,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -51,7 +48,7 @@ class HomeProductCard extends StatelessWidget {
                 Row(
                   children: [
                     RatingBarIndicator(
-                      rating: 4.4,
+                      rating: data['rating'] / 1.0,
                       itemBuilder: (context, index) => Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -66,14 +63,14 @@ class HomeProductCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8,),
-                Text('${computePriceString(price, discount)}\$'),
+                Text('${computePriceString(data['price'] / 1.0, data['discount'])}\$'),
                 SizedBox(height: 4,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('$price\$',
+                    Text('${data['price']}\$',
                         style: TextStyle(decoration: TextDecoration.lineThrough)),
-                    DiscountChip(discount, fontSize: 10,)
+                    DiscountChip(data['discount'], fontSize: 10,)
                   ],
                 ),
               ],

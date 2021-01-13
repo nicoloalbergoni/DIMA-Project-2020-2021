@@ -1,9 +1,10 @@
 import 'dart:io';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
 
@@ -25,12 +26,12 @@ Future<bool> _checkPermission() async {
   return false;
 }
 
-Future<String> downloadUnityBundle(String productID) async {
+Future<String> downloadUnityBundle(String bundlePath) async {
   //TODO: Check permissions
   bool _permissionReady = await _checkPermission();
 
   //TODO: Check status of the call
-  String downloadURL = await storage.ref('AssetBundles/'+ productID).getDownloadURL();
+  String downloadURL = await storage.ref(bundlePath).getDownloadURL();
 
   final pathToSave =
       (await _findLocalPath()) + Platform.pathSeparator + 'Download';
@@ -41,9 +42,11 @@ Future<String> downloadUnityBundle(String productID) async {
     savedDir.create();
   }
 
-  final savePath = p.join(pathToSave, productID);
+  // basically remove "Assetbundles/" and take only the last part as name
+  String bundleID = bundlePath.split('/').last;
+  final savePath = p.join(pathToSave, bundleID);
   await FlutterDownloader.enqueue(
-    fileName: productID,
+    fileName: bundleID,
     url: downloadURL,
     savedDir: pathToSave,
     showNotification: true, // TODO: Set to false in production

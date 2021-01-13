@@ -8,6 +8,7 @@ import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/data_service.dart';
+import 'package:realiteye/utils/product_screen_args.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -29,13 +30,13 @@ class CartScreen extends StatelessWidget {
                     CartItem document = state.cartItems[index];
                     return FirebaseDocFutureBuilder(
                       getProductDocument(document.productId),
-                      (docData) {
+                      (data) {
                         return ListTile(
-                          title: Text(docData['name']),
+                          title: Text(data['name']),
                           subtitle: new Text(document.quantity.toString()),
                           onTap: () {
                             Navigator.pushNamed(context, '/product',
-                                arguments: {'productId': document.productId});
+                                arguments: ProductScreenArgs(document.productId, data));
                           },
                         );
                       });

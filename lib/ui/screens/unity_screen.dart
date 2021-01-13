@@ -4,11 +4,10 @@ import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 
 class UnityScreen extends StatefulWidget {
-  final String bundlePath;
   @override
   _UnityScreenState createState() => _UnityScreenState();
 
-  UnityScreen({Key key, @required this.bundlePath}) : super(key: key);
+  UnityScreen({Key key}) : super(key: key);
 }
 
 class _UnityScreenState extends State<UnityScreen> {
@@ -23,6 +22,8 @@ class _UnityScreenState extends State<UnityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -37,7 +38,7 @@ class _UnityScreenState extends State<UnityScreen> {
           child: Stack(
             children: <Widget>[
               UnityWidget(
-                onUnityViewCreated: onUnityCreated,
+                onUnityViewCreated: onUnityCreated(args['bundlePath']),
                 isARScene: true,
                 onUnityMessage: onUnityMessage,
                 onUnitySceneLoaded: onUnitySceneLoaded,
@@ -96,24 +97,23 @@ class _UnityScreenState extends State<UnityScreen> {
   }
 
   // Communication from Unity to Flutter
-  void onUnityMessage(controller, message) {
+  void onUnityMessage(UnityWidgetController controller, message) {
     print('Received message from unity: ${message.toString()}');
   }
 
-  // Callback that connects the created controller to the unity controller
-  void onUnityCreated(controller) {
-    this._unityWidgetController = controller;
-    setupModelBundle(widget.bundlePath);
+  /// Closure that generates the callback that connects the created controller
+  /// to the Unity controller. A closure is required because the unity plugin
+  /// callback accepts only the controller that is passed by the Unity instance.
+  void Function(UnityWidgetController) onUnityCreated(String bundlePath) {
+    return (controller) {
+      this._unityWidgetController = controller;
+      setupModelBundle(bundlePath);
+    };
   }
 
   // Communication from Unity when new scene is loaded to Flutter
-  void onUnitySceneLoaded(
-      controller, {
-        int buildIndex,
-        bool isLoaded,
-        bool isValid,
-        String name,
-      }) {
+  void onUnitySceneLoaded(UnityWidgetController controller, {
+        int buildIndex, bool isLoaded, bool isValid, String name}) {
     print('Received scene loaded from unity: $name');
     print('Received scene loaded from unity buildIndex: $buildIndex');
   }
