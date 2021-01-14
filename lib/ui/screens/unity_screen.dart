@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 
+// Unity plugin requires strings, so colors are directly represented in this type
+final List<String> colorStrings = ['255,0,0', '0,255,0', '0,0,255'];
+
 class UnityScreen extends StatefulWidget {
   @override
   _UnityScreenState createState() => _UnityScreenState();
@@ -13,7 +16,6 @@ class UnityScreen extends StatefulWidget {
 class _UnityScreenState extends State<UnityScreen> {
   static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   UnityWidgetController _unityWidgetController;
-  double _sliderValue = 0.1;
 
   @override
   void initState() {
@@ -54,19 +56,34 @@ class _UnityScreenState extends State<UnityScreen> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
-                        child: Text("Rotation speed:"),
+                        child: Text("Choose a color:"),
                       ),
-                      Slider(
-                        onChanged: (value) {
-                          setState(() {
-                            _sliderValue = value;
-                          });
-                          setObjPosition(value.toString());
-                        },
-                        value: _sliderValue,
-                        min: 0,
-                        max: 1,
-                      ),
+                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: Scrollbar(
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: colorStrings.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              List<int> cValues = colorStrings[index].split(',')
+                                  .map((e) => int.parse(e)).toList();
+                              Color c = Color.fromRGBO(cValues[0], cValues[1], cValues[2], 1);
+
+                              // TODO: fix this mess
+                              return ElevatedButton(
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  color: c,
+                                ),
+                                onPressed: () => changeModelColor(colorStrings[index]),
+                              );
+                            },
+                            separatorBuilder: (context, index) => SizedBox(width: 10,),
+                        )),
+                      )
                     ],
                   ),
                 ),
@@ -79,13 +96,13 @@ class _UnityScreenState extends State<UnityScreen> {
   }
 
   // Communication from Flutter to Unity
-  void setObjPosition(String speed) {
-    _unityWidgetController.postMessage(
-      'Cube',
-      'setObjPosition',
-      speed,
-    );
-  }
+  // void setObjPosition(String speed) {
+  //   _unityWidgetController.postMessage(
+  //     'Cube',
+  //     'setObjPosition',
+  //     speed,
+  //   );
+  // }
 
   // Communication from Flutter to Unity
   void setupModelBundle(String bundlePath) {
@@ -93,6 +110,15 @@ class _UnityScreenState extends State<UnityScreen> {
       'ObjectSpawner',
       'SetupObject',
       bundlePath,
+    );
+  }
+
+  // Communication from Flutter to Unity
+  void changeModelColor(String encodedColor) {
+    _unityWidgetController.postMessage(
+      'ObjectSpawner',
+      'ChangeColor',
+      encodedColor,
     );
   }
 

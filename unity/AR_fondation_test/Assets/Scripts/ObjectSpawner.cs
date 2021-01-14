@@ -2,10 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour {
     private GameObject objectToSpawn;
+    private GameObject instantiatedObject = null;
+    private Color defaultColor;
+    private Color actualColor;
+    // TODO: delete after debugging
+    public GameObject test;
 
     private PlacementIndicator placementIndicator;
 
@@ -31,18 +37,39 @@ public class ObjectSpawner : MonoBehaviour {
 
       } */
 
-    public GameObject Activate () {
-        GameObject obj = Instantiate(objectToSpawn,
-                placementIndicator.transform.position, placementIndicator.transform.rotation);
+    public GameObject Activate() {
+        instantiatedObject = Instantiate(objectToSpawn, placementIndicator.transform.position, placementIndicator.transform.rotation);
+        // move actual object instead of instantiating it again?
 
-        return obj;
+        return instantiatedObject;
+    }
+
+    public void ChangeColor(string colorEncoding) {
+        float[] colorValues = colorEncoding.Split(',').Select(val => int.Parse(val) / 255.0f).ToArray();
+        Renderer[] objRenderers = instantiatedObject.GetComponentsInChildren<Renderer>();
+
+        actualColor = new Color (colorValues[0], colorValues[1], colorValues[2]);
+        foreach (Renderer objRenderer in objRenderers) {
+            objRenderer.material.SetColor("_Color", actualColor);
+        }
+
+        // Testing code, delete after debugging
+        /*Renderer[] objRenderers = test.GetComponentsInChildren<Renderer> ();
+
+        foreach (Renderer objRenderer in objRenderers) {
+            objRenderer.material.SetColor("_Color", Color.red);
+        }
+        actualColor = Color.red;*/
     }
 
     public void SetupObject(string bundlePath) {
         Debug.Log ("bundlePath:" + bundlePath);
         AssetBundle assetBundle = AssetBundle.LoadFromFile(bundlePath);
         Debug.Log ("bundle loaded correctly:" + (assetBundle != null));
-        objectToSpawn = assetBundle.LoadAsset<GameObject>("Capsule");
+
+        string prefabName = bundlePath.Split ('/').Last ();
+        Debug.Log ("try to load prefab named " + prefabName);
+        objectToSpawn = assetBundle.LoadAsset<GameObject>(prefabName);
         Debug.Log ("object loaded correctly:" + (objectToSpawn != null));
     }
 
