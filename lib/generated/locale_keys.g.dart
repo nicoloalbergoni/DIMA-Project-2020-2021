@@ -7,6 +7,7 @@ abstract class  LocaleKeys {
   static const loading = 'loading';
   static const error = 'error';
   static const price = 'price';
+  static const quantity = 'quantity';
   static const login_title = 'login_title';
   static const login_button = 'login_button';
   static const login_text = 'login_text';
@@ -25,6 +26,7 @@ abstract class  LocaleKeys {
   static const account_title = 'account_title';
   static const product_title = 'product_title';
   static const product_AR = 'product_AR';
+  static const product_no_AR = 'product_no_AR';
   static const home_deals = 'home_deals';
   static const home_popular = 'home_popular';
   static const drawer_account = 'drawer_account';

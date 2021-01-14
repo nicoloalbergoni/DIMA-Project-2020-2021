@@ -103,9 +103,12 @@ class ProductScreen extends StatelessWidget {
                               itemCount: args.data['categories'].length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
+                                String category = args.data['categories'][index];
+                                String categoryKey = 'categories_${category.toLowerCase()}';
+
                                 return Chip(
                                   avatar: Icon(Icons.shopping_bag),
-                                  label: Text('${args.data['categories'][index]}'),
+                                  label: Text(categoryKey.tr()),
                                 );
                               },
                               separatorBuilder: (BuildContext context, int index) =>
@@ -133,7 +136,8 @@ class ProductScreen extends StatelessWidget {
               )
             : FloatingActionButton.extended(
               onPressed: null,
-              label: Text('No AR model available'),
+              label: Text(LocaleKeys.product_no_AR.tr()),
+              backgroundColor: Theme.of(context).disabledColor,
               icon: Icon(Icons.visibility)
             ),
         );
