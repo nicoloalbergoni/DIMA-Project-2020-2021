@@ -9,6 +9,7 @@ import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/product_screen_args.dart';
+import 'package:realiteye/utils/utils.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -24,7 +25,8 @@ class CartScreen extends StatelessWidget {
               Expanded(
                 child: ListView.separated(
                   shrinkWrap: true,
-                  padding: const EdgeInsets.all(8),
+                  // padding used for whole list, not for items
+                  padding: const EdgeInsets.only(top: 6.0),
                   itemCount: state.cartItems.length,
                   itemBuilder: (BuildContext context, int index) {
                     CartItem document = state.cartItems[index];
@@ -32,8 +34,17 @@ class CartScreen extends StatelessWidget {
                       getProductDocument(document.productId),
                       (data) {
                         return ListTile(
+                          leading: SizedBox(
+                            height: 60,
+                            width: 60,
+                            child: Image.network(data['thumbnail'],
+                              fit: BoxFit.cover,
+                              loadingBuilder: onImageLoad,
+                              errorBuilder: onImageError,
+                            ),
+                          ),
                           title: Text(data['name']),
-                          subtitle: new Text(document.quantity.toString()),
+                          subtitle: new Text('${LocaleKeys.quantity.tr()}: ${document.quantity}'),
                           onTap: () {
                             Navigator.pushNamed(context, '/product',
                                 arguments: ProductScreenArgs(document.productId, data));
