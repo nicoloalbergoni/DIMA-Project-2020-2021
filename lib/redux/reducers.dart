@@ -84,6 +84,7 @@ AppState firebaseLogout(AppState state, FirebaseLogoutAction action) {
       firebaseUser: null,
       cartItems: [],
       theme: state.theme,
+      searchHistory: state.searchHistory,
       isFetching: state.isFetching,
       error: state.error
   );
