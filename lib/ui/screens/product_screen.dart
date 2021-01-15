@@ -107,6 +107,7 @@ class ProductScreen extends StatelessWidget {
                                 String categoryKey = 'categories_${category.toLowerCase()}';
 
                                 return Chip(
+                                  // TODO: add a category-icon map?
                                   avatar: Icon(Icons.shopping_bag),
                                   label: Text(categoryKey.tr()),
                                 );
@@ -131,7 +132,7 @@ class ProductScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/unity',
                       arguments: {'bundlePath': bundlePath});
                 },
-                label: Text('${LocaleKeys.product_AR.tr()}'),
+                label: Text(LocaleKeys.product_AR.tr()),
                 icon: Icon(Icons.visibility)
               )
             : FloatingActionButton.extended(

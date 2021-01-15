@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
+import 'package:realiteye/models/cartItem.dart';
 import 'package:realiteye/utils/search_filters.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -110,4 +111,52 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
   }  while (documentList.length < queryLimit);
 
   return documentList;
+}
+
+
+/// Add an order from user's cart items
+Future<void> addOrderFromCartData(String uid, List<CartItem> cartData) async {
+  Map<String, dynamic> orderData;
+  orderData['in_progress'] = true;
+  orderData['issue_date'] = DateTime.now();
+  orderData['delivery_date'] = DateTime.now().add(Duration(days: 14));
+  orderData['total_cost'] = 100.0;
+
+  DocumentSnapshot user = await users.doc(uid).get();
+
+  // Create order, add order data and get its document reference
+  DocumentReference order = await user.reference
+      .collection('orders')
+      .add(orderData);
+
+  // Add each cart item object as a doc
+  cartData.forEach((item) async {
+    Map<String, dynamic> itemMap = {
+      'product_id': item.productId, 'quantity': item.quantity
+    };
+    await order.collection('orderItems').add(itemMap);
+  });
+}
+
+/// Update user's cart items in the database
+Future<void> updateUserCart(String uid, List<CartItem> cartData) async {
+  DocumentSnapshot user = await users.doc(uid).get();
+
+  // Get all documents in cart
+  QuerySnapshot dbCartItems = await user.reference
+      .collection('cart').get();
+
+  // Delete all previous documents (cart items)
+  dbCartItems.docs.forEach((doc) async {
+    await user.reference
+        .collection('cart').doc(doc.id).delete();
+  });
+
+  // Add each cart item object as a doc
+  cartData.forEach((item) async {
+    Map<String, dynamic> itemMap = {
+      'product_id': item.productId, 'quantity': item.quantity
+    };
+    await user.reference.collection('cart').add(itemMap);
+  });
 }
