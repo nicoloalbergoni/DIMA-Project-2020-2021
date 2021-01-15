@@ -31,37 +31,31 @@ class _UnityScreenState extends State<UnityScreen> {
       appBar: AppBar(
         title: Text(LocaleKeys.unity_title.tr()),
       ),
-        body: Card(
-          margin: const EdgeInsets.all(8),
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Stack(
-            children: <Widget>[
-              UnityWidget(
-                onUnityViewCreated: onUnityCreated(args['bundlePath']),
-                isARScene: true,
-                onUnityMessage: onUnityMessage,
-                onUnitySceneLoaded: onUnitySceneLoaded,
-                fullscreen: false,
-              ),
-              Positioned(
-                bottom: 20,
-                left: 20,
-                right: 20,
-                child: Card(
-                  elevation: 10,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Text("Choose a color:"),
-                      ),
-                      SizedBox(height: 10,),
-                      SizedBox(
-                        height: 50,
-                        width: double.infinity,
+        body: Stack(
+          children: <Widget>[
+            UnityWidget(
+              onUnityViewCreated: onUnityCreated(args['bundlePath']),
+              isARScene: true,
+              onUnityMessage: onUnityMessage,
+              onUnitySceneLoaded: onUnitySceneLoaded,
+              onUnityUnloaded: onUnityUnloaded,
+              fullscreen: false,
+            ),
+            Positioned(
+              bottom: 20,
+              left: 20,
+              right: 20,
+              child: Card(
+                elevation: 10,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: 10,),
+                    Text("Choose a color:"),
+                    SizedBox(
+                      height: 70,
+                      width: double.infinity,
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
                         child: Scrollbar(
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
@@ -71,25 +65,30 @@ class _UnityScreenState extends State<UnityScreen> {
                                   .map((e) => int.parse(e)).toList();
                               Color c = Color.fromRGBO(cValues[0], cValues[1], cValues[2], 1);
 
-                              // TODO: fix this mess
-                              return ElevatedButton(
+                              return InkWell(
                                 child: Container(
                                   height: 50,
                                   width: 50,
-                                  color: c,
+                                  decoration: BoxDecoration(
+                                    color: c,
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0)),
+                                  ),
                                 ),
-                                onPressed: () => changeModelColor(colorStrings[index]),
+                                onTap: () => changeModelColor(colorStrings[index]),
                               );
                             },
                             separatorBuilder: (context, index) => SizedBox(width: 10,),
-                        )),
-                      )
-                    ],
-                  ),
+                          )
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );/*,
     );*/
@@ -142,6 +141,11 @@ class _UnityScreenState extends State<UnityScreen> {
         int buildIndex, bool isLoaded, bool isValid, String name}) {
     print('Received scene loaded from unity: $name');
     print('Received scene loaded from unity buildIndex: $buildIndex');
+  }
+
+  void onUnityUnloaded(UnityWidgetController controller) async {
+    print('Unity unload fired');
+    await controller.silentQuitPlayer();
   }
 
 }

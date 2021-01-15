@@ -4,12 +4,11 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
-public class PlacementIndicator : MonoBehaviour
-{
+public class PlacementIndicator : MonoBehaviour {
+    public ObjectSpawner spawner;
 
     private ARRaycastManager rayManager;
     private GameObject indicator;
-    public ObjectSpawner spawner;
     private bool spawned = false;
     private GameObject model;
 
@@ -43,7 +42,7 @@ public class PlacementIndicator : MonoBehaviour
                     model = spawner.Activate();
                 }
                 else {
-                    model.transform.position = this.gameObject.transform.position;
+                    model.transform.position = spawner.ComputeOffsetPosition(this.gameObject.transform.position);
                 }
             }
         }

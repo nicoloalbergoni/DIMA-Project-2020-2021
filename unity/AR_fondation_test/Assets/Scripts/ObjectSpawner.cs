@@ -6,14 +6,15 @@ using System.Linq;
 using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour {
-    private GameObject objectToSpawn;
-    private GameObject instantiatedObject = null;
-    private Color defaultColor;
-    private Color actualColor;
     // TODO: delete after debugging
     public GameObject test;
 
+    private GameObject objectToSpawn;
+    private GameObject instantiatedObject = null;
+    private Color defaultColor;
     private PlacementIndicator placementIndicator;
+    private Vector3 offsetPos;
+    private Quaternion offsetRotation;
 
 
     void Start () {
@@ -37,20 +38,31 @@ public class ObjectSpawner : MonoBehaviour {
 
       } */
 
+    /// <summary>
+    /// This function is called only if the object is not already instantiated, otherwise it is moved by the PlacementIndicator script.
+    /// </summary>
+    /// <returns>Instantiated GameObject</returns>
     public GameObject Activate() {
-        instantiatedObject = Instantiate(objectToSpawn, placementIndicator.transform.position, placementIndicator.transform.rotation);
-        // move actual object instead of instantiating it again?
+        offsetPos = objectToSpawn.transform.position;
+        offsetRotation = objectToSpawn.transform.rotation;
+        Debug.Log ("Model offset: " + offsetPos.ToString());
+        Debug.Log ("Model rotation offset: " + offsetRotation.eulerAngles.ToString ());
+        instantiatedObject = Instantiate(objectToSpawn, placementIndicator.transform.position + offsetPos, placementIndicator.transform.rotation * offsetRotation);
 
         return instantiatedObject;
+    }
+
+    public Vector3 ComputeOffsetPosition(Vector3 pos) {
+        return pos + offsetPos;
     }
 
     public void ChangeColor(string colorEncoding) {
         float[] colorValues = colorEncoding.Split(',').Select(val => int.Parse(val) / 255.0f).ToArray();
         Renderer[] objRenderers = instantiatedObject.GetComponentsInChildren<Renderer>();
 
-        actualColor = new Color (colorValues[0], colorValues[1], colorValues[2]);
+        Color decodedColor = new Color (colorValues[0], colorValues[1], colorValues[2]);
         foreach (Renderer objRenderer in objRenderers) {
-            objRenderer.material.SetColor("_Color", actualColor);
+            objRenderer.material.SetColor("_Color", decodedColor);
         }
 
         // Testing code, delete after debugging
