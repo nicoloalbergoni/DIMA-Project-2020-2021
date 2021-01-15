@@ -71,5 +71,6 @@ abstract class  LocaleKeys {
   static const categories_wood = 'categories_wood';
   static const categories_iron = 'categories_iron';
   static const categories_plastic = 'categories_plastic';
+  static const cart_dismissible_delete = 'cart_dismissible_delete';
 
 }

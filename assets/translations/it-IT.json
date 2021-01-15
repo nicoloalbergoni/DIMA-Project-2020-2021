@@ -68,5 +68,6 @@
   "categories_mechanical": "Meccanico",
   "categories_wood": "Legno",
   "categories_iron": "Ferro",
-  "categories_plastic": "Plastica"
+  "categories_plastic": "Plastica",
+  "cart_dismissible_delete": "Elimina"
 }

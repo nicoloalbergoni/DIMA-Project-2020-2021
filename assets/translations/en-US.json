@@ -68,5 +68,6 @@
   "categories_mechanical": "Mechanical",
   "categories_wood": "Wood",
   "categories_iron": "Iron",
-  "categories_plastic": "Plastic"
+  "categories_plastic": "Plastic",
+  "cart_dismissible_delete": "Delete"
 }
