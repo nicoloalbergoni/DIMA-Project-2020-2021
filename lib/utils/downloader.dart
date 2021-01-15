@@ -30,9 +30,6 @@ Future<String> downloadUnityBundle(String bundlePath) async {
   //TODO: Check permissions
   bool _permissionReady = await _checkPermission();
 
-  //TODO: Check status of the call
-  String downloadURL = await storage.ref(bundlePath).getDownloadURL();
-
   final pathToSave =
       (await _findLocalPath()) + Platform.pathSeparator + 'Download';
 
@@ -44,14 +41,36 @@ Future<String> downloadUnityBundle(String bundlePath) async {
 
   // basically remove "Assetbundles/" and take only the last part as name
   String bundleID = bundlePath.split('/').last;
-  final savePath = p.join(pathToSave, bundleID);
-  await FlutterDownloader.enqueue(
-    fileName: bundleID,
-    url: downloadURL,
-    savedDir: pathToSave,
-    showNotification: true, // TODO: Set to false in production
-    openFileFromNotification: false
-  );
+  String savePath = p.join(pathToSave, bundleID);
+
+  if (isFileCached(savePath)) {
+    print('AssetBundle already cached locally');
+  }
+  else {
+    try {
+      String downloadURL = await storage.ref(bundlePath).getDownloadURL();
+
+      await FlutterDownloader.enqueue(
+          fileName: bundleID,
+          url: downloadURL,
+          savedDir: pathToSave,
+          showNotification: true, // TODO: Set to false in production
+          openFileFromNotification: false
+      );
+    }
+    catch(e) {
+      print('Error while downloading assetBundle');
+      savePath = null;
+    }
+  }
 
   return savePath;
+}
+
+/// Check that file exists and that it's less than 1 day old
+bool isFileCached(String savePath) {
+  File f = File(savePath);
+
+  return f.existsSync() &&
+      DateTime.now().compareTo(f.lastModifiedSync().add(Duration(days: 1))) <= 0;
 }
