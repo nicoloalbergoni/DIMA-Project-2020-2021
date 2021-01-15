@@ -10,6 +10,9 @@ AppState appReducers(AppState state, dynamic action) {
   else if (action is RemoveCartItemAction) {
     return removeCartItem(state, action);
   }
+  else if (action is ChangeCartItemQuantity) {
+    return changeCartItemQuantity(state, action);
+  }
   else if (action is ChangeFirebaseUserAction) {
     return changeFirebaseUser(state, action);
   }
@@ -50,6 +53,13 @@ AppState removeCartItem(AppState state, RemoveCartItemAction action) {
     ..addAll(state.cartItems)
     ..removeWhere((item) => item.productId == action.productId)
   );
+}
+
+AppState changeCartItemQuantity(AppState state, ChangeCartItemQuantity action) {
+  return state.copyWith(cartItems: <CartItem>[]
+    ..addAll(state.cartItems.map((e) => (e.productId == action.item.productId)
+        ? action.item : e
+    )));
 }
 
 AppState changeFirebaseUser(AppState state, ChangeFirebaseUserAction action) {

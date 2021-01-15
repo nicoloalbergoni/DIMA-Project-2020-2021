@@ -13,7 +13,26 @@ import 'package:realiteye/utils/product_screen_args.dart';
 import 'package:realiteye/utils/utils.dart';
 import 'package:realiteye/view_models/cart_screen_vm.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  List<TextEditingController> textControllers;
+
+  @override
+  void initState() {
+    super.initState();
+    textControllers = [];
+  }
+
+  @override
+  void dispose() {
+    textControllers.forEach((element) => element.dispose());
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +41,12 @@ class CartScreen extends StatelessWidget {
       body: StoreConnector<AppState, CartScreenViewModel>(
         converter: (store) {
           return CartScreenViewModel(
-              cartItems: store.state.cartItems,
-              removeFromCartCallback: (productId) =>
-                  store.dispatch(RemoveCartItemAction(productId)));
+            cartItems: store.state.cartItems,
+            removeFromCartCallback: (productId) =>
+                store.dispatch(RemoveCartItemAction(productId)),
+            changeCartItemQuantityCallback: (cartItem) =>
+                store.dispatch(ChangeCartItemQuantity(cartItem)),
+          );
         },
         builder: (context, viewModel) {
           return Column(
@@ -36,9 +58,13 @@ class CartScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 6.0),
                   itemCount: viewModel.cartItems.length,
                   itemBuilder: (BuildContext context, int index) {
-                    CartItem document = viewModel.cartItems[index];
+                    CartItem cartItem = viewModel.cartItems[index];
+                    TextEditingController textQuantityController =
+                        TextEditingController(
+                            text: cartItem.quantity.toString());
+                    textControllers.add(textQuantityController);
                     return FirebaseDocFutureBuilder(
-                      getProductDocument(document.productId),
+                      getProductDocument(cartItem.productId),
                       (data) {
                         // TODO: Fix dismissible problem in listview
                         return Dismissible(
@@ -46,7 +72,7 @@ class CartScreen extends StatelessWidget {
                           direction: DismissDirection.startToEnd,
                           onDismissed: (_) {
                             viewModel
-                                .removeFromCartCallback(document.productId);
+                                .removeFromCartCallback(cartItem.productId);
                             displaySnackbarWithText(
                                 context, 'Product removed from cart');
                           },
@@ -77,13 +103,74 @@ class CartScreen extends StatelessWidget {
                               ),
                             ),
                             title: Text(data['name']),
-                            subtitle: new Text(
-                                '${LocaleKeys.quantity.tr()}: ${document.quantity}'),
                             onTap: () {
                               Navigator.pushNamed(context, '/product',
                                   arguments: ProductScreenArgs(
-                                      document.productId, data));
+                                      cartItem.productId, data));
                             },
+                            subtitle: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                    '${LocaleKeys.quantity.tr()}: ${cartItem.quantity}'),
+                                Spacer(),
+                                Container(
+                                  padding: const EdgeInsets.all(0.0),
+                                  height: 36.0,
+                                  width: 40.0,
+                                  child: IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () {
+                                      int newQuantity = cartItem.quantity - 1;
+                                      viewModel.changeCartItemQuantityCallback(
+                                          CartItem(
+                                              cartItem.productId, newQuantity));
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(0.0),
+                                  height: 36.0,
+                                  width: 40.0,
+                                  child: TextField(
+                                    textAlign: TextAlign.center,
+                                    keyboardType: TextInputType.number,
+                                    controller: textQuantityController,
+                                    onSubmitted: (value) {
+                                      int quantity = int.tryParse(value);
+                                      if (quantity != null) {
+                                        if (quantity < 1 || quantity > 50)
+                                          displaySnackbarWithText(context,
+                                              "The quantity must be between 1 and 50");
+                                        else
+                                          viewModel
+                                              .changeCartItemQuantityCallback(
+                                              CartItem(cartItem.productId,
+                                                  quantity));
+                                      } else {
+                                        displaySnackbarWithText(context,
+                                            "The quantity cannot be null");
+                                        textQuantityController.text = cartItem.quantity.toString();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(0.0),
+                                  height: 36.0,
+                                  width: 40.0,
+                                  child: IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      int newQuantity = cartItem.quantity + 1;
+                                      viewModel.changeCartItemQuantityCallback(
+                                          CartItem(
+                                              cartItem.productId, newQuantity));
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

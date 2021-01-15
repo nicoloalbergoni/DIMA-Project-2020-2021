@@ -16,6 +16,12 @@ class RemoveCartItemAction {
   RemoveCartItemAction(this.productId);
 }
 
+class ChangeCartItemQuantity {
+  final CartItem item;
+
+  ChangeCartItemQuantity(this.item);
+}
+
 class ChangeFirebaseUserAction {
   final User firebaseUser;
 

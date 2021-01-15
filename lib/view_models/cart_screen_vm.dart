@@ -4,8 +4,9 @@ import 'package:realiteye/models/cartItem.dart';
 class CartScreenViewModel {
 
   final List<CartItem> cartItems;
+  final Function(CartItem) changeCartItemQuantityCallback;
   final Function(DocumentReference) removeFromCartCallback;
 
-  CartScreenViewModel({this.cartItems, this.removeFromCartCallback});
+  CartScreenViewModel({this.cartItems, this.removeFromCartCallback, this.changeCartItemQuantityCallback});
 
 }
