@@ -6,6 +6,7 @@ import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/models/cartItem.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
+import 'package:realiteye/ui/widgets/cart_bottom_sheet.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
@@ -32,6 +33,15 @@ class _CartScreenState extends State<CartScreen> {
   void dispose() {
     textControllers.forEach((element) => element.dispose());
     super.dispose();
+  }
+
+  void _showModalBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (context) {
+        return CartBottomSheet();
+      },
+    );
   }
 
   @override
@@ -212,6 +222,7 @@ class _CartScreenState extends State<CartScreen> {
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             // Add your onPressed code here!
+            _showModalBottomSheet(context);
           },
           label: Text(LocaleKeys.cart_buy_button.tr()),
           icon: Icon(Icons.shopping_cart_rounded)),
