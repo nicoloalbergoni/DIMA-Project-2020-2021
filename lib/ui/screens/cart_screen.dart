@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/models/cartItem.dart';
@@ -132,29 +133,53 @@ class _CartScreenState extends State<CartScreen> {
                                   padding: const EdgeInsets.all(0.0),
                                   height: 36.0,
                                   width: 40.0,
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
-                                    controller: textQuantityController,
-                                    onSubmitted: (value) {
-                                      int quantity = int.tryParse(value);
-                                      if (quantity != null) {
-                                        if (quantity < 1 || quantity > 50)
-                                          displaySnackbarWithText(context,
-                                              "The quantity must be between 1 and 50");
-                                        else
-                                          viewModel
-                                              .changeCartItemQuantityCallback(
-                                              CartItem(cartItem.productId,
-                                                  quantity));
-                                      } else {
-                                        displaySnackbarWithText(context,
-                                            "The quantity cannot be null");
-                                        textQuantityController.text = cartItem.quantity.toString();
-                                      }
-                                    },
+                                  child:  Focus(
+                                      onFocusChange: (focus) {
+                                        if (!focus) {
+                                          int quantity = int.tryParse(
+                                              textQuantityController.text);
+                                          if (quantity == null ||
+                                              quantity < 1 ||
+                                              quantity > 50) {
+                                            displaySnackbarWithText(context,
+                                                "The quantity must be between 1 and 50");
+                                            textQuantityController.text = cartItem.quantity.toString();
+                                          } else {
+                                            viewModel
+                                                .changeCartItemQuantityCallback(
+                                                CartItem(
+                                                    cartItem.productId,
+                                                    quantity));
+                                          }
+                                        }
+                                      },
+                                      child: TextField(
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        controller: textQuantityController,
+                                        onSubmitted: (value) {
+                                          int quantity = int.tryParse(value);
+                                          if (quantity != null) {
+                                            if (quantity < 1 || quantity > 50)
+                                              displaySnackbarWithText(context,
+                                                  "The quantity must be between 1 and 50");
+                                            else
+                                              viewModel
+                                                  .changeCartItemQuantityCallback(
+                                                      CartItem(
+                                                          cartItem.productId,
+                                                          quantity));
+                                          } else {
+                                            displaySnackbarWithText(context,
+                                                "The quantity cannot be null");
+                                            textQuantityController.text =
+                                                cartItem.quantity.toString();
+                                          }
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                ),
+
                                 Container(
                                   padding: const EdgeInsets.all(0.0),
                                   height: 36.0,
