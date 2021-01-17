@@ -30,78 +30,80 @@ class _UnityScreenState extends State<UnityScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(LocaleKeys.unity_title.tr()),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () async {
+                unloadAssetBundle();
+                await _unityWidgetController.unload();
+                //TODO: buggy pop animation, but impossible to solve probably
+                Navigator.pop(context);
+              }
+            );
+          },
+        ),
       ),
-        body: Stack(
-          children: <Widget>[
-            UnityWidget(
-              onUnityViewCreated: onUnityCreated(args['bundlePath']),
-              isARScene: true,
-              onUnityMessage: onUnityMessage,
-              onUnitySceneLoaded: onUnitySceneLoaded,
-              onUnityUnloaded: onUnityUnloaded,
-              fullscreen: false,
-            ),
-            Positioned(
-              bottom: 20,
-              left: 20,
-              right: 20,
-              child: Card(
-                elevation: 10,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 10,),
-                    Text("Choose a color:"),
-                    SizedBox(
-                      height: 70,
-                      width: double.infinity,
-                      child: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Scrollbar(
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: colorStrings.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              List<int> cValues = colorStrings[index].split(',')
-                                  .map((e) => int.parse(e)).toList();
-                              Color c = Color.fromRGBO(cValues[0], cValues[1], cValues[2], 1);
+      body: Stack(
+        children: <Widget>[
+          UnityWidget(
+            onUnityCreated: onUnityCreated(args['bundlePath']),
+            isARScene: true,
+            onUnityMessage: onUnityMessage,
+            onUnitySceneLoaded: onUnitySceneLoaded,
+            fullscreen: false,
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            right: 20,
+            child: Card(
+              elevation: 10,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 10,),
+                  Text("Choose a color:"),
+                  SizedBox(
+                    height: 70,
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Scrollbar(
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: colorStrings.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            List<int> cValues = colorStrings[index].split(',')
+                                .map((e) => int.parse(e)).toList();
+                            Color c = Color.fromRGBO(cValues[0], cValues[1], cValues[2], 1);
 
-                              return InkWell(
-                                child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: c,
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0)),
-                                  ),
+                            return InkWell(
+                              child: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: c,
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0)),
                                 ),
-                                onTap: () => changeModelColor(colorStrings[index]),
-                              );
-                            },
-                            separatorBuilder: (context, index) => SizedBox(width: 10,),
-                          )
-                        ),
+                              ),
+                              onTap: () => changeModelColor(colorStrings[index]),
+                            );
+                          },
+                          separatorBuilder: (context, index) => SizedBox(width: 10,),
+                        )
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
-          ],
-        ),
-      );/*,
-    );*/
+          ),
+        ],
+      ),
+    );
   }
-
-  // Communication from Flutter to Unity
-  // void setObjPosition(String speed) {
-  //   _unityWidgetController.postMessage(
-  //     'Cube',
-  //     'setObjPosition',
-  //     speed,
-  //   );
-  // }
 
   // Communication from Flutter to Unity
   void setupModelBundle(String bundlePath) {
@@ -120,9 +122,17 @@ class _UnityScreenState extends State<UnityScreen> {
       encodedColor,
     );
   }
+  
+  void unloadAssetBundle() {
+    _unityWidgetController.postMessage(
+      'ObjectSpawner',
+      'UnloadAssetBundle',
+      'noParamActuallyNeededButThisLibraryIsStupid'
+    );
+  }
 
   // Communication from Unity to Flutter
-  void onUnityMessage(UnityWidgetController controller, message) {
+  void onUnityMessage(message) {
     print('Received message from unity: ${message.toString()}');
   }
 
@@ -137,15 +147,15 @@ class _UnityScreenState extends State<UnityScreen> {
   }
 
   // Communication from Unity when new scene is loaded to Flutter
-  void onUnitySceneLoaded(UnityWidgetController controller, {
-        int buildIndex, bool isLoaded, bool isValid, String name}) {
-    print('Received scene loaded from unity: $name');
-    print('Received scene loaded from unity buildIndex: $buildIndex');
+  void onUnitySceneLoaded(SceneLoaded sceneInfo) {
+    print('Received scene loaded from unity: ${sceneInfo.name}');
+    print('Received scene loaded from unity buildIndex: ${sceneInfo.buildIndex}');
   }
 
-  void onUnityUnloaded(UnityWidgetController controller) async {
-    print('Unity unload fired');
-    await controller.silentQuitPlayer();
-  }
-
+  // @override
+  // void dispose() {
+  //   _unityWidgetController.quit();
+  //   _unityWidgetController.dispose();
+  //   super.dispose();
+  // }
 }

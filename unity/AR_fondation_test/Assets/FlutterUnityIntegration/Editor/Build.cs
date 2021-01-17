@@ -110,9 +110,6 @@ public class Build
 
         if (report.summary.result != BuildResult.Succeeded)
             throw new Exception("Build failed");
-
-        // Automate so manual steps
-        GetSomeRestWillYa();
     }
 
 
@@ -216,7 +213,6 @@ project("":unityLibrary"").projectDir = file(""./unityLibrary"")
         if (!Regex.IsMatch(app_build_script, @"dependencies \{"))
         {
             app_build_script += @"
-
 dependencies {
     implementation project(':unityLibrary')
 }
@@ -224,7 +220,7 @@ dependencies {
             File.WriteAllText(app_build_path, app_build_script);
         } else
         {
-            if (!Regex.IsMatch(app_build_script, @"implementation project(':unityLibrary')"))
+            if (!app_build_script.Contains(@"implementation project(':unityLibrary')"))
             {
                 Regex regex = new Regex(@"dependencies \{", RegexOptions.Multiline);
                 app_build_script = regex.Replace(app_build_script, @"
@@ -235,7 +231,6 @@ dependencies {
             }
         }
     }
-
 
     /// <summary>
     /// This method tries to autome the build setup required for Android

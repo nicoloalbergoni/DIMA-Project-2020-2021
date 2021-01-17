@@ -27,17 +27,6 @@ public class ObjectSpawner : MonoBehaviour {
         GameObject obj = Instantiate(objectToSpawn);*/
     }
 
-    /*  void Update()
-      {
-          if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
-          {
-              GameObject obj = Instantiate(objectToSpawn, 
-                  placementIndicator.transform.position, placementIndicator.transform.rotation);
-
-          }
-
-      } */
-
     /// <summary>
     /// This function is called only if the object is not already instantiated, otherwise it is moved by the PlacementIndicator script.
     /// </summary>
@@ -45,8 +34,8 @@ public class ObjectSpawner : MonoBehaviour {
     public GameObject Activate() {
         offsetPos = objectToSpawn.transform.position;
         offsetRotation = objectToSpawn.transform.rotation;
-        Debug.Log ("Model offset: " + offsetPos.ToString());
-        Debug.Log ("Model rotation offset: " + offsetRotation.eulerAngles.ToString ());
+        Debug.Log ("[Unity] model offset: " + offsetPos.ToString());
+        Debug.Log ("[Unity] model rotation offset: " + offsetRotation.eulerAngles.ToString ());
         instantiatedObject = Instantiate(objectToSpawn, placementIndicator.transform.position + offsetPos, placementIndicator.transform.rotation * offsetRotation);
 
         return instantiatedObject;
@@ -75,14 +64,19 @@ public class ObjectSpawner : MonoBehaviour {
     }
 
     public void SetupObject(string bundlePath) {
-        Debug.Log ("bundlePath:" + bundlePath);
+        Debug.Log ("[Unity] bundlePath:" + bundlePath);
         AssetBundle assetBundle = AssetBundle.LoadFromFile(bundlePath);
-        Debug.Log ("bundle loaded correctly:" + (assetBundle != null));
+        Debug.Log ("[Unity] bundle loaded correctly:" + (assetBundle != null));
 
         string prefabName = bundlePath.Split ('/').Last ();
-        Debug.Log ("try to load prefab named " + prefabName);
+        Debug.Log ("[Unity] try to load prefab named " + prefabName);
         objectToSpawn = assetBundle.LoadAsset<GameObject>(prefabName);
-        Debug.Log ("object loaded correctly:" + (objectToSpawn != null));
+        Debug.Log ("[Unity] object loaded correctly:" + (objectToSpawn != null));
+    }
+
+    public void UnloadAssetBundle(string uselessParam) {
+        AssetBundle.UnloadAllAssetBundles (true);
+        Debug.Log ("[Unity] asset bundles unloaded");
     }
 
 }

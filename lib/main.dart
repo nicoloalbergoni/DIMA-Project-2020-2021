@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/redux/actions.dart';
@@ -36,14 +37,18 @@ void main() async {
       initialState: _initialState,
       middleware: [fetchCartMiddleware, new LoggingMiddleware.printer()]);
 
-  runApp(
-    EasyLocalization(
-        supportedLocales: [Locale('en', 'US'), Locale('it', 'IT')],
-        path: 'assets/translations',
-        fallbackLocale: Locale('en', 'US'),
-        saveLocale: true,
-        child: MyApp(store: _store)),
-  );
+  // Than we setup preferred orientations,
+  // and only after it finished we run our app
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(
+        EasyLocalization(
+          supportedLocales: [Locale('en', 'US'), Locale('it', 'IT')],
+          path: 'assets/translations',
+          fallbackLocale: Locale('en', 'US'),
+          saveLocale: true,
+          child: MyApp(store: _store),
+        ),
+      ));
 }
 
 class MyApp extends StatelessWidget {

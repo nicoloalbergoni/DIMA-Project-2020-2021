@@ -63,8 +63,9 @@ class HomeProductCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8,),
+                Spacer(),
                 Text('${computePriceString(data['price'] / 1.0, data['discount'])}\$'),
-                SizedBox(height: 4,),
+                SizedBox(height: 6,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
