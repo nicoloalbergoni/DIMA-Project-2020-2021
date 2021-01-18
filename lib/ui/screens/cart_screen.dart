@@ -23,6 +23,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   List<TextEditingController> textControllers;
   Map<String, DocumentSnapshot> documentList;
+  String uid;
 
   @override
   void initState() {
@@ -37,10 +38,17 @@ class _CartScreenState extends State<CartScreen> {
 
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    uid = getUID(context);
+  }
+
   Future<Map<String, DocumentSnapshot>> _getDocumentList() async {
     Map<String, DocumentSnapshot> tempList = Map<String, DocumentSnapshot>();
     List<CartItem> itemList = StoreProvider.of<AppState>(context, listen: false).state.cartItems;
 
+    //TODO: handle case in which getProductDocument fails
     for(CartItem i in itemList) {
       DocumentSnapshot doc = await getProductDocument(i.productId);
       tempList[i.productId.id] = doc;
@@ -55,14 +63,6 @@ class _CartScreenState extends State<CartScreen> {
     super.dispose();
   }
 
-  void _showModalBottomSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (context) {
-        return CartBottomSheet();
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -254,11 +254,20 @@ class _CartScreenState extends State<CartScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            // Add your onPressed code here!
             _showModalBottomSheet(context);
           },
           label: Text(LocaleKeys.cart_buy_button.tr()),
           icon: Icon(Icons.shopping_cart_rounded)),
     );
   }
+
+  void _showModalBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (context) {
+        return CartBottomSheet(StoreProvider.of<AppState>(context).state.cartItems, documentList, uid);
+      },
+    );
+  }
+
 }
