@@ -9,7 +9,7 @@ import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/redux/middlewares.dart';
 import 'package:realiteye/redux/reducers.dart';
-import 'package:realiteye/ui/screens/account_screen.dart';
+import 'package:realiteye/ui/screens/profile_screen.dart';
 import 'package:realiteye/ui/screens/cart_screen.dart';
 import 'package:realiteye/ui/screens/debug_screen.dart';
 import 'package:realiteye/ui/screens/home_screen.dart';

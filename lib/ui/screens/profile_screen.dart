@@ -13,6 +13,8 @@ final double _textPadding = 4.0;
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    //TODO: fix crash when calling logout from drawer in account page
     final String uid = getUID(context);
     return Scaffold(
         appBar: CustomAppBar(
@@ -26,6 +28,8 @@ class ProfileScreen extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.all(8.0),
               child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Column(
@@ -41,24 +45,23 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30,),
+                  SizedBox(height: 20,),
                   ..._buildInfoWidgets(data),
                   SizedBox(height: 20,),
                   Text(LocaleKeys.account_address_title.tr(),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(height: 6,),
-                  Expanded(child: SingleCardPageList(
-                      data['addresses'], _buildAddressCardContent, 100)
-                  ),
-                  SizedBox(height: 20,),
+                   SingleCardPageList(
+                      data['addresses'], _buildAddressCardContent, 100),
+
+                 SizedBox(height: 30,),
                   Text(LocaleKeys.account_payment_title.tr(),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   SizedBox(height: 6,),
-                  Expanded(child: SingleCardPageList(
-                      data['payment_methods'], _buildPaymentCardContent, 60)
-                  ),
+                   SingleCardPageList(
+                      data['payment_methods'], _buildPaymentCardContent, 60),
                 ],
               ),
             );
