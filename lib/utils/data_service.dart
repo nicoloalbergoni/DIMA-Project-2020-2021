@@ -159,4 +159,6 @@ Future<void> updateUserCart(String uid, List<CartItem> cartData) async {
     };
     await user.reference.collection('cart').add(itemMap);
   });
+
+  print('Cart updated correctly');
 }

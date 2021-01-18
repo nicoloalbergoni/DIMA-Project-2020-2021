@@ -9,16 +9,17 @@ import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/redux/middlewares.dart';
 import 'package:realiteye/redux/reducers.dart';
-import 'package:realiteye/ui/screens/profile_screen.dart';
 import 'package:realiteye/ui/screens/cart_screen.dart';
 import 'package:realiteye/ui/screens/debug_screen.dart';
 import 'package:realiteye/ui/screens/home_screen.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
 import 'package:realiteye/ui/screens/order_screen.dart';
 import 'package:realiteye/ui/screens/product_screen.dart';
+import 'package:realiteye/ui/screens/profile_screen.dart';
 import 'package:realiteye/ui/screens/registration_screen.dart';
 import 'package:realiteye/ui/screens/search_screen.dart';
 import 'package:realiteye/ui/screens/unity_screen.dart';
+import 'package:realiteye/ui/widgets/lifecycle_watcher.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 
@@ -96,40 +97,42 @@ class MyApp extends StatelessWidget {
                         currentFocus.focusedChild.unfocus();
                       }
                     },
-                    child: MaterialApp(
-                      localizationsDelegates: context.localizationDelegates,
-                      supportedLocales: context.supportedLocales,
-                      locale: context.locale,
-                      theme: ThemeData(
-                          brightness: Brightness.light,
-                          /* light theme settings */
-                          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
-                          primaryColor: Colors.teal[700],
-                          accentColor: Colors.tealAccent[400]
-                      ),
-                      darkTheme: ThemeData(
-                        brightness: Brightness.dark,
-                        /* dark theme settings */
-                      ),
-                      themeMode: state.theme,
-                      /* ThemeMode.system to follow system theme,
+                    child: LifecycleWatcher(
+                      child: MaterialApp(
+                        localizationsDelegates: context.localizationDelegates,
+                        supportedLocales: context.supportedLocales,
+                        locale: context.locale,
+                        theme: ThemeData(
+                            brightness: Brightness.light,
+                            /* light theme settings */
+                            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
+                            primaryColor: Colors.teal[700],
+                            accentColor: Colors.tealAccent[400]
+                        ),
+                        darkTheme: ThemeData(
+                          brightness: Brightness.dark,
+                          /* dark theme settings */
+                        ),
+                        themeMode: state.theme,
+                        /* ThemeMode.system to follow system theme,
                       ThemeMode.light for light theme,
                       ThemeMode.dark for dark theme
                       */
-                      initialRoute: '/',
-                      routes: {
-                        '/': (context) => HomeScreen(),
-                        '/product': (context) => ProductScreen(),
-                        '/login': (context) => LoginScreen(),
-                        '/register': (context) => RegistrationScreen(),
-                        '/unity': (context) => UnityScreen(),
-                        '/cart': (context) => CartScreen(),
-                        '/debug': (context) => DebugScreen(),
-                        '/search': (context) => SearchScreen(),
-                        '/profile': (context) => ProfileScreen(),
-                        '/orders': (context) => OrderScreen()
-                      },
-                    ),
+                        initialRoute: '/',
+                        routes: {
+                          '/': (context) => HomeScreen(),
+                          '/product': (context) => ProductScreen(),
+                          '/login': (context) => LoginScreen(),
+                          '/register': (context) => RegistrationScreen(),
+                          '/unity': (context) => UnityScreen(),
+                          '/cart': (context) => CartScreen(),
+                          '/debug': (context) => DebugScreen(),
+                          '/search': (context) => SearchScreen(),
+                          '/profile': (context) => ProfileScreen(),
+                          '/orders': (context) => OrderScreen()
+                        },
+                      ),
+                    )
                   );
                 })
             );
