@@ -45,13 +45,13 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
   }
 
   List<String> _getUserAddresses(Map<String, dynamic> data) {
-    List<String> userAdresses = [];
+    List<String> userAddresses = [];
     data['addresses'].forEach((address) {
-      userAdresses.add(
+      userAddresses.add(
           "${address['street']}, ${address['city']}, ${address['state']}, ${address['zip_code']}");
     });
 
-    return userAdresses;
+    return userAddresses;
   }
 
   List<String> _getUserPayments(Map<String, dynamic> data) {
