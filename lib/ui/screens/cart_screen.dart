@@ -24,6 +24,8 @@ class _CartScreenState extends State<CartScreen> {
   List<TextEditingController> textControllers;
   Map<String, DocumentSnapshot> documentList;
   String uid;
+  final int maxQuantity = 50;
+  final int minQuantity = 1;
 
   @override
   void initState() {
@@ -158,7 +160,9 @@ class _CartScreenState extends State<CartScreen> {
                                         icon: Icon(Icons.remove),
                                         onPressed: () {
                                           int newQuantity = cartItem.quantity - 1;
-                                          viewModel.changeCartItemQuantityCallback(
+                                          if(newQuantity < minQuantity || newQuantity > maxQuantity) displaySnackbarWithText(context,
+                                              "The quantity must be between 1 and 50");
+                                          else viewModel.changeCartItemQuantityCallback(
                                               CartItem(
                                                   cartItem.productId, newQuantity));
                                         },
@@ -171,31 +175,9 @@ class _CartScreenState extends State<CartScreen> {
                                       child:  Focus(
                                         onFocusChange: (focus) {
                                           if (!focus) {
-                                            int quantity = int.tryParse(
-                                                textQuantityController.text);
-                                            if (quantity == null ||
-                                                quantity < 1 ||
-                                                quantity > 50) {
-                                              displaySnackbarWithText(context,
-                                                  "The quantity must be between 1 and 50");
-                                              textQuantityController.text = cartItem.quantity.toString();
-                                            } else {
-                                              viewModel
-                                                  .changeCartItemQuantityCallback(
-                                                  CartItem(
-                                                      cartItem.productId,
-                                                      quantity));
-                                            }
-                                          }
-                                        },
-                                        child: TextField(
-                                          textAlign: TextAlign.center,
-                                          keyboardType: TextInputType.number,
-                                          controller: textQuantityController,
-                                          onSubmitted: (value) {
-                                            int quantity = int.tryParse(value);
+                                            int quantity = int.tryParse(textQuantityController.text);
                                             if (quantity != null) {
-                                              if (quantity < 1 || quantity > 50)
+                                              if (quantity < minQuantity || quantity > maxQuantity)
                                                 displaySnackbarWithText(context,
                                                     "The quantity must be between 1 and 50");
                                               else
@@ -206,7 +188,31 @@ class _CartScreenState extends State<CartScreen> {
                                                         quantity));
                                             } else {
                                               displaySnackbarWithText(context,
-                                                  "The quantity cannot be null");
+                                                  "The quantity must be a valid integer");
+                                              textQuantityController.text =
+                                                  cartItem.quantity.toString();
+                                            }
+                                          }
+                                        },
+                                        child: TextField(
+                                          textAlign: TextAlign.center,
+                                          keyboardType: TextInputType.number,
+                                          controller: textQuantityController,
+                                          onSubmitted: (value) {
+                                            int quantity = int.tryParse(value);
+                                            if (quantity != null) {
+                                              if (quantity < minQuantity || quantity > maxQuantity)
+                                                displaySnackbarWithText(context,
+                                                    "The quantity must be between 1 and 50");
+                                              else
+                                                viewModel
+                                                    .changeCartItemQuantityCallback(
+                                                    CartItem(
+                                                        cartItem.productId,
+                                                        quantity));
+                                            } else {
+                                              displaySnackbarWithText(context,
+                                                  "The quantity must be a valid integer");
                                               textQuantityController.text =
                                                   cartItem.quantity.toString();
                                             }
@@ -223,7 +229,9 @@ class _CartScreenState extends State<CartScreen> {
                                         icon: Icon(Icons.add),
                                         onPressed: () {
                                           int newQuantity = cartItem.quantity + 1;
-                                          viewModel.changeCartItemQuantityCallback(
+                                          if(newQuantity < minQuantity || newQuantity > maxQuantity) displaySnackbarWithText(context,
+                                              "The quantity must be between 1 and 50");
+                                          else viewModel.changeCartItemQuantityCallback(
                                               CartItem(
                                                   cartItem.productId, newQuantity));
                                         },
