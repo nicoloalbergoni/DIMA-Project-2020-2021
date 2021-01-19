@@ -52,7 +52,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test: ^1.15.7
   change_app_package_name: ^0.1.2
+  cloud_firestore_mocks: ^0.5.2+1
 
 
 
