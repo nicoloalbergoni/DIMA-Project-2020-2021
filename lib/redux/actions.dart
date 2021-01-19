@@ -16,6 +16,11 @@ class RemoveCartItemAction {
   RemoveCartItemAction(this.productId);
 }
 
+class ClearCartItemList {
+
+ ClearCartItemList();
+}
+
 class ChangeCartItemQuantity {
   final CartItem item;
 

@@ -72,33 +72,37 @@ Map<String, bool> orderDict = {
 
 Future<List<DocumentSnapshot>> getSearchQueryResult(
     SearchFilters searchFilters, DocumentSnapshot lastVisible) async {
-
   QuerySnapshot queryResult;
   List<DocumentSnapshot> documentList = [];
   List<String> selectedCategories = [];
 
   searchFilters.categoriesBool.forEach((key, value) {
-    if (value)
-      selectedCategories.add(key);
+    if (value) selectedCategories.add(key);
   });
 
   Query baseQuery = products
       .where("discounted_price",
           isGreaterThanOrEqualTo: searchFilters.priceRangeValues.start)
-      .where("discounted_price", isLessThanOrEqualTo: searchFilters.priceRangeValues.end)
-      .orderBy("discounted_price", descending: orderDict[searchFilters.dropdownValue]);
+      .where("discounted_price",
+          isLessThanOrEqualTo: searchFilters.priceRangeValues.end)
+      .orderBy("discounted_price",
+          descending: orderDict[searchFilters.dropdownValue]);
 
   if (searchFilters.showAROnly)
     baseQuery = baseQuery.where("has_AR", isEqualTo: true);
 
   if (selectedCategories.length > 0)
-    baseQuery = baseQuery.where("categories", arrayContainsAny: selectedCategories);
+    baseQuery =
+        baseQuery.where("categories", arrayContainsAny: selectedCategories);
 
   do {
     if (lastVisible == null)
       queryResult = await baseQuery.limit(queryLimit).get();
     else
-      queryResult = await baseQuery.startAfterDocument(lastVisible).limit(queryLimit).get();
+      queryResult = await baseQuery
+          .startAfterDocument(lastVisible)
+          .limit(queryLimit)
+          .get();
 
     if (queryResult.docs.length == 0) break;
 
@@ -108,34 +112,41 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
     }).toList());
 
     lastVisible = queryResult.docs.last;
-  }  while (documentList.length < queryLimit);
+  } while (documentList.length < queryLimit);
 
   return documentList;
 }
 
-
 /// Add an order from user's cart items
-Future<void> addOrderFromCartData(String uid, List<CartItem> cartData) async {
-  Map<String, dynamic> orderData;
-  orderData['in_progress'] = true;
-  orderData['issue_date'] = DateTime.now();
-  orderData['delivery_date'] = DateTime.now().add(Duration(days: 14));
-  orderData['total_cost'] = 100.0;
+Future<void> addOrderFromCartData(String uid, List<CartItem> cartItem,
+    Map<String, DocumentSnapshot> cartDocuments, double totalPrice, String deliveryAddress) async {
+
+  Map<String, dynamic> orderData = {
+    'in_progress': true,
+    'issue_date': DateTime.now(),
+    'delivery_date': DateTime.now().add(Duration(days: 14)),
+    'total_cost': totalPrice,
+    'delivery_address': deliveryAddress
+  };
 
   DocumentSnapshot user = await users.doc(uid).get();
 
   // Create order, add order data and get its document reference
-  DocumentReference order = await user.reference
-      .collection('orders')
-      .add(orderData);
+  DocumentReference order =
+      await user.reference.collection('orders').add(orderData);
 
   // Add each cart item object as a doc
-  cartData.forEach((item) async {
+  cartItem.forEach((item) async {
     Map<String, dynamic> itemMap = {
-      'product_id': item.productId, 'quantity': item.quantity
+      'product_id': item.productId,
+      'quantity': item.quantity,
+      'item_cost': cartDocuments[item.productId.id].data()['discounted_price']
     };
     await order.collection('orderItems').add(itemMap);
   });
+
+  //Delete the items from the remote cart
+  await updateUserCart(uid, []);
 }
 
 /// Update user's cart items in the database
@@ -143,19 +154,18 @@ Future<void> updateUserCart(String uid, List<CartItem> cartData) async {
   DocumentSnapshot user = await users.doc(uid).get();
 
   // Get all documents in cart
-  QuerySnapshot dbCartItems = await user.reference
-      .collection('cart').get();
+  QuerySnapshot dbCartItems = await user.reference.collection('cart').get();
 
   // Delete all previous documents (cart items)
   dbCartItems.docs.forEach((doc) async {
-    await user.reference
-        .collection('cart').doc(doc.id).delete();
+    await user.reference.collection('cart').doc(doc.id).delete();
   });
 
   // Add each cart item object as a doc
   cartData.forEach((item) async {
     Map<String, dynamic> itemMap = {
-      'product_id': item.productId, 'quantity': item.quantity
+      'product_id': item.productId,
+      'quantity': item.quantity
     };
     await user.reference.collection('cart').add(itemMap);
   });

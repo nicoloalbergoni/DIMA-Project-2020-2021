@@ -78,6 +78,10 @@ class _CartScreenState extends State<CartScreen> {
           );
         },
         builder: (context, viewModel) {
+
+          if(viewModel.cartItems.isEmpty) return Container();
+
+
           return FutureBuilder(
               future: _getDocumentList(),
               builder: (context, data) {
@@ -250,12 +254,15 @@ class _CartScreenState extends State<CartScreen> {
           });
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            _showModalBottomSheet(context);
-          },
-          label: Text(LocaleKeys.cart_buy_button.tr()),
-          icon: Icon(Icons.shopping_cart_rounded)),
+      floatingActionButton: Visibility(
+        visible: StoreProvider.of<AppState>(context).state.cartItems.isNotEmpty,
+        child: FloatingActionButton.extended(
+            onPressed: () {
+              _showModalBottomSheet(context);
+            },
+            label: Text(LocaleKeys.cart_buy_button.tr()),
+            icon: Icon(Icons.shopping_cart_rounded)),
+      ),
     );
   }
 

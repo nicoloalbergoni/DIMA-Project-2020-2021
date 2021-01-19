@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/models/cartItem.dart';
+import 'package:realiteye/redux/actions.dart';
+import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
@@ -217,7 +220,14 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
           SizedBox(
             width: double.infinity,
             child: RaisedButton(
-              onPressed: () {},
+              onPressed: () async {
+                //Clear the remote-cart
+                await addOrderFromCartData(widget.uid, widget.cartItems, widget.documentList, _getTotalPrice(), _addressDropDownValue);
+                //Clear the local-cart
+                StoreProvider.of<AppState>(context).dispatch(ClearCartItemList());
+                //Close the BottomSheet
+                Navigator.pop(context);
+              },
               color: Theme.of(context).primaryColor,
               // shape: RoundedRectangleBorder(
               //   borderRadius: BorderRadius.circular(18.0),
@@ -229,4 +239,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
       ),
     );
   }
+
+
+
 }

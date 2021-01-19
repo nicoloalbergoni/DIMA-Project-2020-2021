@@ -10,6 +10,9 @@ AppState appReducers(AppState state, dynamic action) {
   else if (action is RemoveCartItemAction) {
     return removeCartItem(state, action);
   }
+  else if (action is ClearCartItemList) {
+   return  clearCartItemList(state, action);
+  }
   else if (action is ChangeCartItemQuantity) {
     return changeCartItemQuantity(state, action);
   }
@@ -53,6 +56,10 @@ AppState removeCartItem(AppState state, RemoveCartItemAction action) {
     ..addAll(state.cartItems)
     ..removeWhere((item) => item.productId == action.productId)
   );
+}
+
+AppState clearCartItemList(AppState state, ClearCartItemList action) {
+  return state.copyWith(cartItems: <CartItem>[]);
 }
 
 AppState changeCartItemQuantity(AppState state, ChangeCartItemQuantity action) {
