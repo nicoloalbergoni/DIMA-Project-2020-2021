@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
-import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/ui/widgets/single_card_page_list.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
@@ -13,15 +12,15 @@ final double _textPadding = 4.0;
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    //TODO: fix crash when calling logout from drawer in account page
     final String uid = getUID(context);
+    if (uid == null)
+      return Container();
+
     return Scaffold(
         appBar: CustomAppBar(
           LocaleKeys.account_title.tr(),
           showCartIcon: true,
         ),
-        drawer: SideMenu(),
         body: FirebaseDocFutureBuilder(
           getUserDocument(uid),
           (data) {

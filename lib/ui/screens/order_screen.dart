@@ -10,6 +10,8 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String uid = getUID(context);
+    if (uid == null)
+      return Container();
 
     return DefaultTabController(
         length: 2,

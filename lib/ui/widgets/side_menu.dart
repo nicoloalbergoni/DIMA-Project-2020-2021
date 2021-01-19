@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
+import 'package:realiteye/ui/screens/home_screen.dart';
 import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
@@ -175,10 +175,13 @@ List<Widget> _buildMenuItems(
             onTap: () async {
               await _auth.signOut();
               viewModel.logoutUser();
-              displaySnackbarWithText(context, 'Logout successfully');
 
-              // Then close the drawer
-              Navigator.pop(context);
+              // Then close the drawer and all screens before the home
+              Navigator.popUntil(context, (route) => route.isFirst);
+
+              // display snackbar on home screen
+              HomeScreen.scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text('Logout successfully')));
             },
           ),
         ]

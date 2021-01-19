@@ -7,9 +7,11 @@ import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/data_service.dart';
 
 class HomeScreen extends StatelessWidget {
+  static var scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: CustomAppBar(
         'Realiteye',
         showCartIcon: true,

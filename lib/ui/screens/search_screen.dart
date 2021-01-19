@@ -117,7 +117,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  //TODO: Handle display of search results when unfocus
   void _onFocusChange() {
     setState(() {
       if (_searchFocus.hasFocus) {

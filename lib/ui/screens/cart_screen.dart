@@ -38,12 +38,6 @@ class _CartScreenState extends State<CartScreen> {
 
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    uid = getUID(context);
-  }
-
   Future<Map<String, DocumentSnapshot>> _getDocumentList() async {
     Map<String, DocumentSnapshot> tempList = Map<String, DocumentSnapshot>();
     List<CartItem> itemList = StoreProvider.of<AppState>(context, listen: false).state.cartItems;
@@ -66,6 +60,10 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    uid = getUID(context);
+    if (uid == null)
+      return Container();
+
     return Scaffold(
       appBar: CustomAppBar(LocaleKeys.cart_title.tr()),
       drawer: SideMenu(),
