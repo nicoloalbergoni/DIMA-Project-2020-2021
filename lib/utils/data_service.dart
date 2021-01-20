@@ -7,62 +7,61 @@ import 'package:realiteye/utils/search_filters.dart';
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 // Create a CollectionReference called users that references the firestore collection
-final CollectionReference users =
-    FirebaseFirestore.instance.collection('users');
-final CollectionReference products =
-    FirebaseFirestore.instance.collection('products');
+final CollectionReference Function(FirebaseFirestore) users =
+    (fireInstance) => fireInstance.collection('users');
+final CollectionReference Function(FirebaseFirestore) products =
+    (fireInstance) => fireInstance.collection('products');
 
 final int queryLimit = 5;
 // TODO: just for testing real time streams, eliminate in future
-Stream<QuerySnapshot> getUsers() {
+Stream<QuerySnapshot> getUsers({FirebaseFirestore mockFsInstance}) {
   // Call the user's CollectionReference to add a new user
-  return users.snapshots();
+  return users(mockFsInstance ?? firestore).snapshots();
 }
 
-Future<QuerySnapshot> getUserCart(String uid) async {
-  DocumentSnapshot user = await users.doc(uid).get();
+Future<QuerySnapshot> getUserCart(String uid, {FirebaseFirestore mockFsInstance}) async {
+  DocumentSnapshot user = await users(mockFsInstance ?? firestore).doc(uid).get();
   return user.reference.collection('cart').get();
 }
 
-Future<DocumentSnapshot> getProductDocument(DocumentReference productId) async {
-  return products.doc(productId.id).get();
+Future<DocumentSnapshot> getProductDocument(DocumentReference productId, {FirebaseFirestore mockFsInstance}) async {
+  return products(mockFsInstance ?? firestore).doc(productId.id).get();
 }
 
 // Add a user to the users Firestore collection
-void addUser(User user, Map<String, dynamic> userData) async {
+void addUser(User user, Map<String, dynamic> userData, {FirebaseFirestore mockFsInstance}) async {
   if (user != null && userData != null) {
-    await users.doc(user.uid).set(userData);
+    await users(mockFsInstance ?? firestore).doc(user.uid).set(userData);
     print('User ${user.email} correctly registered on the database');
   }
 }
 
-Future<DocumentSnapshot> getUserDocument(String uid) async {
-  // TODO: Handle error cases
-  return users.doc(uid).get();
+Future<DocumentSnapshot> getUserDocument(String uid, {FirebaseFirestore mockFsInstance}) async {
+  return users(mockFsInstance ?? firestore).doc(uid).get();
 }
 
-Future<QuerySnapshot> getUserInProgressOrders(String uid) async {
-  DocumentSnapshot user = await users.doc(uid).get();
+Future<QuerySnapshot> getUserInProgressOrders(String uid, {FirebaseFirestore mockFsInstance}) async {
+  DocumentSnapshot user = await users(mockFsInstance ?? firestore).doc(uid).get();
   return user.reference
       .collection('orders')
       .where('in_progress', isEqualTo: true)
       .get();
 }
 
-Future<QuerySnapshot> getUserCompletedOrders(String uid) async {
-  DocumentSnapshot user = await users.doc(uid).get();
+Future<QuerySnapshot> getUserCompletedOrders(String uid, {FirebaseFirestore mockFsInstance}) async {
+  DocumentSnapshot user = await users(mockFsInstance ?? firestore).doc(uid).get();
   return user.reference
       .collection('orders')
       .where('in_progress', isEqualTo: false)
       .get();
 }
 
-Future<QuerySnapshot> getHotDeals() async {
-  return products.where('hot_deal', isEqualTo: true).get();
+Future<QuerySnapshot> getHotDeals({FirebaseFirestore mockFsInstance}) async {
+  return products(mockFsInstance ?? firestore).where('hot_deal', isEqualTo: true).get();
 }
 
-Future<QuerySnapshot> getPopulars() async {
-  return products.where('popular', isEqualTo: true).get();
+Future<QuerySnapshot> getPopulars({FirebaseFirestore mockFsInstance}) async {
+  return products(mockFsInstance ?? firestore).where('popular', isEqualTo: true).get();
 }
 
 Map<String, bool> orderDict = {
@@ -71,7 +70,7 @@ Map<String, bool> orderDict = {
 };
 
 Future<List<DocumentSnapshot>> getSearchQueryResult(
-    SearchFilters searchFilters, DocumentSnapshot lastVisible) async {
+    SearchFilters searchFilters, DocumentSnapshot lastVisible, {FirebaseFirestore mockFsInstance}) async {
   QuerySnapshot queryResult;
   List<DocumentSnapshot> documentList = [];
   List<String> selectedCategories = [];
@@ -80,7 +79,7 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
     if (value) selectedCategories.add(key);
   });
 
-  Query baseQuery = products
+  Query baseQuery = products(mockFsInstance ?? firestore)
       .where("discounted_price",
           isGreaterThanOrEqualTo: searchFilters.priceRangeValues.start)
       .where("discounted_price",
@@ -118,13 +117,9 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
 }
 
 /// Add an order from user's cart items
-Future<void> addOrderFromCartData(
-    String uid,
-    List<CartItem> cartItem,
-    Map<String, DocumentSnapshot> cartDocuments,
-    double totalPrice,
-    String deliveryAddress,
-    String paymentCard) async {
+Future<void> addOrderFromCartData(String uid, List<CartItem> cartItem,
+    Map<String, DocumentSnapshot> cartDocuments, double totalPrice,
+    String deliveryAddress, String paymentCard, {FirebaseFirestore mockFsInstance}) async {
 
   Map<String, dynamic> orderData = {
     'in_progress': true,
@@ -135,7 +130,7 @@ Future<void> addOrderFromCartData(
     'payment_card': paymentCard
   };
 
-  DocumentSnapshot user = await users.doc(uid).get();
+  DocumentSnapshot user = await users(mockFsInstance ?? firestore).doc(uid).get();
 
   // Create order, add order data and get its document reference
   DocumentReference order =
@@ -156,8 +151,8 @@ Future<void> addOrderFromCartData(
 }
 
 /// Update user's cart items in the database
-Future<void> updateUserCart(String uid, List<CartItem> cartData) async {
-  DocumentSnapshot user = await users.doc(uid).get();
+Future<void> updateUserCart(String uid, List<CartItem> cartData, {FirebaseFirestore mockFsInstance}) async {
+  DocumentSnapshot user = await users(mockFsInstance ?? firestore).doc(uid).get();
 
   // Get all documents in cart
   QuerySnapshot dbCartItems = await user.reference.collection('cart').get();
