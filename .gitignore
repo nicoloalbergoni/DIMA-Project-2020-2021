@@ -49,3 +49,5 @@ android/app/google-services.json
 /Seed_App/node_modules/
 /Seed_App/service_account.json
 /Seed_App/userData.json
+
+/data/

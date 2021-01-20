@@ -1,7 +1,7 @@
 let admin = require("firebase-admin");
 const path = require("path");
 const auth = admin.auth();
-const FileSystem = require("fs");
+const fs = require("fs");
 
 /**
  * The maximum is exclusive and the minimum is inclusive
@@ -31,8 +31,7 @@ function createUserRegistrationPromise(userAuthData, outputData) {
   });  
 }
 
-exports.registerUsers = function (number) {
-
+exports.registerUsers = function(number) {
   let outputData = {};
   let promises = [];
 
@@ -46,7 +45,7 @@ exports.registerUsers = function (number) {
 
   Promise.all(promises).then(() => {
     let jsonObj = JSON.stringify(outputData, null, 2);
-    FileSystem.writeFile('./userData.json', jsonObj , (err) => {
+    fs.writeFile('./userData.json', jsonObj , (err) => {
         if (err) throw err;
       });
   }).catch((error) => {
@@ -54,26 +53,26 @@ exports.registerUsers = function (number) {
   });
 };
 
-exports.deleteCollection = async function (collectionRef) {
-
+exports.deleteCollection = async function(collectionRef) {
   let snapshot = await collectionRef.get();
-  snapshot.forEach(async (element) => {
-    await element.ref.delete();
-  });
+  let promises = [];
+  snapshot.forEach(element => promises.push(element.ref.delete()));
+
+  await Promise.all(promises);
 
   console.log(`Deleted documents in ${collectionRef.id} collection`);
 };
 
-exports.loadJson = function (fileName) {
+exports.loadJson = function(fileName) {
   let fullPath = path.join(__dirname, '..', fileName);
-  let rawdata = FileSystem.readFileSync(fullPath);
+  let rawdata = fs.readFileSync(fullPath);
   return JSON.parse(rawdata);
 };
 
 exports.getAllDocumentReferences = async function(collectionRef) {
   let referenceList = [];
   let snapshot = await collectionRef.get();
-  snapshot.forEach(async (element) => {
+  snapshot.forEach(element => {
     referenceList.push(element);
   });
 
@@ -87,6 +86,24 @@ exports.generateRandomDate = function (start, end) {
 exports.generateRandomImageUrl = function(width = 640, height = 480) {
   let id = getRandomInt(1, 1000);
   return `https://picsum.photos/id/${id}/${width}/${height}`;
+};
+
+exports.extractionWithNoDuplicates = function(arr, extrNum) {
+  if (extrNum > arr.length) {
+    throw new Error('extraction number is bigger than the possible choices');
+  }
+
+  let validValues = [...arr];   // array deep copy
+  let res = [];
+  for (let i = 0; i < extrNum; i++) {
+    res.push(...validValues.splice(getRandomInt(0, validValues.length), 1));
+  }
+
+  return res;
+};
+
+exports.makeTwoDecimalsPrice = function(price){
+  return parseFloat(price.toFixed(2));
 };
 
 
