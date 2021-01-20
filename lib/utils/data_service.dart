@@ -118,15 +118,21 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
 }
 
 /// Add an order from user's cart items
-Future<void> addOrderFromCartData(String uid, List<CartItem> cartItem,
-    Map<String, DocumentSnapshot> cartDocuments, double totalPrice, String deliveryAddress) async {
+Future<void> addOrderFromCartData(
+    String uid,
+    List<CartItem> cartItem,
+    Map<String, DocumentSnapshot> cartDocuments,
+    double totalPrice,
+    String deliveryAddress,
+    String paymentCard) async {
 
   Map<String, dynamic> orderData = {
     'in_progress': true,
     'issue_date': DateTime.now(),
     'delivery_date': DateTime.now().add(Duration(days: 14)),
     'total_cost': totalPrice,
-    'delivery_address': deliveryAddress
+    'delivery_address': deliveryAddress,
+    'payment_card': paymentCard
   };
 
   DocumentSnapshot user = await users.doc(uid).get();

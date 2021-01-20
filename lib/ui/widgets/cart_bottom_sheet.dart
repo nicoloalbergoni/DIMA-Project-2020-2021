@@ -9,7 +9,6 @@ import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
 
 class CartBottomSheet extends StatefulWidget {
-
   final List<CartItem> cartItems;
   final Map<String, DocumentSnapshot> documentList;
   final String uid;
@@ -18,12 +17,13 @@ class CartBottomSheet extends StatefulWidget {
 
   @override
   _CartBottomSheetState createState() => _CartBottomSheetState();
-
 }
 
 class _CartBottomSheetState extends State<CartBottomSheet> {
   String _addressDropDownValue;
   String _paymentDropDownValue;
+  List<String> userAddresses;
+  List<String> userPayments;
 
   double _getTotalPrice() {
     double totalPrice = 0;
@@ -62,6 +62,14 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
     });
 
     return userPayments;
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    userPayments = [];
+    userAddresses = [];
   }
 
   @override
@@ -123,9 +131,9 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
           ),
           FirebaseDocFutureBuilder(
             getUserDocument(widget.uid),
-                (data) {
-              List<String> userAddresses = _getUserAddresses(data);
-              List<String> userPayments = _getUserPayments(data);
+            (data) {
+              userAddresses = _getUserAddresses(data);
+              userPayments = _getUserPayments(data);
 
               return Column(
                 children: [
@@ -147,10 +155,11 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                         DropdownButton<String>(
                           isDense: true,
                           isExpanded: true,
-                          underline: SizedBox(), // Remove underline
+                          underline: SizedBox(),
+                          // Remove underline
                           // Sort of work-around because apparently you cannot set the initial value for
                           // the dropdown inside this FutureBuilder via setState
-                          value: _addressDropDownValue == null ? userAddresses.first : _addressDropDownValue,
+                          value: _addressDropDownValue ?? userAddresses.first,
                           items: userAddresses.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -172,7 +181,9 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Container(
                     height: 50,
                     //padding: EdgeInsets.only(left: 10),
@@ -191,7 +202,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                           isDense: true,
                           isExpanded: true,
                           underline: SizedBox(),
-                          value: _paymentDropDownValue == null ? userPayments.first : _paymentDropDownValue,
+                          value: _paymentDropDownValue ?? userPayments.first,
                           items: userPayments.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -222,9 +233,16 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
             child: RaisedButton(
               onPressed: () async {
                 //Clear the remote-cart
-                await addOrderFromCartData(widget.uid, widget.cartItems, widget.documentList, _getTotalPrice(), _addressDropDownValue);
+                await addOrderFromCartData(
+                    widget.uid,
+                    widget.cartItems,
+                    widget.documentList,
+                    _getTotalPrice(),
+                    _addressDropDownValue ?? userAddresses.first,
+                    _paymentDropDownValue ?? userPayments.first);
                 //Clear the local-cart
-                StoreProvider.of<AppState>(context).dispatch(ClearCartItemList());
+                StoreProvider.of<AppState>(context)
+                    .dispatch(ClearCartItemList());
                 //Close the BottomSheet
                 Navigator.pop(context);
               },
@@ -239,7 +257,4 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
       ),
     );
   }
-
-
-
 }
