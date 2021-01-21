@@ -117,7 +117,7 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
 }
 
 /// Add an order from user's cart items
-Future<void> addOrderFromCartData(String uid, List<CartItem> cartItem,
+Future<void> addOrderFromCartData(String uid, List<CartItem> cartItems,
     Map<String, DocumentSnapshot> cartDocuments, double totalPrice,
     String deliveryAddress, String paymentCard, {FirebaseFirestore mockFsInstance}) async {
 
@@ -137,7 +137,7 @@ Future<void> addOrderFromCartData(String uid, List<CartItem> cartItem,
       await user.reference.collection('orders').add(orderData);
 
   // Add each cart item object as a doc
-  cartItem.forEach((item) async {
+  cartItems.forEach((item) async {
     Map<String, dynamic> itemMap = {
       'product_id': item.productId,
       'quantity': item.quantity,
@@ -147,7 +147,7 @@ Future<void> addOrderFromCartData(String uid, List<CartItem> cartItem,
   });
 
   //Delete the items from the remote cart
-  await updateUserCart(uid, []);
+  await updateUserCart(uid, [], mockFsInstance: mockFsInstance);
 }
 
 /// Update user's cart items in the database
@@ -164,11 +164,7 @@ Future<void> updateUserCart(String uid, List<CartItem> cartData, {FirebaseFirest
 
   // Add each cart item object as a doc
   cartData.forEach((item) async {
-    Map<String, dynamic> itemMap = {
-      'product_id': item.productId,
-      'quantity': item.quantity
-    };
-    await user.reference.collection('cart').add(itemMap);
+    await user.reference.collection('cart').add(item.asMap());
   });
 
   print('Cart updated correctly');
