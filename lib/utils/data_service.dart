@@ -25,7 +25,7 @@ Future<QuerySnapshot> getUserCart(String uid, {FirebaseFirestore mockFsInstance}
 }
 
 Future<DocumentSnapshot> getProductDocument(DocumentReference productId, {FirebaseFirestore mockFsInstance}) async {
-  return products(mockFsInstance ?? firestore).doc(productId.id).get();
+  return productId.get();
 }
 
 // Add a user to the users Firestore collection

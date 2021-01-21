@@ -14,6 +14,8 @@ const uid = 'abc';
 MockFirestoreInstance instance;
 Map<String, dynamic> prodData;
 Map<String, dynamic> userData;
+Map<String, dynamic> orderData;
+
 Map<String, DocumentReference> prodRefs = {};
 Map<String, DocumentReference> userRefs = {};
 
@@ -29,9 +31,13 @@ Future<Map<String, dynamic>> loadJsonData(String path) {
 }
 
 void main() {
+  // Executed before each test, reset the mock to a predefined db instance,
+  // avoiding test side-effects from influencing the successive ones.
   setUp(() async {
     prodData = await loadJsonData(p.join('data', 'products.json'));
     userData = await loadJsonData(p.join('data', 'users.json'));
+    // only two orders now: o0 in progress, o1 completed
+    orderData = await loadJsonData(p.join('data', 'orders.json'));
 
     instance = MockFirestoreInstance();
     for (var entry in prodData.entries) {
@@ -47,19 +53,73 @@ void main() {
       });
 
       await userRefs[entry.key].collection('cart').add(cartItem);
+      for (var orderEntry in orderData.entries) {
+        await userRefs[entry.key].collection('orders').add(orderEntry.value);
+      }
     }
   });
 
-  test("Should return user document", () async {
-    final data = await getUserDocument(userRefs['u1'].id, mockFsInstance: instance);
-    expect(data, DocumentSnapshotMatcher(userRefs['u1'].id, userData['u1']));
+  group('GET operations', () {
+    test('Should return user document', () async {
+      DocumentSnapshot data = await getUserDocument(userRefs['u1'].id, mockFsInstance: instance);
+      expect(data, DocumentSnapshotMatcher(userRefs['u1'].id, userData['u1']));
+    });
+
+    test('Should return user cart', () async {
+      QuerySnapshot data = await getUserCart(userRefs['u1'].id, mockFsInstance: instance);
+      expect(data.docs.length, 1);
+      expect(data, QuerySnapshotMatcher([
+        DocumentSnapshotMatcher.onData(cartItem)
+      ]));
+    });
+
+    test('Should return product document', () async {
+      DocumentSnapshot data = await getProductDocument(prodRefs['p1'], mockFsInstance: instance);
+      expect(data, DocumentSnapshotMatcher(prodRefs['p1'].id, prodData['p1']));
+    });
+
+    test('Should return orders still in progress of given user', () async {
+      QuerySnapshot data = await getUserInProgressOrders(userRefs['u1'].id, mockFsInstance: instance);
+      expect(data, QuerySnapshotMatcher([
+        DocumentSnapshotMatcher.onData(orderData['o0'])
+      ]));
+    });
+
+    test('Should return completed orders of given user', () async {
+      QuerySnapshot data = await getUserCompletedOrders(userRefs['u1'].id, mockFsInstance: instance);
+      expect(data, QuerySnapshotMatcher([
+        DocumentSnapshotMatcher.onData(orderData['o1'])
+      ]));
+    });
+
+    test('Should return hot deals products', () async {
+      QuerySnapshot data = await getHotDeals(mockFsInstance: instance);
+
+      var hotDeals = {...prodData}; // deep copy
+      hotDeals.removeWhere((key, value) => !value['hot_deal']);
+      List<DocumentSnapshotMatcher> expectedResults = [];
+      hotDeals.forEach((key, value) => expectedResults.add(DocumentSnapshotMatcher.onData(value)));
+
+      expect(data, QuerySnapshotMatcher(expectedResults));
+    });
+
+    test('Should return popular products', () async {
+      QuerySnapshot data = await getPopulars(mockFsInstance: instance);
+
+      var hotDeals = {...prodData}; // deep copy
+      hotDeals.removeWhere((key, value) => !value['popular']);
+      List<DocumentSnapshotMatcher> expectedResults = [];
+      hotDeals.forEach((key, value) => expectedResults.add(DocumentSnapshotMatcher.onData(value)));
+
+      expect(data, QuerySnapshotMatcher(expectedResults));
+    });
   });
 
-  test("Should return user cart", () async {
-    final data = await getUserCart(userRefs['u1'].id, mockFsInstance: instance);
-    expect(data.docs.length, 1);
-    expect(data, QuerySnapshotMatcher([
-      DocumentSnapshotMatcher.onData(cartItem)
-    ]));
+  group('Product search query', () {
+    // TODO: multiple filters configuration tests
+  });
+
+  group('INSERT / UPDATE operations', () {
+    // TODO
   });
 }
