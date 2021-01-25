@@ -78,7 +78,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     height: 5,
                   ),
                   FilterBar(
-                    _searchFilters.dropdownValue,
+                    _searchFilters.orderingKey,
                     _searchFilters.showFilters,
                     _searchFilters.showAROnly,
                     _searchFilters.priceRangeValues,
@@ -188,7 +188,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _onDropdownChanged(String newValue) {
     setState(() {
-      _searchFilters.dropdownValue = newValue;
+      _searchFilters.orderingKey = newValue;
     });
   }
 

@@ -3,22 +3,25 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
+import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/models/cartItem.dart';
 import 'package:realiteye/utils/data_service.dart';
+import 'package:realiteye/utils/search_filters.dart';
 import 'package:test/test.dart';
 
 import 'utils/document_snapshot_matcher.dart';
 import 'utils/query_snapshot_matcher.dart';
 
-const uid = 'abc';
 MockFirestoreInstance instance;
 Map<String, dynamic> prodData;
 Map<String, dynamic> userData;
 Map<String, dynamic> orderData;
 
-Map<String, DocumentReference> prodRefs = {};
-Map<String, DocumentReference> userRefs = {};
+Map<String, DocumentReference> prodRefs;
+Map<String, DocumentReference> userRefs;
+List<Map<String, dynamic>> priceOrderedProds;
 
 Map<String, dynamic> cartItem = {
   'product_id': prodRefs['p0'],
@@ -31,22 +34,47 @@ Future<Map<String, dynamic>> loadJsonData(String path) {
       .then((fileContents) => jsonDecode(fileContents));
 }
 
+bool satisfyPriceRange(DocumentSnapshot doc, int min, int max) {
+  double price = doc.data()['discounted_price'];
+  return price >= min && price <= max;
+}
+
+bool satisfyQueryText(DocumentSnapshot doc, String query) {
+  return (doc.data()['name'] as String).toLowerCase().contains(query);
+}
+
+bool satisfyCategories(DocumentSnapshot doc, List<String> categories) {
+  // cast to List<String> not allowed by dart, but is actually a list of strings
+  return (doc.data()['categories'] as List<dynamic>)
+      .any((el) => categories.any((cat) => cat == el));
+}
+
 void main() {
-  // Executed before each test, reset the mock to a predefined db instance,
-  // avoiding test side-effects from influencing the successive ones.
-  setUp(() async {
+  setUpAll(() async{
     prodData = await loadJsonData(p.join('data', 'products.json'));
     userData = await loadJsonData(p.join('data', 'users.json'));
     // only two orders now: o0 in progress, o1 completed
     orderData = await loadJsonData(p.join('data', 'orders.json'));
 
+    priceOrderedProds = prodData.values.cast<Map<String, dynamic>>().toList();
+    priceOrderedProds.sort((a, b) =>
+        (a['discounted_price'] as double).compareTo(b['discounted_price'] as double));
+  });
+
+  // Executed before each test, reset the mock to a predefined db instance,
+  // avoiding test side-effects from influencing the successive ones.
+  setUp(() async {
     instance = MockFirestoreInstance();
+    prodRefs = {};
+    userRefs = {};
+
     for (var entry in prodData.entries) {
       DocumentReference ref = await instance.collection('products').add(entry.value);
       prodRefs.addAll({
         entry.key: ref,
       });
     }
+
     for (var entry in userData.entries) {
       DocumentReference ref = await instance.collection('users').add(entry.value);
       userRefs.addAll({
@@ -116,9 +144,101 @@ void main() {
     });
   });
 
+
   group('Product search query', () {
-    // TODO: multiple filters configuration tests
+    // Filters not specified are setup to default values, so they are implicitly tested
+    test('Should provide the first cheapest products', () async {
+      SearchFilters filters = SearchFilters(orderingKey: LocaleKeys.filter_cheapest_first);
+      List<DocumentSnapshot> data = await getSearchQueryResult(filters, null,
+          mockFsInstance: instance);
+
+      List<DocumentSnapshotMatcher> expectedResults =
+          priceOrderedProds.take(data.length)
+              .map((e) => DocumentSnapshotMatcher.onData(e)).toList();
+
+      expect(data, expectedResults);
+    });
+    test('Should provide products that match the string provided', () async {
+      String query = 'int';
+      SearchFilters filters = SearchFilters(queryText: query);
+      List<DocumentSnapshot> data = await getSearchQueryResult(filters, null,
+          mockFsInstance: instance);
+
+      data.forEach((doc) {
+        expect(satisfyQueryText(doc, query), true);
+      });
+    });
+    test('Should provide products that match the price range', () async {
+      SearchFilters filters = SearchFilters(priceRangeValues: RangeValues(200, 300));
+      List<DocumentSnapshot> data = await getSearchQueryResult(filters, null,
+          mockFsInstance: instance);
+
+      data.forEach((doc) {
+        expect(satisfyPriceRange(doc, 200, 300), true);
+      });
+    });
+    test('Should provide products that satisfy at least one chosen category', () async {
+      SearchFilters filters = SearchFilters(categoriesBool: {
+        "Furniture": false,
+        "Design": true,
+        "Electronic": false,
+        "Handmade": true,
+        "Rustic": false,
+        "Practical": false,
+        "Unbranded": false,
+        "Ergonomic": false,
+        "Mechanical": false,
+        "Wood": false,
+        "Iron": false,
+        "Plastic": false,
+      });
+      List<DocumentSnapshot> data = await getSearchQueryResult(filters, null,
+          mockFsInstance: instance);
+
+      data.forEach((doc) {
+        expect(satisfyCategories(doc, ['Design', 'Handmade']), true);
+      });
+    });
+    test('Should provide products that has an AR model associated', () async {
+      SearchFilters filters = SearchFilters(showAROnly: true);
+      List<DocumentSnapshot> data = await getSearchQueryResult(filters, null,
+          mockFsInstance: instance);
+
+      data.forEach((doc) {
+        expect(doc.data()['has_AR'], true);
+      });
+    });
+    test('Should provide products that satisfy all filters', () async {
+      String query = 'ed';
+      SearchFilters filters = SearchFilters(
+          queryText: query,
+          priceRangeValues: RangeValues(50, 250),
+          showAROnly: true,
+          categoriesBool: {
+            "Furniture": false,
+            "Design": false,
+            "Electronic": true,
+            "Handmade": false,
+            "Rustic": false,
+            "Practical": false,
+            "Unbranded": false,
+            "Ergonomic": false,
+            "Mechanical": false,
+            "Wood": false,
+            "Iron": false,
+            "Plastic": false,
+          }
+      );
+      List<DocumentSnapshot> data = await getSearchQueryResult(filters, null,
+          mockFsInstance: instance);
+
+      data.forEach((doc) {
+        expect(doc.data()['has_AR'] && satisfyPriceRange(doc, 50, 250)
+            && satisfyQueryText(doc, query) && satisfyCategories(doc, ['Electronic']), true);
+      });
+    });
   });
+
 
   group('INSERT / UPDATE operations', () {
     test('Should delete db cart and update it with local data', () async {
@@ -153,14 +273,17 @@ void main() {
       String deliveryAddress = 'Via test 22, Milano, 1234';
       String paymentCard = '1234-5678, 12/12/2022';
 
-      await addOrderFromCartData(userRefs['u1'].id, localCart, cartDocs,
-          totalPrice, deliveryAddress, paymentCard, mockFsInstance: instance);
+      DocumentReference order = await addOrderFromCartData(userRefs['u1'].id,
+          localCart, cartDocs, totalPrice, deliveryAddress,
+          paymentCard, mockFsInstance: instance);
 
       QuerySnapshot orders = await getUserInProgressOrders(userRefs['u1'].id,
           mockFsInstance: instance);
 
       expect(orders.docs.length, 2);
-      // TODO: check other properties
+
+      QuerySnapshot orderCartDocs = await order.collection('orderItems').get();
+      expect(orderCartDocs.docs.length, localCart.length);
     });
   });
 }

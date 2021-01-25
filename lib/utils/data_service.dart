@@ -85,7 +85,7 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
       .where("discounted_price",
           isLessThanOrEqualTo: searchFilters.priceRangeValues.end)
       .orderBy("discounted_price",
-          descending: orderDict[searchFilters.dropdownValue]);
+          descending: orderDict[searchFilters.orderingKey]);
 
   if (searchFilters.showAROnly)
     baseQuery = baseQuery.where("has_AR", isEqualTo: true);
@@ -117,7 +117,7 @@ Future<List<DocumentSnapshot>> getSearchQueryResult(
 }
 
 /// Add an order from user's cart items
-Future<void> addOrderFromCartData(String uid, List<CartItem> cartItems,
+Future<DocumentReference> addOrderFromCartData(String uid, List<CartItem> cartItems,
     Map<String, DocumentSnapshot> cartDocuments, double totalPrice,
     String deliveryAddress, String paymentCard, {FirebaseFirestore mockFsInstance}) async {
 
@@ -148,6 +148,8 @@ Future<void> addOrderFromCartData(String uid, List<CartItem> cartItems,
 
   //Delete the items from the remote cart
   await updateUserCart(uid, [], mockFsInstance: mockFsInstance);
+
+  return order;
 }
 
 /// Update user's cart items in the database
