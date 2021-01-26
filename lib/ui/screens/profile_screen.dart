@@ -19,7 +19,6 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppBar(
           LocaleKeys.account_title.tr(),
-          showCartIcon: true,
         ),
         body: FirebaseDocFutureBuilder(
           getUserDocument(uid),

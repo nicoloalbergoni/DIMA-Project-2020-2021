@@ -73,7 +73,9 @@ class SideMenu extends StatelessWidget {
                                   viewModel.firebaseUser != null
                                       ? viewModel.firebaseUser.email
                                       : LocaleKeys.drawer_avatar_subtitle.tr(),
-                                  style: TextStyle(color: Colors.white,),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ))
                           ],
                         ),
@@ -156,13 +158,16 @@ List<Widget> _buildMenuItems(
               Navigator.popAndPushNamed(context, '/orders');
             },
           ),
-          ListTile(
-            title: Text(LocaleKeys.drawer_cart.tr()),
-            leading: Icon(Icons.shopping_cart),
-            onTap: () {
-              // Close the drawer and open new screen
-              Navigator.popAndPushNamed(context, '/cart');
-            },
+          Visibility(
+            visible: ModalRoute.of(context).settings.name != "/cart",
+            child: ListTile(
+              title: Text(LocaleKeys.drawer_cart.tr()),
+              leading: Icon(Icons.shopping_cart),
+              onTap: () {
+                // Close the drawer and open new screen
+                Navigator.popAndPushNamed(context, '/cart');
+              },
+            ),
           ),
           Divider(
             thickness: 3,
@@ -180,8 +185,8 @@ List<Widget> _buildMenuItems(
               Navigator.popUntil(context, (route) => route.isFirst);
 
               // display snackbar on home screen
-              HomeScreen.scaffoldKey.currentState.showSnackBar(SnackBar(
-                  content: Text('Logout successfully')));
+              HomeScreen.scaffoldKey.currentState
+                  .showSnackBar(SnackBar(content: Text('Logout successfully')));
             },
           ),
         ]
