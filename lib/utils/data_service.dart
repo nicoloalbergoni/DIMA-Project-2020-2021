@@ -45,6 +45,7 @@ Future<QuerySnapshot> getUserInProgressOrders(String uid, {FirebaseFirestore moc
   return user.reference
       .collection('orders')
       .where('in_progress', isEqualTo: true)
+      .orderBy('issue_date', descending: true)
       .get();
 }
 
@@ -53,6 +54,7 @@ Future<QuerySnapshot> getUserCompletedOrders(String uid, {FirebaseFirestore mock
   return user.reference
       .collection('orders')
       .where('in_progress', isEqualTo: false)
+      .orderBy('issue_date', descending: true)
       .get();
 }
 
