@@ -72,4 +72,9 @@ abstract class  LocaleKeys {
   static const categories_iron = 'categories_iron';
   static const categories_plastic = 'categories_plastic';
   static const cart_dismissible_delete = 'cart_dismissible_delete';
+  static const bottom_order_title = 'bottom_order_title';
+  static const bottom_order_address_info = 'bottom_order_address_info';
+  static const bottom_order_payment_info = 'bottom_order_payment_info';
+  static const bottom_order_button = 'bottom_order_button';
+
 }

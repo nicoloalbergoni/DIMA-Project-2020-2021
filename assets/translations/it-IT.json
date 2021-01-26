@@ -69,5 +69,9 @@
   "categories_wood": "Legno",
   "categories_iron": "Ferro",
   "categories_plastic": "Plastica",
-  "cart_dismissible_delete": "Elimina"
+  "cart_dismissible_delete": "Elimina",
+  "bottom_order_title": "Dettagli Ordine",
+  "bottom_order_address_info": "Informazioni di spedizione",
+  "bottom_order_payment_info": "Informazioni di pagamento",
+  "bottom_order_button": "Conferma ordine"
 }

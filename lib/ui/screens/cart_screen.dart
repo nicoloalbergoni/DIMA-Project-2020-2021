@@ -37,15 +37,15 @@ class _CartScreenState extends State<CartScreen> {
     //   documentList = value;
     //   print(documentList.length);
     // });
-
   }
 
   Future<Map<String, DocumentSnapshot>> _getDocumentList() async {
     Map<String, DocumentSnapshot> tempList = Map<String, DocumentSnapshot>();
-    List<CartItem> itemList = StoreProvider.of<AppState>(context, listen: false).state.cartItems;
+    List<CartItem> itemList =
+        StoreProvider.of<AppState>(context, listen: false).state.cartItems;
 
     //TODO: handle case in which getProductDocument fails
-    for(CartItem i in itemList) {
+    for (CartItem i in itemList) {
       DocumentSnapshot doc = await getProductDocument(i.productId);
       tempList[i.productId.id] = doc;
     }
@@ -59,12 +59,10 @@ class _CartScreenState extends State<CartScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     uid = getUID(context);
-    if (uid == null)
-      return Container();
+    if (uid == null) return Container();
 
     return Scaffold(
       appBar: CustomAppBar(LocaleKeys.cart_title.tr()),
@@ -80,14 +78,12 @@ class _CartScreenState extends State<CartScreen> {
           );
         },
         builder: (context, viewModel) {
-
-          if(viewModel.cartItems.isEmpty) return Container();
-
+          if (viewModel.cartItems.isEmpty) return Container();
 
           return FutureBuilder(
               future: _getDocumentList(),
               builder: (context, data) {
-                if(data.hasData) {
+                if (data.hasData) {
                   documentList = data.data;
                   return Column(
                     children: [
@@ -99,12 +95,13 @@ class _CartScreenState extends State<CartScreen> {
                           itemCount: documentList.length,
                           itemBuilder: (BuildContext context, int index) {
                             CartItem cartItem = viewModel.cartItems[index];
-                            Map<String, dynamic> data = documentList[cartItem.productId.id].data();
+                            Map<String, dynamic> data =
+                                documentList[cartItem.productId.id].data();
                             TextEditingController textQuantityController =
-                            TextEditingController(
-                                text: cartItem.quantity.toString());
+                                TextEditingController(
+                                    text: cartItem.quantity.toString());
                             textControllers.add(textQuantityController);
-                            return  Dismissible(
+                            return Dismissible(
                               key: UniqueKey(),
                               direction: DismissDirection.startToEnd,
                               onDismissed: (_) {
@@ -140,31 +137,42 @@ class _CartScreenState extends State<CartScreen> {
                                     errorBuilder: onImageError,
                                   ),
                                 ),
-                                title: Text(data['name']),
+                                title: Text(
+                                  data['name'],
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                                 onTap: () {
                                   Navigator.pushNamed(context, '/product',
                                       arguments: ProductScreenArgs(
                                           cartItem.productId, data));
                                 },
-                                subtitle: Row(
+                                subtitle: Text(
+                                    "${LocaleKeys.price.tr()}: ${data['discounted_price']}\$"),
+                                trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(
-                                        '${LocaleKeys.quantity.tr()}: ${cartItem.quantity}'),
-                                    Spacer(),
                                     Container(
                                       padding: const EdgeInsets.all(0.0),
                                       height: 36.0,
                                       width: 40.0,
                                       child: IconButton(
-                                        icon: Icon(Icons.remove),
+                                        icon: Icon(
+                                          Icons.remove_circle,
+                                          color: Colors.black,
+                                        ),
                                         onPressed: () {
-                                          int newQuantity = cartItem.quantity - 1;
-                                          if(newQuantity < minQuantity || newQuantity > maxQuantity) displaySnackbarWithText(context,
-                                              "The quantity must be between 1 and 50");
-                                          else viewModel.changeCartItemQuantityCallback(
-                                              CartItem(
-                                                  cartItem.productId, newQuantity));
+                                          int newQuantity =
+                                              cartItem.quantity - 1;
+                                          if (newQuantity < minQuantity ||
+                                              newQuantity > maxQuantity)
+                                            displaySnackbarWithText(context,
+                                                "The quantity must be between 1 and 50");
+                                          else
+                                            viewModel
+                                                .changeCartItemQuantityCallback(
+                                                    CartItem(cartItem.productId,
+                                                        newQuantity));
                                         },
                                       ),
                                     ),
@@ -172,20 +180,22 @@ class _CartScreenState extends State<CartScreen> {
                                       padding: const EdgeInsets.all(0.0),
                                       height: 36.0,
                                       width: 40.0,
-                                      child:  Focus(
+                                      child: Focus(
                                         onFocusChange: (focus) {
                                           if (!focus) {
-                                            int quantity = int.tryParse(textQuantityController.text);
+                                            int quantity = int.tryParse(
+                                                textQuantityController.text);
                                             if (quantity != null) {
-                                              if (quantity < minQuantity || quantity > maxQuantity)
+                                              if (quantity < minQuantity ||
+                                                  quantity > maxQuantity)
                                                 displaySnackbarWithText(context,
                                                     "The quantity must be between 1 and 50");
                                               else
                                                 viewModel
                                                     .changeCartItemQuantityCallback(
-                                                    CartItem(
-                                                        cartItem.productId,
-                                                        quantity));
+                                                        CartItem(
+                                                            cartItem.productId,
+                                                            quantity));
                                             } else {
                                               displaySnackbarWithText(context,
                                                   "The quantity must be a valid integer");
@@ -201,15 +211,16 @@ class _CartScreenState extends State<CartScreen> {
                                           onSubmitted: (value) {
                                             int quantity = int.tryParse(value);
                                             if (quantity != null) {
-                                              if (quantity < minQuantity || quantity > maxQuantity)
+                                              if (quantity < minQuantity ||
+                                                  quantity > maxQuantity)
                                                 displaySnackbarWithText(context,
                                                     "The quantity must be between 1 and 50");
                                               else
                                                 viewModel
                                                     .changeCartItemQuantityCallback(
-                                                    CartItem(
-                                                        cartItem.productId,
-                                                        quantity));
+                                                        CartItem(
+                                                            cartItem.productId,
+                                                            quantity));
                                             } else {
                                               displaySnackbarWithText(context,
                                                   "The quantity must be a valid integer");
@@ -220,20 +231,27 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                       ),
                                     ),
-
                                     Container(
                                       padding: const EdgeInsets.all(0.0),
                                       height: 36.0,
                                       width: 40.0,
                                       child: IconButton(
-                                        icon: Icon(Icons.add),
+                                        icon: Icon(
+                                          Icons.add_circle,
+                                          color: Colors.black,
+                                        ),
                                         onPressed: () {
-                                          int newQuantity = cartItem.quantity + 1;
-                                          if(newQuantity < minQuantity || newQuantity > maxQuantity) displaySnackbarWithText(context,
-                                              "The quantity must be between 1 and 50");
-                                          else viewModel.changeCartItemQuantityCallback(
-                                              CartItem(
-                                                  cartItem.productId, newQuantity));
+                                          int newQuantity =
+                                              cartItem.quantity + 1;
+                                          if (newQuantity < minQuantity ||
+                                              newQuantity > maxQuantity)
+                                            displaySnackbarWithText(context,
+                                                "The quantity must be between 1 and 50");
+                                          else
+                                            viewModel
+                                                .changeCartItemQuantityCallback(
+                                                    CartItem(cartItem.productId,
+                                                        newQuantity));
                                         },
                                       ),
                                     ),
@@ -243,7 +261,7 @@ class _CartScreenState extends State<CartScreen> {
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
+                              const Divider(),
                         ),
                       )
                     ],
@@ -254,12 +272,14 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Text("Loading")
                     ],
                   ),
                 );
-          });
+              });
         },
       ),
       floatingActionButton: Visibility(
@@ -278,9 +298,11 @@ class _CartScreenState extends State<CartScreen> {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
-        return CartBottomSheet(StoreProvider.of<AppState>(context).state.cartItems, documentList, uid);
+        return CartBottomSheet(
+            StoreProvider.of<AppState>(context).state.cartItems,
+            documentList,
+            uid);
       },
     );
   }
-
 }

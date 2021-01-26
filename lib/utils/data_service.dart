@@ -121,11 +121,12 @@ Future<DocumentReference> addOrderFromCartData(String uid, List<CartItem> cartIt
     Map<String, DocumentSnapshot> cartDocuments, double totalPrice,
     String deliveryAddress, String paymentCard, {FirebaseFirestore mockFsInstance}) async {
 
+
   Map<String, dynamic> orderData = {
     'in_progress': true,
     'issue_date': DateTime.now(),
     'delivery_date': DateTime.now().add(Duration(days: 14)),
-    'total_cost': totalPrice,
+    'total_cost': double.parse(totalPrice.toStringAsFixed(2)), // This is to fix the double precision to 2 decimals
     'delivery_address': deliveryAddress,
     'payment_card': paymentCard
   };

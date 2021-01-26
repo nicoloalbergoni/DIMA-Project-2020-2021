@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/models/cartItem.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CartBottomSheet extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -27,18 +30,34 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
 
   double _getTotalPrice() {
     double totalPrice = 0;
-    widget.documentList.forEach((_, value) {
-      totalPrice += value['discounted_price'];
+    widget.cartItems.forEach((element) {
+      totalPrice += (widget.documentList[element.productId.id]
+              .data()['discounted_price'] *
+          element.quantity);
     });
 
     return totalPrice;
   }
 
-  List<String> _getOrderRecapStrings() {
-    List<String> orderStrings = [];
+  List<Row> _getOrderRecapStrings() {
+    List<Row> orderStrings = [];
     widget.cartItems.forEach((element) {
-      orderStrings.add(
-          "${widget.documentList[element.productId.id].data()['name']}   x${element.quantity}");
+      Map<String, dynamic> documentData = widget.documentList[element.productId.id].data();
+      double totalPrice = (documentData['discounted_price'] * element.quantity);
+
+      orderStrings.add(Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "${documentData['name']}   x${element.quantity}",
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+          Text(
+            "${totalPrice.toStringAsFixed(2)}\$",
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+        ],
+      ));
     });
 
     return orderStrings;
@@ -64,7 +83,6 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
     return userPayments;
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -74,7 +92,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> orderStrings = _getOrderRecapStrings();
+    List<Row> orderStrings = _getOrderRecapStrings();
 
     // TODO: Add custom BottomSheet Theme (if needed)
     return Container(
@@ -97,7 +115,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Order Details",
+                  LocaleKeys.bottom_order_title.tr(),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline6,
                 ),
@@ -118,10 +136,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 return Container(
                   height: 20,
                   //padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    orderStrings[index],
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
+                  child: orderStrings[index],
                 );
               },
             ),
@@ -145,7 +160,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Address Information:",
+                          "${LocaleKeys.bottom_order_address_info.tr()}:",
                           textAlign: TextAlign.left,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -191,7 +206,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Payment Information:",
+                          "${LocaleKeys.bottom_order_payment_info.tr()}:",
                           textAlign: TextAlign.left,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -250,7 +265,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
               // shape: RoundedRectangleBorder(
               //   borderRadius: BorderRadius.circular(18.0),
               // ),
-              child: Text("Confirm order"),
+              child: Text(LocaleKeys.bottom_order_button.tr()),
             ),
           ),
         ],

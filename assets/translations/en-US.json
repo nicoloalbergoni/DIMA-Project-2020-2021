@@ -69,5 +69,9 @@
   "categories_wood": "Wood",
   "categories_iron": "Iron",
   "categories_plastic": "Plastic",
-  "cart_dismissible_delete": "Delete"
+  "cart_dismissible_delete": "Delete",
+  "bottom_order_title": "Order Details",
+  "bottom_order_address_info": "Delivery information",
+  "bottom_order_payment_info": "Payment information",
+  "bottom_order_button": "Confirm order"
 }
