@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:realiteye/models/cartItem.dart';
+import 'package:realiteye/models/cart_item.dart';
 
 class ProductScreenAppbarViewModel {
   final User firebaseUser;

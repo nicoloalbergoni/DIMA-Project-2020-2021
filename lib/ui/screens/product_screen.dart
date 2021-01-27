@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
-import 'package:realiteye/models/cartItem.dart';
+import 'package:realiteye/models/cart_item.dart';
+import 'package:realiteye/models/product_screen_args.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
@@ -12,7 +13,6 @@ import 'package:realiteye/ui/widgets/discount_chip.dart';
 import 'package:realiteye/ui/widgets/image_carousel.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/downloader.dart';
-import 'package:realiteye/utils/product_screen_args.dart';
 import 'package:realiteye/utils/utils.dart';
 import 'package:realiteye/view_models/product_screen_appbar_vm.dart';
 

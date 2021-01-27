@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:realiteye/utils/product_screen_args.dart';
+import 'package:realiteye/models/product_screen_args.dart';
 import 'package:realiteye/utils/utils.dart';
 
 import 'discount_chip.dart';

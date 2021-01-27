@@ -1,4 +1,4 @@
-import 'package:realiteye/models/cartItem.dart';
+import 'package:realiteye/models/cart_item.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:redux/redux.dart';

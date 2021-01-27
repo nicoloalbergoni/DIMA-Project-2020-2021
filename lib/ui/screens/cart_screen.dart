@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
-import 'package:realiteye/models/cartItem.dart';
+import 'package:realiteye/models/cart_item.dart';
+import 'package:realiteye/models/product_screen_args.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/ui/widgets/cart_bottom_sheet.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/side_menu.dart';
 import 'package:realiteye/utils/data_service.dart';
-import 'package:realiteye/utils/product_screen_args.dart';
 import 'package:realiteye/utils/utils.dart';
 import 'package:realiteye/view_models/cart_screen_vm.dart';
 

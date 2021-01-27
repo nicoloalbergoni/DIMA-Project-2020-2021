@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
-import 'package:realiteye/utils/search_filters_callbacks.dart';
+import 'package:realiteye/models/search_filters_callbacks.dart';
 
 class FilterBar extends StatelessWidget {
 

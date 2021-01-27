@@ -6,9 +6,9 @@ import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:realiteye/generated/locale_keys.g.dart';
-import 'package:realiteye/models/cartItem.dart';
+import 'package:realiteye/models/cart_item.dart';
+import 'package:realiteye/models/search_filters.dart';
 import 'package:realiteye/utils/data_service.dart';
-import 'package:realiteye/utils/search_filters.dart';
 import 'package:test/test.dart';
 
 import 'utils/document_snapshot_matcher.dart';
@@ -116,6 +116,7 @@ void main() {
 
     test('Should return completed orders of given user', () async {
       QuerySnapshot data = await getUserCompletedOrders(userRefs['u1'].id, mockFsInstance: instance);
+
       expect(data, QuerySnapshotMatcher([
         DocumentSnapshotMatcher.onData(orderData['o1'])
       ]));

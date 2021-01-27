@@ -1,6 +1,6 @@
+import 'package:realiteye/models/cart_item.dart';
 import 'package:realiteye/redux/app_state.dart';
 
-import '../models/cartItem.dart';
 import 'actions.dart';
 
 AppState appReducers(AppState state, dynamic action) {

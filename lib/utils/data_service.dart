@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
-import 'package:realiteye/models/cartItem.dart';
-import 'package:realiteye/utils/search_filters.dart';
+import 'package:realiteye/models/cart_item.dart';
+import 'package:realiteye/models/search_filters.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
