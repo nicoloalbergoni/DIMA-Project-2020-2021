@@ -49,6 +49,11 @@ bool satisfyCategories(DocumentSnapshot doc, List<String> categories) {
       .any((el) => categories.any((cat) => cat == el));
 }
 
+/// Date has a format yyyy-mm-ggTHH:MM:SS.MMMZ, example: 2004-07-29T19:31:33.543Z
+Timestamp parseIsoFormatDate(String date) {
+  return Timestamp.fromDate(DateTime.parse(date));
+}
+
 void main() {
   setUpAll(() async{
     prodData = await loadJsonData(p.join('data', 'products.json'));
@@ -59,6 +64,12 @@ void main() {
     priceOrderedProds = prodData.values.cast<Map<String, dynamic>>().toList();
     priceOrderedProds.sort((a, b) =>
         (a['discounted_price'] as double).compareTo(b['discounted_price'] as double));
+
+    // cast date strings to Timestamp, used by Firestore
+    orderData.forEach((key, value) {
+      value['issue_date'] = parseIsoFormatDate(value['issue_date']);
+      value['delivery_date'] = parseIsoFormatDate(value['delivery_date']);
+    });
   });
 
   // Executed before each test, reset the mock to a predefined db instance,
