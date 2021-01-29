@@ -26,23 +26,29 @@ class _UnityScreenState extends State<UnityScreen> {
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        unloadAssetBundle();
+        _unityWidgetController.unload();
+        return true;
+      },
+      child: Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(LocaleKeys.unity_title.tr()),
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () async {
-                unloadAssetBundle();
-                await _unityWidgetController.unload();
-                //TODO: buggy pop animation, but impossible to solve probably
-                Navigator.pop(context);
-              }
-            );
-          },
-        ),
+        // leading: Builder(
+        //   builder: (context) {
+        //     return IconButton(
+        //         icon: Icon(Icons.arrow_back),
+        //         onPressed: () async {
+        //           unloadAssetBundle();
+        //           await _unityWidgetController.unload();
+        //           //TODO: buggy pop animation, but impossible to solve probably
+        //           Navigator.pop(context);
+        //         }
+        //     );
+        //   },
+        // ),
       ),
       body: Stack(
         children: <Widget>[
@@ -69,30 +75,30 @@ class _UnityScreenState extends State<UnityScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Scrollbar(
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: colorStrings.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            List<int> cValues = colorStrings[index].split(',')
-                                .map((e) => int.parse(e)).toList();
-                            Color c = Color.fromRGBO(cValues[0], cValues[1], cValues[2], 1);
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: colorStrings.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              List<int> cValues = colorStrings[index].split(',')
+                                  .map((e) => int.parse(e)).toList();
+                              Color c = Color.fromRGBO(cValues[0], cValues[1], cValues[2], 1);
 
-                            return InkWell(
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: c,
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0)),
+                              return InkWell(
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    color: c,
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0)),
+                                  ),
                                 ),
-                              ),
-                              onTap: () => changeModelColor(colorStrings[index]),
-                            );
-                          },
-                          separatorBuilder: (context, index) => SizedBox(width: 10,),
-                        )
+                                onTap: () => changeModelColor(colorStrings[index]),
+                              );
+                            },
+                            separatorBuilder: (context, index) => SizedBox(width: 10,),
+                          )
                       ),
                     ),
                   )
@@ -102,7 +108,8 @@ class _UnityScreenState extends State<UnityScreen> {
           ),
         ],
       ),
-    );
+    ),
+        );
   }
 
   // Communication from Flutter to Unity
