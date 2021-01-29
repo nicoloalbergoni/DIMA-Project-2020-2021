@@ -23,11 +23,15 @@ class SideMenu extends StatelessWidget {
       child: StoreConnector<AppState, SideMenuViewModel>(
         converter: (store) {
           return SideMenuViewModel(
-              theme: store.state.theme,
-              firebaseUser: store.state.firebaseUser,
-              switchThemeCallback: (mode) =>
-                  store.dispatch(SwitchThemeAction(mode)),
-              logoutUser: () => store.dispatch(FirebaseLogoutAction()));
+            theme: store.state.theme,
+            firebaseUser: store.state.firebaseUser,
+            switchThemeCallback: (mode) =>
+                store.dispatch(SwitchThemeAction(mode)),
+            logoutUser: () async {
+              await updateUserCart(store.state.firebaseUser.uid, store.state.cartItems);
+              store.dispatch(FirebaseLogoutAction());
+            },
+          );
         },
         builder: (context, viewModel) {
           return Column(
