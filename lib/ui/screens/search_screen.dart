@@ -37,6 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
+
     showHistory = false;
     showSearchResult = false;
     _searchFocus.addListener(_onFocusChange);
@@ -47,6 +48,18 @@ class _SearchScreenState extends State<SearchScreen> {
         _onARToggleChanged,
         _onPriceSliderChanged,
         _onCategoriesSelected);
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final SearchFilters args = ModalRoute.of(context).settings.arguments;
+    if (args != null) {
+      _searchFilters = args;
+      _searchController.text = args.queryText;
+    }
   }
 
   @override
