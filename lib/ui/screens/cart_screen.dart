@@ -53,6 +53,21 @@ class _CartScreenState extends State<CartScreen> {
     return tempList;
   }
 
+  void onCartItemQuantityChange(int newQuantity, CartScreenViewModel viewModel,
+                                CartItem cartItem, BuildContext context,
+                                {TextEditingController controller}) {
+    if (newQuantity < minQuantity || newQuantity > maxQuantity) {
+      displaySnackbarWithText(context, "The quantity must be between 1 and 50");
+      if (controller != null) {
+        controller.text = cartItem.quantity.toString();
+      }
+    }
+    else {
+      viewModel.changeCartItemQuantityCallback(
+          CartItem(cartItem.productId, newQuantity));
+    }
+  }
+
   @override
   void dispose() {
     textControllers.forEach((element) => element.dispose());
@@ -159,20 +174,13 @@ class _CartScreenState extends State<CartScreen> {
                                       child: IconButton(
                                         icon: Icon(
                                           Icons.remove_circle,
-                                          color: Colors.black,
+                                          //color: Colors.black,
                                         ),
                                         onPressed: () {
                                           int newQuantity =
                                               cartItem.quantity - 1;
-                                          if (newQuantity < minQuantity ||
-                                              newQuantity > maxQuantity)
-                                            displaySnackbarWithText(context,
-                                                "The quantity must be between 1 and 50");
-                                          else
-                                            viewModel
-                                                .changeCartItemQuantityCallback(
-                                                    CartItem(cartItem.productId,
-                                                        newQuantity));
+                                          onCartItemQuantityChange(newQuantity,
+                                              viewModel, cartItem, context);
                                         },
                                       ),
                                     ),
@@ -185,18 +193,13 @@ class _CartScreenState extends State<CartScreen> {
                                           if (!focus) {
                                             int quantity = int.tryParse(
                                                 textQuantityController.text);
+
                                             if (quantity != null) {
-                                              if (quantity < minQuantity ||
-                                                  quantity > maxQuantity)
-                                                displaySnackbarWithText(context,
-                                                    "The quantity must be between 1 and 50");
-                                              else
-                                                viewModel
-                                                    .changeCartItemQuantityCallback(
-                                                        CartItem(
-                                                            cartItem.productId,
-                                                            quantity));
-                                            } else {
+                                              onCartItemQuantityChange(quantity,
+                                                viewModel, cartItem, context,
+                                                controller: textQuantityController);
+                                            }
+                                            else {
                                               displaySnackbarWithText(context,
                                                   "The quantity must be a valid integer");
                                               textQuantityController.text =
@@ -210,18 +213,13 @@ class _CartScreenState extends State<CartScreen> {
                                           controller: textQuantityController,
                                           onSubmitted: (value) {
                                             int quantity = int.tryParse(value);
+
                                             if (quantity != null) {
-                                              if (quantity < minQuantity ||
-                                                  quantity > maxQuantity)
-                                                displaySnackbarWithText(context,
-                                                    "The quantity must be between 1 and 50");
-                                              else
-                                                viewModel
-                                                    .changeCartItemQuantityCallback(
-                                                        CartItem(
-                                                            cartItem.productId,
-                                                            quantity));
-                                            } else {
+                                              onCartItemQuantityChange(quantity,
+                                                viewModel, cartItem, context,
+                                                controller: textQuantityController);
+                                            }
+                                            else {
                                               displaySnackbarWithText(context,
                                                   "The quantity must be a valid integer");
                                               textQuantityController.text =
@@ -238,20 +236,13 @@ class _CartScreenState extends State<CartScreen> {
                                       child: IconButton(
                                         icon: Icon(
                                           Icons.add_circle,
-                                          color: Colors.black,
+                                          //color: Colors.black,
                                         ),
                                         onPressed: () {
                                           int newQuantity =
                                               cartItem.quantity + 1;
-                                          if (newQuantity < minQuantity ||
-                                              newQuantity > maxQuantity)
-                                            displaySnackbarWithText(context,
-                                                "The quantity must be between 1 and 50");
-                                          else
-                                            viewModel
-                                                .changeCartItemQuantityCallback(
-                                                    CartItem(cartItem.productId,
-                                                        newQuantity));
+                                          onCartItemQuantityChange(newQuantity,
+                                              viewModel, cartItem, context);
                                         },
                                       ),
                                     ),

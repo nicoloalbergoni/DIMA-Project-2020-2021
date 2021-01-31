@@ -13,11 +13,6 @@ final CollectionReference Function(FirebaseFirestore) products =
     (fireInstance) => fireInstance.collection('products');
 
 final int queryLimit = 5;
-// TODO: just for testing real time streams, eliminate in future
-Stream<QuerySnapshot> getUsers({FirebaseFirestore mockFsInstance}) {
-  // Call the user's CollectionReference to add a new user
-  return users(mockFsInstance ?? firestore).snapshots();
-}
 
 Future<QuerySnapshot> getUserCart(String uid, {FirebaseFirestore mockFsInstance}) async {
   DocumentSnapshot user = await users(mockFsInstance ?? firestore).doc(uid).get();

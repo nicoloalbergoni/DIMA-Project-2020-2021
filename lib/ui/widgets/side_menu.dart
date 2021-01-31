@@ -86,14 +86,6 @@ class SideMenu extends StatelessWidget {
                       ),
                     ),
                     ..._buildMenuItems(viewModel, context),
-                    ListTile(
-                      title: Text(LocaleKeys.drawer_debug.tr()),
-                      leading: Icon(Icons.bug_report),
-                      onTap: () async {
-                        // Close the drawer and open new screen
-                        Navigator.popAndPushNamed(context, "/debug");
-                      },
-                    ),
                   ],
                 ),
               ),

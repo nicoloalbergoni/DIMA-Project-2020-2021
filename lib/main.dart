@@ -10,7 +10,6 @@ import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/redux/middlewares.dart';
 import 'package:realiteye/redux/reducers.dart';
 import 'package:realiteye/ui/screens/cart_screen.dart';
-import 'package:realiteye/ui/screens/debug_screen.dart';
 import 'package:realiteye/ui/screens/home_screen.dart';
 import 'package:realiteye/ui/screens/login_screen.dart';
 import 'package:realiteye/ui/screens/order_screen.dart';
@@ -66,7 +65,6 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         // Check for errors
         if (snapshot.hasError) {
-          // TODO: Change TextDirection based on current locale language
           return Text(LocaleKeys.error.tr(), textDirection: TextDirection.ltr);
         }
         // Once complete, show your application
@@ -126,7 +124,6 @@ class MyApp extends StatelessWidget {
                           '/register': (context) => RegistrationScreen(),
                           '/unity': (context) => UnityScreen(),
                           '/cart': (context) => CartScreen(),
-                          '/debug': (context) => DebugScreen(),
                           '/search': (context) => SearchScreen(),
                           '/profile': (context) => ProfileScreen(),
                           '/orders': (context) => OrderScreen()
