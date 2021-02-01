@@ -76,5 +76,7 @@ abstract class  LocaleKeys {
   static const bottom_order_address_info = 'bottom_order_address_info';
   static const bottom_order_payment_info = 'bottom_order_payment_info';
   static const bottom_order_button = 'bottom_order_button';
+  static const unity_color_picker_title = 'unity_color_picker_title';
+  static const unity_ar_hint = 'unity_ar_hint';
 
 }

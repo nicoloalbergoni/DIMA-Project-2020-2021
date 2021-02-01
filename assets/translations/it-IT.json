@@ -73,5 +73,7 @@
   "bottom_order_title": "Dettagli Ordine",
   "bottom_order_address_info": "Informazioni di spedizione",
   "bottom_order_payment_info": "Informazioni di pagamento",
-  "bottom_order_button": "Conferma ordine"
+  "bottom_order_button": "Conferma ordine",
+  "unity_color_picker_title": "Scegli un colore:",
+  "unity_ar_hint": "Muovi lentamente il dispositivo per trovare dei piani, dopodichè, quando appare l'indicatore, clicca sullo schermo per piazzare il modello."
 }

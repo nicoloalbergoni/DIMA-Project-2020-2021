@@ -73,5 +73,7 @@
   "bottom_order_title": "Order Details",
   "bottom_order_address_info": "Delivery information",
   "bottom_order_payment_info": "Payment information",
-  "bottom_order_button": "Confirm order"
+  "bottom_order_button": "Confirm order",
+  "unity_color_picker_title": "Choose a color:",
+  "unity_ar_hint": "Tilt slowly your device to find planes, then tap your screen when the indicator is shown to place the model."
 }
