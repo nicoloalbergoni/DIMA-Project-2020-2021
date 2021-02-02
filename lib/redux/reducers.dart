@@ -79,8 +79,8 @@ AppState switchTheme(AppState state, SwitchThemeAction action) {
 
 AppState addHistoryItem(AppState state, AddHistoryItemAction action) {
   return state.copyWith(searchHistory: <String>[]
-    ..addAll(state.searchHistory)
-    ..add(action.searchedString));
+    ..add(action.searchedString)
+    ..addAll(state.searchHistory.take(5)));
 }
 
 AppState onCartFetchStart(AppState state, FetchCartAction action) {

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 
 class SearchBox extends StatelessWidget {
@@ -17,18 +17,41 @@ class SearchBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      focusNode: _focus,
-      textInputAction: TextInputAction.search,
-      onSubmitted: (_) => _performSearch(),
-      decoration: InputDecoration(
-          fillColor: Colors.grey.withOpacity(0.2),
-          filled: true,
-          hintText: LocaleKeys.search_box_hint.tr(),
-          enabledBorder: _defaultBorderStyle,
-          border: _defaultBorderStyle,
-          suffixIcon: IconButton(onPressed: _performSearch, icon: Icon(Icons.search))),
+    return Row(
+      children: [
+        Expanded(child: TextField(
+          controller: controller,
+          focusNode: _focus,
+          textInputAction: TextInputAction.search,
+          onSubmitted: (_) => _performSearch(),
+          decoration: InputDecoration(
+              fillColor: Colors.grey.withOpacity(0.2),
+              filled: true,
+              hintText: LocaleKeys.search_box_hint.tr(),
+              enabledBorder: _defaultBorderStyle,
+              border: _defaultBorderStyle,
+              suffixIcon: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () => controller.clear(),
+              )),
+          ),
+        ),
+        SizedBox(width: 10,),
+        IconButton(icon: Icon(Icons.search), onPressed: _performSearch)
+      ],
     );
+    // return TextField(
+    //   controller: controller,
+    //   focusNode: _focus,
+    //   textInputAction: TextInputAction.search,
+    //   onSubmitted: (_) => _performSearch(),
+    //   decoration: InputDecoration(
+    //       fillColor: Colors.grey.withOpacity(0.2),
+    //       filled: true,
+    //       hintText: LocaleKeys.search_box_hint.tr(),
+    //       enabledBorder: _defaultBorderStyle,
+    //       border: _defaultBorderStyle,
+    //       suffixIcon: IconButton(onPressed: _performSearch, icon: Icon(Icons.search))),
+    // );
   }
 }
