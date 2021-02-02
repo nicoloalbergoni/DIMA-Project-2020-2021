@@ -260,14 +260,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 //Close the BottomSheet
                 Navigator.pop(context);
               },
-              color: Theme.of(context).primaryColor,
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.circular(18.0),
-              // ),
-              child: Text(
-                LocaleKeys.bottom_order_button.tr(),
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Text(LocaleKeys.bottom_order_button.tr(),),
             ),
           ),
         ],

@@ -276,6 +276,7 @@ class _CartScreenState extends State<CartScreen> {
       floatingActionButton: Visibility(
         visible: StoreProvider.of<AppState>(context).state.cartItems.isNotEmpty,
         child: FloatingActionButton.extended(
+
             onPressed: () {
               _showModalBottomSheet(context);
             },

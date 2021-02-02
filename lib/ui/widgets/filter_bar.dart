@@ -63,7 +63,7 @@ class FilterBar extends StatelessWidget {
                     child: Text(
                       LocaleKeys.filter_button_text.tr(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.blueAccent),
+                      //style: TextStyle(color: Theme.of(context).primaryColor),
                     ),
                   ),
                 ],

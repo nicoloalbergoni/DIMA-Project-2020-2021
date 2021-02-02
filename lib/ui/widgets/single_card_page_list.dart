@@ -37,20 +37,23 @@ class _SingleCardPageListState extends State<SingleCardPageList> {
         SizedBox(height: 6,),
         SizedBox(
           height: 20,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: widget.items.length,
-            itemBuilder: (BuildContext context, int index) {
-              return RaisedButton(
-                child: Text(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.items.length,
+              itemBuilder: (BuildContext context, int index) {
+                return RaisedButton(
+                  child: Text(
                     '${index + 1}',
-                  style: TextStyle(decoration: (index == _actualIndex)
-                      ? TextDecoration.underline : TextDecoration.none),
-                ),
-                onPressed: () => _setActualIndex(index),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) => SizedBox(width: 6,),
+                    style: TextStyle(decoration: (index == _actualIndex)
+                        ? TextDecoration.underline : TextDecoration.none),
+                  ),
+                  onPressed: () => _setActualIndex(index),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) => SizedBox(width: 6,),
+            ),
           ),
         )
       ],

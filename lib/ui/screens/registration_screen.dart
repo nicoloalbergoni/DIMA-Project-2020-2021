@@ -40,110 +40,105 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(LocaleKeys.registration_title.tr())),
-        resizeToAvoidBottomInset: false,
-        body: Builder(
-          builder: (context) {
-            return Center(
-              child: Form(
-                  key: _formKey,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  child: Card(
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          TextFormField(
-                            controller: _emailController,
-                            decoration: InputDecoration(labelText: 'Email'),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              if (!validateEmail(value))
-                                return 'Not a valid email';
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: _firstNameController,
-                            decoration: InputDecoration(
-                                labelText: LocaleKeys.registration_name.tr()),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: _lastNameController,
-                            decoration: InputDecoration(
-                                labelText:
-                                    LocaleKeys.registration_surname.tr()),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: _passwordController,
-                            decoration: InputDecoration(labelText: 'Password'),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
-                            obscureText: true,
-                          ),
-                          TextFormField(
-                            controller: _confirmPasswordController,
-                            decoration: InputDecoration(
-                                labelText: LocaleKeys
-                                    .registration_confirm_password
-                                    .tr()),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              if (value != _passwordController.text) {
-                                return "Passwords don't match";
-                              }
-                              return null;
-                            },
-                            obscureText: true,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            alignment: Alignment.center,
-                            child: RaisedButton(
-                              onPressed: () async {
-                                if (_formKey.currentState.validate()) {
-                                  User user = await _register(context);
-                                  if (user != null) {
-                                    var store =
-                                        StoreProvider.of<AppState>(context);
-                                    store.dispatch(
-                                        ChangeFirebaseUserAction(user));
-                                    store.dispatch(FetchCartAction());
-                                    Navigator.pop(context);
-                                  }
-                                }
-                              },
-                              child: Text(LocaleKeys.registration_button.tr()),
-                            ),
-                          ),
-                        ],
+      appBar: AppBar(title: Text(LocaleKeys.registration_title.tr())),
+      resizeToAvoidBottomInset: false,
+      body: Builder(
+        builder: (context) {
+          return Center(
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.disabled,
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(labelText: 'Email'),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        if (!validateEmail(value)) return 'Not a valid email';
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _firstNameController,
+                      decoration: InputDecoration(
+                          labelText: LocaleKeys.registration_name.tr()),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _lastNameController,
+                      decoration: InputDecoration(
+                          labelText: LocaleKeys.registration_surname.tr()),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(labelText: 'Password'),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      obscureText: true,
+                    ),
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      decoration: InputDecoration(
+                          labelText:
+                              LocaleKeys.registration_confirm_password.tr()),
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        if (value != _passwordController.text) {
+                          return "Passwords don't match";
+                        }
+                        return null;
+                      },
+                      obscureText: true,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      alignment: Alignment.center,
+                      child: RaisedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            User user = await _register(context);
+                            if (user != null) {
+                              var store = StoreProvider.of<AppState>(context);
+                              store.dispatch(ChangeFirebaseUserAction(user));
+                              store.dispatch(FetchCartAction());
+                              Navigator.pop(context);
+                            }
+                          }
+                        },
+                        child: Text(LocaleKeys.registration_button.tr()),
                       ),
                     ),
-                  )),
-            );
-          },
-        ));
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Future<User> _register(BuildContext context) async {
@@ -175,7 +170,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return null;
     } catch (e) {
       print(e);
-      displaySnackbarWithText(context, LocaleKeys.snackbar_registration_failed.tr());
+      displaySnackbarWithText(
+          context, LocaleKeys.snackbar_registration_failed.tr());
       return null;
     }
   }

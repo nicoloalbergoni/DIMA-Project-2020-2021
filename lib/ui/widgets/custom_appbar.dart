@@ -55,7 +55,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? Badge(
                 position: BadgePosition.topEnd(top: 2, end: 6),
                 badgeColor: Colors.yellow,
-                badgeContent: Text(cartItemCount.toString()),
+                badgeContent: Text(
+                  cartItemCount.toString(),
+                  style: TextStyle(color: Colors.black),
+                ),
                 child: IconButton(
                   icon: Icon(Icons.shopping_cart),
                   onPressed: () => Navigator.pushNamed(context, '/cart'),

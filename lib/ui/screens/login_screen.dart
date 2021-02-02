@@ -101,7 +101,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   _signInWithEmailAndPassword, context);
                             }
                           },
-                          color: Theme.of(context).accentColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
