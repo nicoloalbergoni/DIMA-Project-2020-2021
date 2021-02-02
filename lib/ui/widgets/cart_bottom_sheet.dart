@@ -264,7 +264,10 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
               // shape: RoundedRectangleBorder(
               //   borderRadius: BorderRadius.circular(18.0),
               // ),
-              child: Text(LocaleKeys.bottom_order_button.tr()),
+              child: Text(
+                LocaleKeys.bottom_order_button.tr(),
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ],

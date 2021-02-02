@@ -178,7 +178,14 @@ List<Widget> _buildMenuItems(
               viewModel.logoutUser();
 
               // Then close the drawer and all screens before the home
-              Navigator.popUntil(context, (route) => route.isFirst);
+              if (ModalRoute.of(context).settings.name != Navigator.defaultRouteName) {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              }
+              // If only the drawer is opened, just pop it (popUntil won't work correctly)
+              else {
+                Navigator.pop(context);
+              }
+
 
               // display snackbar on home screen
               HomeScreen.scaffoldKey.currentState
