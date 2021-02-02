@@ -29,7 +29,7 @@ class HomeScreen extends StatelessWidget {
             HomeProductShowcase(LocaleKeys.home_deals.tr(), getHotDeals()),
             HomeProductShowcase(LocaleKeys.home_popular.tr(), getPopulars()),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 HomeFilterCard(
                   'assets/images/home_card_1.jpg',
@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                   }
                 ),
                 HomeFilterCard(
-                  'assets/images/home_card_3.jpg',
+                  'assets/images/home_card_4.jpg',
                   LocaleKeys.home_card_2.tr(),
                   width: 170,
                   height: 120,

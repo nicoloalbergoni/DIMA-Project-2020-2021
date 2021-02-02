@@ -47,7 +47,8 @@ class _SearchScreenState extends State<SearchScreen> {
         _onFilterButtonPressed,
         _onARToggleChanged,
         _onPriceSliderChanged,
-        _onCategoriesSelected);
+        _onCategoriesSelected
+    );
   }
 
 
@@ -59,6 +60,10 @@ class _SearchScreenState extends State<SearchScreen> {
     if (args != null) {
       _searchFilters = args;
       _searchController.text = args.queryText;
+
+      // launch search after screen is built
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _searchPressed());
     }
   }
 
@@ -78,6 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
           },
           builder: (context, viewModel) {
             vm = viewModel;
+
             return Padding(
               padding: EdgeInsets.all(7),
               child: Column(

@@ -31,7 +31,7 @@ class HomeFilterCard extends StatelessWidget {
             child: InkWell(
                 onTap: onTap,
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(16.0),
                   child: Center(
                     child: Text(text,
                       textAlign: TextAlign.center,
