@@ -57,7 +57,7 @@ class _CartScreenState extends State<CartScreen> {
                                 CartItem cartItem, BuildContext context,
                                 {TextEditingController controller}) {
     if (newQuantity < minQuantity || newQuantity > maxQuantity) {
-      displaySnackbarWithText(context, "The quantity must be between 1 and 50");
+      displaySnackbarWithText(context, LocaleKeys.snackbar_quantity_range_error.tr());
       if (controller != null) {
         controller.text = cartItem.quantity.toString();
       }
@@ -124,7 +124,7 @@ class _CartScreenState extends State<CartScreen> {
                                 viewModel
                                     .removeFromCartCallback(cartItem.productId);
                                 displaySnackbarWithText(
-                                    context, 'Product removed from cart');
+                                    context, LocaleKeys.snackbar_cart_remove.tr());
                               },
                               background: Container(
                                 alignment: Alignment.centerLeft,
@@ -201,7 +201,7 @@ class _CartScreenState extends State<CartScreen> {
                                             }
                                             else {
                                               displaySnackbarWithText(context,
-                                                  "The quantity must be a valid integer");
+                                                  LocaleKeys.snackbar_quantity_error.tr());
                                               textQuantityController.text =
                                                   cartItem.quantity.toString();
                                             }
@@ -221,7 +221,7 @@ class _CartScreenState extends State<CartScreen> {
                                             }
                                             else {
                                               displaySnackbarWithText(context,
-                                                  "The quantity must be a valid integer");
+                                                  LocaleKeys.snackbar_quantity_error.tr());
                                               textQuantityController.text =
                                                   cartItem.quantity.toString();
                                             }
@@ -266,7 +266,7 @@ class _CartScreenState extends State<CartScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Text("Loading")
+                      Text(LocaleKeys.loading.tr())
                     ],
                   ),
                 );

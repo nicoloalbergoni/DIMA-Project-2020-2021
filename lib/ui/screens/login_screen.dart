@@ -242,13 +242,13 @@ class _LoginScreenState extends State<LoginScreen> {
       return user;
     } on FirebaseAuthException catch (e) {
       print("Error code: ${e.code}");
-      displaySnackbarWithText(context, "Error during authentication");
+      displaySnackbarWithText(context, LocaleKeys.snackbar_authentication_error.tr());
       return null;
     } catch (e) {
       print(e);
       /* TODO: more meaningful message or show no snackbar at all,
       *   it seems is triggered by back button */
-      displaySnackbarWithText(context, "Error");
+      displaySnackbarWithText(context, LocaleKeys.error.tr());
       return null;
     }
   }

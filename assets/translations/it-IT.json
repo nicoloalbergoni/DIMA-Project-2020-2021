@@ -75,5 +75,15 @@
   "bottom_order_payment_info": "Informazioni di pagamento",
   "bottom_order_button": "Conferma ordine",
   "unity_color_picker_title": "Scegli un colore:",
-  "unity_ar_hint": "Muovi lentamente il dispositivo per trovare dei piani, dopodichè, quando appare l'indicatore, clicca sullo schermo per piazzare il modello."
+  "unity_ar_hint": "Muovi lentamente il dispositivo per trovare dei piani, dopodichè, quando appare l'indicatore, clicca sullo schermo per piazzare il modello.",
+  "snackbar_quantity_range_error": "La quantità deve essere tra 1 e 50",
+  "snackbar_quantity_error": "La quantità deve essere un numero intero",
+  "snackbar_authentication_error": "Errore durante l'autenticazione",
+  "snackbar_login_failed": "Login con email e password fallito",
+  "snackbar_registration_failed": "Registrazione fallita",
+  "snackbar_logout": "Logout completato",
+  "snackbar_cart_remove": "Prodotto rimosso dal carrello",
+  "snackbar_cart_add": "Prodotto aggiunto al carrello",
+  "snackbar_categories_limit": "Puoi selezionare al massimo 10 categorie",
+  "snackbar_no_more_items": "Nessun altro prodotto è stato trovato"
 }

@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/redux/actions.dart';
 import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:realiteye/generated/locale_keys.g.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final CollectionReference users =
@@ -175,7 +175,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return null;
     } catch (e) {
       print(e);
-      displaySnackbarWithText(context, "Failed to register");
+      displaySnackbarWithText(context, LocaleKeys.snackbar_registration_failed.tr());
       return null;
     }
   }

@@ -179,7 +179,7 @@ class _SearchScreenState extends State<SearchScreen> {
     else {
       // TODO: workaround to avoid context propagation
       _scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text('No more items were found')));
+          content: Text(LocaleKeys.snackbar_no_more_items.tr())));
     }
   }
 
@@ -237,6 +237,6 @@ class _SearchScreenState extends State<SearchScreen> {
         _searchFilters.categoriesBool[category] = !_searchFilters.categoriesBool[category];
       });
     }
-    else displaySnackbarWithText(context, "You can select up to 10 categories");
+    else displaySnackbarWithText(context, LocaleKeys.snackbar_categories_limit.tr());
   }
 }

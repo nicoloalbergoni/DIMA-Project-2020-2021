@@ -157,12 +157,12 @@ Widget _buildCartAction(DocumentReference productId,
         ? IconButton(icon: Icon(Icons.remove_shopping_cart),
             onPressed: () {
               vm.removeFromCartCallback(productId);
-              displaySnackbarWithText(context, 'Product removed from cart');
+              displaySnackbarWithText(context, LocaleKeys.snackbar_cart_remove.tr());
             })
         : IconButton(icon: Icon(Icons.add_shopping_cart),
             onPressed: () {
               vm.addToCartCallback(CartItem(productId, 1));
-              displaySnackbarWithText(context, 'Product added to cart');
+              displaySnackbarWithText(context, LocaleKeys.snackbar_cart_add.tr());
             });
   }
 }

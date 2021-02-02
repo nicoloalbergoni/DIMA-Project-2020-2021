@@ -182,7 +182,7 @@ List<Widget> _buildMenuItems(
 
               // display snackbar on home screen
               HomeScreen.scaffoldKey.currentState
-                  .showSnackBar(SnackBar(content: Text('Logout successfully')));
+                  .showSnackBar(SnackBar(content: Text(LocaleKeys.snackbar_logout.tr())));
             },
           ),
         ]

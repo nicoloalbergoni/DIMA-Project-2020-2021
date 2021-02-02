@@ -78,5 +78,15 @@ abstract class  LocaleKeys {
   static const bottom_order_button = 'bottom_order_button';
   static const unity_color_picker_title = 'unity_color_picker_title';
   static const unity_ar_hint = 'unity_ar_hint';
+  static const snackbar_quantity_range_error = 'snackbar_quantity_range_error';
+  static const snackbar_quantity_error = 'snackbar_quantity_error';
+  static const snackbar_authentication_error = 'snackbar_authentication_error';
+  static const snackbar_login_failed = 'snackbar_login_failed';
+  static const snackbar_registration_failed = 'snackbar_registration_failed';
+  static const snackbar_logout = 'snackbar_logout';
+  static const snackbar_cart_remove = 'snackbar_cart_remove';
+  static const snackbar_cart_add = 'snackbar_cart_add';
+  static const snackbar_categories_limit = 'snackbar_categories_limit';
+  static const snackbar_no_more_items = 'snackbar_no_more_items';
 
 }
