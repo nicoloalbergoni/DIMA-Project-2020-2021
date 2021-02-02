@@ -87,5 +87,7 @@
   "snackbar_cart_remove": "Prodotto rimosso dal carrello",
   "snackbar_cart_add": "Prodotto aggiunto al carrello",
   "snackbar_categories_limit": "Puoi selezionare al massimo 10 categorie",
-  "snackbar_no_more_items": "Nessun altro prodotto è stato trovato"
+  "snackbar_no_more_items": "Nessun altro prodotto è stato trovato",
+  "snackbar_weak_pw": "La password inserita è troppo debole",
+  "snackbar_email_in_use": "Email già in uso"
 }

@@ -63,17 +63,25 @@ class SideMenu extends StatelessWidget {
                                 ? FirebaseDocFutureBuilder(
                                     getUserDocument(viewModel.firebaseUser.uid),
                                     (userData) {
-                                    return CircleAvatar(
-                                      radius: 30,
-                                      backgroundImage:
-                                          NetworkImage(userData['photoURL']),
-                                    );
+                                    return (userData['photoURL'] != null)
+                                        ? CircleAvatar(
+                                            radius: 30,
+                                            backgroundImage:
+                                                NetworkImage(userData['photoURL']))
+                                        // TODO: same of one below, refactor in future
+                                        : CircleAvatar(
+                                            radius: 30,
+                                            backgroundColor: Colors.transparent,
+                                            foregroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.account_circle,
+                                              size: 62,
+                                            ));
                                   })
                                 : CircleAvatar(
                                     radius: 30,
                                     backgroundColor: Colors.transparent,
                                     foregroundColor: Colors.white,
-                                    // TODO: Make icon have the same size of the circle avatar
                                     child: Icon(
                                       Icons.account_circle,
                                       size: 62,

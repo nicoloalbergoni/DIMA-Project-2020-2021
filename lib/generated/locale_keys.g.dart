@@ -90,5 +90,7 @@ abstract class  LocaleKeys {
   static const snackbar_cart_add = 'snackbar_cart_add';
   static const snackbar_categories_limit = 'snackbar_categories_limit';
   static const snackbar_no_more_items = 'snackbar_no_more_items';
+  static const snackbar_weak_pw = 'snackbar_weak_pw';
+  static const snackbar_email_in_use = 'snackbar_email_in_use';
 
 }

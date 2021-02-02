@@ -257,7 +257,9 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 //Clear the local-cart
                 StoreProvider.of<AppState>(context)
                     .dispatch(ClearCartItemList());
-                //Close the BottomSheet
+                // Close the BottomSheet
+                Navigator.pop(context);
+                // Return to last screen
                 Navigator.pop(context);
               },
               child: Text(LocaleKeys.bottom_order_button.tr(),),

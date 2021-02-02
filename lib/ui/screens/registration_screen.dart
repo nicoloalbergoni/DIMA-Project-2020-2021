@@ -9,6 +9,8 @@ import 'package:realiteye/redux/app_state.dart';
 import 'package:realiteye/utils/data_service.dart';
 import 'package:realiteye/utils/utils.dart';
 
+import 'home_screen.dart';
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final CollectionReference users =
     FirebaseFirestore.instance.collection('users');
@@ -124,7 +126,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               var store = StoreProvider.of<AppState>(context);
                               store.dispatch(ChangeFirebaseUserAction(user));
                               store.dispatch(FetchCartAction());
-                              Navigator.pop(context);
+                              Navigator.popUntil(context, (route) => route.isFirst);
                             }
                           }
                         },
@@ -146,8 +148,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       final User user = (await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
-      ))
-          .user;
+      )).user;
 
       Map<String, dynamic> _userData = {
         'firstname': _firstNameController.text,
@@ -158,20 +159,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       addUser(user, _userData);
 
       // TODO: because of Navigator.pop it will not be visible in time
-      displaySnackbarWithText(context, "${user.email} registered");
+      //displaySnackbarWithText(context, "${user.email} registered");
+      HomeScreen.scaffoldKey.currentState.showSnackBar(
+          SnackBar(content: Text("${user.email} registered")));
 
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print(e.code + ': The password provided is too weak.');
+        displaySnackbarWithText(context, LocaleKeys.snackbar_weak_pw.tr());
+        //print(e.code + ': The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print(e.code + ': The account already exists for that email.');
+        displaySnackbarWithText(context, LocaleKeys.snackbar_email_in_use.tr());
+      }
+      else {
+        displaySnackbarWithText(context, LocaleKeys.snackbar_registration_failed.tr());
       }
       return null;
     } catch (e) {
       print(e);
-      displaySnackbarWithText(
-          context, LocaleKeys.snackbar_registration_failed.tr());
+      displaySnackbarWithText(context, LocaleKeys.snackbar_registration_failed.tr());
       return null;
     }
   }

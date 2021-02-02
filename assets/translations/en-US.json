@@ -87,5 +87,7 @@
   "snackbar_cart_remove": "Product removed from cart",
   "snackbar_cart_add": "Product added to cart",
   "snackbar_categories_limit": "You can select up to 10 categories",
-  "snackbar_no_more_items": "No more items were found"
+  "snackbar_no_more_items": "No more items were found",
+  "snackbar_weak_pw": "The password provided is too weak",
+  "snackbar_email_in_use": "An account already exists for that email"
 }

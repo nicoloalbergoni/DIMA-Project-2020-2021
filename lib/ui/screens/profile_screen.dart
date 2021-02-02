@@ -33,10 +33,19 @@ class ProfileScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        radius: 100,
-                        backgroundImage: NetworkImage(data['photoURL']),
-                      ),
+                      (data['photoURL'] != null)
+                        ? CircleAvatar(
+                            radius: 100,
+                            backgroundImage: NetworkImage(data['photoURL']),
+                          )
+                        : CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: 100,
+                          child: Icon(
+                            Icons.account_circle,
+                            size: 200,
+                          ),
+                        ),
                       SizedBox(height: 10,),
                       Text('${data['firstname']} ${data['lastname']}',
                         style: Theme.of(context).textTheme.headline5,
@@ -100,7 +109,9 @@ List<Widget> _buildInfoWidgets(Map<String, dynamic> data) {
   return <Widget>[
     Text('Email: ${data['email']}'),
     SizedBox(height: _textPadding,),
-    Text('${LocaleKeys.account_birthday.tr()}: '
-        '${formatDate(data['birth_date'])}'),
+    (data['birth_date'] != null)
+        ? Text('${LocaleKeys.account_birthday.tr()}: '
+            '${formatDate(data['birth_date'])}')
+        : Text('${LocaleKeys.account_birthday.tr()}: ')
   ];
 }

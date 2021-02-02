@@ -26,6 +26,16 @@ Future<DocumentSnapshot> getProductDocument(DocumentReference productId, {Fireba
 // Add a user to the users Firestore collection
 void addUser(User user, Map<String, dynamic> userData, {FirebaseFirestore mockFsInstance}) async {
   if (user != null && userData != null) {
+    // TODO: should have proper forms to insert the data
+    userData.addAll({
+      'addresses': [
+        {'city': 'Milan', 'state': 'Italy', 'street': 'Via Roma 26', 'zip_code': '12345' }
+      ],
+      'payment_methods': [
+        { 'CC_expiry_date': DateTime.now().add(Duration(days: 365 * 3)),
+          'CC_number': '1234-5678-4321-8765'}
+      ]
+    });
     await users(mockFsInstance ?? firestore).doc(user.uid).set(userData);
     print('User ${user.email} correctly registered on the database');
   }
