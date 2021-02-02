@@ -29,6 +29,8 @@ abstract class  LocaleKeys {
   static const product_no_AR = 'product_no_AR';
   static const home_deals = 'home_deals';
   static const home_popular = 'home_popular';
+  static const home_card_1 = 'home_card_1';
+  static const home_card_2 = 'home_card_2';
   static const drawer_account = 'drawer_account';
   static const drawer_orders = 'drawer_orders';
   static const drawer_cart = 'drawer_cart';

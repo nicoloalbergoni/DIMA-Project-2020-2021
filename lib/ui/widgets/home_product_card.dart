@@ -17,6 +17,7 @@ class HomeProductCard extends StatelessWidget {
     return SizedBox(
       width: 131,
       child: Card(
+        elevation: 4.0,
         child: InkWell(
           splashColor: Colors.green.withAlpha(30),
           onTap: () {
