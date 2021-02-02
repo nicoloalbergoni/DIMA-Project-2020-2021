@@ -28,7 +28,8 @@ class SideMenu extends StatelessWidget {
             switchThemeCallback: (mode) =>
                 store.dispatch(SwitchThemeAction(mode)),
             logoutUser: () async {
-              await updateUserCart(store.state.firebaseUser.uid, store.state.cartItems);
+              await updateUserCart(
+                  store.state.firebaseUser.uid, store.state.cartItems);
               store.dispatch(FirebaseLogoutAction());
             },
           );
@@ -45,8 +46,15 @@ class SideMenu extends StatelessWidget {
                       height: 150,
                       child: DrawerHeader(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                        ),
+                            color: Theme.of(context).primaryColor,
+                            gradient: (viewModel.theme == ThemeMode.light)
+                                ? LinearGradient(colors: [
+                                    Theme.of(context).primaryColor,
+                                    Theme.of(context)
+                                        .primaryColor
+                                        .withAlpha(180)
+                                  ])
+                                : null),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -178,7 +186,8 @@ List<Widget> _buildMenuItems(
               viewModel.logoutUser();
 
               // Then close the drawer and all screens before the home
-              if (ModalRoute.of(context).settings.name != Navigator.defaultRouteName) {
+              if (ModalRoute.of(context).settings.name !=
+                  Navigator.defaultRouteName) {
                 Navigator.popUntil(context, (route) => route.isFirst);
               }
               // If only the drawer is opened, just pop it (popUntil won't work correctly)
@@ -186,10 +195,9 @@ List<Widget> _buildMenuItems(
                 Navigator.pop(context);
               }
 
-
               // display snackbar on home screen
-              HomeScreen.scaffoldKey.currentState
-                  .showSnackBar(SnackBar(content: Text(LocaleKeys.snackbar_logout.tr())));
+              HomeScreen.scaffoldKey.currentState.showSnackBar(
+                  SnackBar(content: Text(LocaleKeys.snackbar_logout.tr())));
             },
           ),
         ]
