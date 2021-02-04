@@ -28,30 +28,31 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
-      );
+  );
 
   // Initialize Redux state
   final _initialState = AppState(
-      cartItems: [],
-      firebaseUser: null,
-      theme: ThemeMode.light,
-      searchHistory: ['item 1']);
+    cartItems: [],
+    firebaseUser: null,
+    theme: ThemeMode.light,
+    searchHistory: []
+  );
   final Store<AppState> _store = Store<AppState>(appReducers,
-      initialState: _initialState,
-      middleware: [fetchCartMiddleware, new LoggingMiddleware.printer()]);
+    initialState: _initialState,
+    middleware: [fetchCartMiddleware, new LoggingMiddleware.printer()]);
 
   // Than we setup preferred orientations,
   // and only after it finished we run our app
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(
-            EasyLocalization(
-              supportedLocales: [Locale('en', 'US'), Locale('it', 'IT')],
-              path: 'assets/translations',
-              fallbackLocale: Locale('en', 'US'),
-              saveLocale: true,
-              child: MyApp(store: _store),
-            ),
-          ));
+    .then((value) => runApp(
+        EasyLocalization(
+          supportedLocales: [Locale('en', 'US'), Locale('it', 'IT')],
+          path: 'assets/translations',
+          fallbackLocale: Locale('en', 'US'),
+          saveLocale: true,
+          child: MyApp(store: _store),
+        ),
+      ));
 }
 
 class MyApp extends StatelessWidget {
