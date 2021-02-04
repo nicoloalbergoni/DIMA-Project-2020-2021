@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
+import 'package:realiteye/ui/widgets/bold_field_value_text.dart';
 import 'package:realiteye/ui/widgets/custom_appbar.dart';
 import 'package:realiteye/ui/widgets/firebase_doc_future_builder.dart';
 import 'package:realiteye/ui/widgets/single_card_page_list.dart';
@@ -95,13 +96,13 @@ Widget _buildAddressCardContent(Map<String, dynamic> address) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text('${LocaleKeys.account_address_state.tr()}: ${address['state']}'),
+      BoldFieldValueText('${LocaleKeys.account_address_state.tr()}:', '${address['state']}'),
       SizedBox(height: _textPadding,),
-      Text('${LocaleKeys.account_address_city.tr()}: ${address['city']}'),
+      BoldFieldValueText('${LocaleKeys.account_address_city.tr()}:', '${address['city']}'),
       SizedBox(height: _textPadding,),
-      Text('${LocaleKeys.account_address_street.tr()}: ${address['street']}'),
+      BoldFieldValueText('${LocaleKeys.account_address_street.tr()}:', '${address['street']}'),
       SizedBox(height: _textPadding,),
-      Text('${LocaleKeys.account_address_zip.tr()}: ${address['zip_code']}'),
+      BoldFieldValueText('${LocaleKeys.account_address_zip.tr()}:', '${address['zip_code']}'),
     ],
   );
 }
@@ -110,9 +111,9 @@ Widget _buildPaymentCardContent(Map<String, dynamic> payment) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text('${LocaleKeys.account_payment_card.tr()}: ${payment['CC_number']}'),
+      BoldFieldValueText('${LocaleKeys.account_payment_card.tr()}:', '${payment['CC_number']}'),
       SizedBox(height: _textPadding,),
-      Text('${LocaleKeys.account_payment_expiration.tr()}: '
+      BoldFieldValueText('${LocaleKeys.account_payment_expiration.tr()}: ',
           '${formatDate(payment['CC_expiry_date'])}'),
     ],
   );
@@ -120,11 +121,10 @@ Widget _buildPaymentCardContent(Map<String, dynamic> payment) {
 
 List<Widget> _buildInfoWidgets(Map<String, dynamic> data) {
   return <Widget>[
-    Text('Email: ${data['email']}'),
+    BoldFieldValueText('Email:', '${data['email']}'),
     SizedBox(height: _textPadding,),
     (data['birth_date'] != null)
-        ? Text('${LocaleKeys.account_birthday.tr()}: '
-            '${formatDate(data['birth_date'])}')
-        : Text('${LocaleKeys.account_birthday.tr()}: ')
+      ? BoldFieldValueText('${LocaleKeys.account_birthday.tr()}: ', '${formatDate(data['birth_date'])}')
+      : BoldFieldValueText('${LocaleKeys.account_birthday.tr()}: ', ''),
   ];
 }

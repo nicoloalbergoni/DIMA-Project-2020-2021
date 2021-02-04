@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:realiteye/generated/locale_keys.g.dart';
 import 'package:realiteye/utils/utils.dart';
 
+import 'bold_field_value_text.dart';
+
 class OrderCard extends StatelessWidget {
   final String id;
   final Timestamp issueTimestamp;
@@ -24,12 +26,13 @@ class OrderCard extends StatelessWidget {
               Text('${LocaleKeys.orders_id.tr()}: $id',
                 style: Theme.of(context).textTheme.headline6,
               ),
-              Text('${LocaleKeys.orders_start.tr()}: ${formatDate(issueTimestamp)}'),
-              Text('${LocaleKeys.orders_expected.tr()}: ${formatDate(deliveryTimestamp)}'),
+              SizedBox(height: 4,),
+              BoldFieldValueText('${LocaleKeys.orders_start.tr()}:', '${formatDate(issueTimestamp)}'),
+              BoldFieldValueText('${LocaleKeys.orders_expected.tr()}:', '${formatDate(deliveryTimestamp)}'),
               SizedBox(height: 6,),
               Align(
                 alignment: Alignment.bottomRight,
-                child: Text('${LocaleKeys.orders_total.tr()}: $totalCost\$'),
+                child: BoldFieldValueText('${LocaleKeys.orders_total.tr()}:', '$totalCost\$'),
               )
             ],
           ),

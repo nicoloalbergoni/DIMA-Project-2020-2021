@@ -104,7 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     _searchFilters.categoriesBool,
                     _searchFiltersCallbacks,
                   ),
-                  (showHistory || viewModel.searchHistory.length == 0)
+                  (showHistory && viewModel.searchHistory.length != 0)
                       ? Flexible(child: _buildHistoryList())
                       : Container(),
                   (showSearchResult && retrievedDocs.length > 0)
