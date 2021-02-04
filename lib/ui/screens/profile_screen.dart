@@ -53,22 +53,35 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 20,),
-                  ..._buildInfoWidgets(data),
-                  SizedBox(height: 20,),
-                  Text(LocaleKeys.account_address_title.tr(),
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(height: 6,),
-                   SingleCardPageList(
-                      data['addresses'], _buildAddressCardContent, 100),
+                  Expanded(
+                    child: Scrollbar(
+                      child: ListView(
+                        children: [
+                          ..._buildInfoWidgets(data),
 
-                 SizedBox(height: 30,),
-                  Text(LocaleKeys.account_payment_title.tr(),
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(height: 6,),
-                   SingleCardPageList(
-                      data['payment_methods'], _buildPaymentCardContent, 60),
+                          SizedBox(height: 24,),
+                          Text(LocaleKeys.account_address_title.tr(),
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          SizedBox(height: 6,),
+                          SingleCardPageList(data['addresses'],
+                              _buildAddressCardContent,
+                              cardHeight: 100
+                          ),
+
+                          SizedBox(height: 24,),
+                          Text(LocaleKeys.account_payment_title.tr(),
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          SizedBox(height: 6,),
+                          SingleCardPageList(data['payment_methods'],
+                              _buildPaymentCardContent,
+                              cardHeight: 60
+                          ),
+                        ],
+                      ),
+                    )
+                  )
                 ],
               ),
             );

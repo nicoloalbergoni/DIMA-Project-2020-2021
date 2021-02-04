@@ -46,81 +46,80 @@ class ProductScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               children: [
-                Flexible(
-                    child: ImageCarousel(args.data['images']),
-                    flex: 1
+                SizedBox(
+                  height: 200.0 + 28.0, // 200 image carousel, 28 indicators
+                  child: ImageCarousel(args.data['images'], height: 200.0,),
                 ),
-                Flexible(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(args.data['name'],
-                              style: Theme.of(context).textTheme.headline5
-                          ),
-                          Row(
-                            children: [
-                              RatingBarIndicator(
-                                rating: args.data['rating'] / 1.0,
-                                itemBuilder: (context, index) => Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                itemCount: 5,
-                                itemSize: 16.0,
-                                direction: Axis.horizontal,
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(args.data['name'],
+                            style: Theme.of(context).textTheme.headline5
+                        ),
+                        Row(
+                          children: [
+                            RatingBarIndicator(
+                              rating: args.data['rating'] / 1.0,
+                              itemBuilder: (context, index) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
                               ),
-                              Text('1234',
-                                style: Theme.of(context).textTheme.caption,
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 8,),
-                          Row(
-                            children: [
-                              Text('${LocaleKeys.price.tr()}:'
-                                  ' ${computePriceString(
-                                  args.data['price'] / 1.0,
-                                  args.data['discount'])}\$'),
-                              SizedBox(width: 20,),
-                              DiscountChip(args.data['discount']),
-                            ],
-                          ),
-                          // Row(
-                          //   children: [
-                          //     Chip(
-                          //       avatar: Icon(Icons.shopping_bag),
-                          //       label: Text('On sale'),
-                          //     ),
-                          //     SizedBox(width: 10,),
-                          //     Chip(
-                          //       avatar: Icon(Icons.card_giftcard),
-                          //       label: Text('Gifts'),
-                          //     )
-                          //   ],
-                          // ),
-                          SizedBox(height: 50,
-                            child: ListView.separated(
-                              itemCount: args.data['categories'].length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext context, int index) {
-                                String category = args.data['categories'][index];
-                                String categoryKey = 'categories_${category.toLowerCase()}';
-
-                                return Chip(
-                                  // TODO: add a category-icon map?
-                                  avatar: Icon(Icons.shopping_bag),
-                                  label: Text(categoryKey.tr()),
-                                );
-                              },
-                              separatorBuilder: (BuildContext context, int index) =>
-                                  SizedBox(width: 6,),
+                              itemCount: 5,
+                              itemSize: 16.0,
+                              direction: Axis.horizontal,
                             ),
+                            Text('1234',
+                              style: Theme.of(context).textTheme.caption,
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 8,),
+                        Row(
+                          children: [
+                            Text('${LocaleKeys.price.tr()}:'
+                                ' ${computePriceString(
+                                args.data['price'] / 1.0,
+                                args.data['discount'])}\$'),
+                            SizedBox(width: 20,),
+                            DiscountChip(args.data['discount']),
+                          ],
+                        ),
+                        // Row(
+                        //   children: [
+                        //     Chip(
+                        //       avatar: Icon(Icons.shopping_bag),
+                        //       label: Text('On sale'),
+                        //     ),
+                        //     SizedBox(width: 10,),
+                        //     Chip(
+                        //       avatar: Icon(Icons.card_giftcard),
+                        //       label: Text('Gifts'),
+                        //     )
+                        //   ],
+                        // ),
+                        SizedBox(height: 50,
+                          child: ListView.separated(
+                            itemCount: args.data['categories'].length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (BuildContext context, int index) {
+                              String category = args.data['categories'][index];
+                              String categoryKey = 'categories_${category.toLowerCase()}';
+
+                              return Chip(
+                                // TODO: add a category-icon map?
+                                avatar: Icon(Icons.shopping_bag),
+                                label: Text(categoryKey.tr()),
+                              );
+                            },
+                            separatorBuilder: (BuildContext context, int index) =>
+                                SizedBox(width: 6,),
                           ),
-                          SizedBox(height: 16,),
-                          Text(args.data['description'])
-                        ]
-                    ),
-                    flex: 2
+                        ),
+                        SizedBox(height: 16,),
+                        Text(args.data['description'])
+                      ]
+                  ),
                 ),
               ],
             ),

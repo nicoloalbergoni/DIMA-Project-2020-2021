@@ -16,7 +16,7 @@ class HomeFilterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height,
+      //height: height,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(imageAssetUri),

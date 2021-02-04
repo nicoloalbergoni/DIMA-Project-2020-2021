@@ -5,7 +5,7 @@ class SingleCardPageList extends StatefulWidget {
   final Widget Function(Map<String, dynamic> data) buildCardContent;
   final double cardHeight;
 
-  SingleCardPageList(this.items, this.buildCardContent, this.cardHeight);
+  SingleCardPageList(this.items, this.buildCardContent, {this.cardHeight = 50.0});
 
   @override
   _SingleCardPageListState createState() => _SingleCardPageListState();

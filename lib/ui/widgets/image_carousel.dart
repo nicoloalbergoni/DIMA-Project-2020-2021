@@ -4,8 +4,9 @@ import 'package:realiteye/utils/utils.dart';
 
 class ImageCarousel extends StatefulWidget {
   final List<dynamic> imgList;
+  final double height;
 
-  ImageCarousel(this.imgList);
+  ImageCarousel(this.imgList, {this.height = 230.0});
 
   @override
   State<StatefulWidget> createState() {
@@ -27,7 +28,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                   autoPlay: true,
                   enlargeCenterPage: true,
                   aspectRatio: 2.0,
-                  //height: 400,
+                  height: widget.height,
                   onPageChanged: (index, reason) {
                     setState(() {
                       _current = index;
@@ -66,7 +67,8 @@ List<Widget> buildImageSliders(List<dynamic> imgList) {
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
           child: Stack(
             children: <Widget>[
-              Image.network(item, fit: BoxFit.cover, width: 1000.0,
+              Image.network(item, fit: BoxFit.cover,
+                width: 1000.0,
                 loadingBuilder: onImageLoad,
                 errorBuilder: onImageError,
               ),

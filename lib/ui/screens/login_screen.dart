@@ -39,145 +39,176 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: false,
       body: Builder(builder: (context) {
         return Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //Sample logo of the app added to occupy space
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          "https://image.shutterstock.com/image-vector/global-camera-eye-logo-photo-600w-383758570.jpg"),
-                      fit: BoxFit.fitWidth)),
-            ),
-            Form(
-              key: _formKey,
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    // SizedBox(
-                    //   height: 50,
-                    // ),
-                    TextFormField(
-                      // TODO: Remove initial value in production
-                      controller: _emailController
-                        ..text = "Elsie_Crona55@example.com",
-                      decoration: InputDecoration(
-                          labelText: 'Email', suffixIcon: Icon(Icons.email)),
-                      validator: (String value) {
-                        if (value.isEmpty) return 'Please enter some text';
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      // TODO: Remove initial value in production
-                      controller: _passwordController..text = "R5Z3IDE8lkaofwu",
-                      decoration: InputDecoration(
-                          labelText: 'Password', suffixIcon: Icon(Icons.lock)),
-                      validator: (String value) {
-                        if (value.isEmpty) return 'Please enter some text';
-                        return null;
-                      },
-                      obscureText: true,
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: RaisedButton(
-                          onPressed: () {
-                            // Dismiss the keyboard after submit (otherwise snackbar is not visible)
-                            FocusScope.of(context).unfocus();
-                            if (_formKey.currentState.validate()) {
-                              _performSignInWithMethod(
-                                  _signInWithEmailAndPassword, context);
-                            }
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          child: Text(LocaleKeys.login_button.tr())),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 30, bottom: 5, left: 15),
-              child: Text(
-                LocaleKeys.login_text.tr(),
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 130,
-                    child: SignInButton(
-                      Buttons.Google,
-                      text: "Google",
-                      onPressed: () =>
-                          _performSignInWithMethod(_signInWithGoogle, context),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 130,
-                    child: SignInButton(
-                      Buttons.Facebook,
-                      text: "Facebook",
-                      //TODO: Add support for facebook login
-                      onPressed: () => print('Sign in with facebook'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 0, bottom: 10),
-              child: Divider(
-                thickness: 1,
-                indent: 15,
-                endIndent: 15,
-                height: 25,
-                color: Colors.black,
-              ),
-            ),
-            Row(
+            buildFormWithLogo("https://image.shutterstock.com/image-vector/global-camera-eye-logo-photo-600w-383758570.jpg"),
+            Spacer(flex: 2,),
+            Column(
               children: [
-                SizedBox(
-                  width: 30,
-                ),
-                RichText(
-                  text: TextSpan(
-                    text: LocaleKeys.login_not_registered.tr(),
-                    style: DefaultTextStyle.of(context).style,
-                    children: [
-                      TextSpan(
-                          text: LocaleKeys.login_signup_link.tr(),
-                          style: TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () =>
-                                Navigator.pushNamed(context, "/register")),
-                    ],
-                  ),
-                ),
+                buildSocialLoginSection(),
+                buildRegistrationSection(context),
               ],
-            )
+            ),
+            Spacer(flex: 1,),
+            SizedBox(height: 20,)
           ],
         );
       }),
+    );
+  }
+
+  Widget buildFormWithLogo(String logoUrl) {
+    return Column(
+      children: [
+        //Sample logo of the app added to occupy space
+        Container(
+          width: double.infinity,
+          height: 200,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(logoUrl),
+                  fit: BoxFit.fitWidth)),
+        ),
+        Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // SizedBox(
+                //   height: 50,
+                // ),
+                TextFormField(
+                  // TODO: Remove initial value in production
+                  controller: _emailController
+                    ..text = "Elsie_Crona55@example.com",
+                  decoration: InputDecoration(
+                      labelText: 'Email', suffixIcon: Icon(Icons.email)),
+                  validator: (String value) {
+                    if (value.isEmpty) return 'Please enter some text';
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                  // TODO: Remove initial value in production
+                  controller: _passwordController..text = "R5Z3IDE8lkaofwu",
+                  decoration: InputDecoration(
+                      labelText: 'Password', suffixIcon: Icon(Icons.lock)),
+                  validator: (String value) {
+                    if (value.isEmpty) return 'Please enter some text';
+                    return null;
+                  },
+                  obscureText: true,
+                ),
+                SizedBox(
+                  height: 22,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                      onPressed: () {
+                        // Dismiss the keyboard after submit (otherwise snackbar is not visible)
+                        FocusScope.of(context).unfocus();
+                        if (_formKey.currentState.validate()) {
+                          _performSignInWithMethod(
+                              _signInWithEmailAndPassword, context);
+                        }
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      child: Text(LocaleKeys.login_button.tr())),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildSocialLoginSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 15),
+          child: Text(
+            LocaleKeys.login_text.tr(),
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 130,
+                child: SignInButton(
+                  Buttons.Google,
+                  text: "Google",
+                  onPressed: () =>
+                      _performSignInWithMethod(_signInWithGoogle, context),
+                ),
+              ),
+              SizedBox(
+                width: 130,
+                child: SignInButton(
+                  Buttons.Facebook,
+                  text: "Facebook",
+                  //TODO: Add support for facebook login
+                  onPressed: () => print('Sign in with facebook'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildRegistrationSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Divider(
+          thickness: 1,
+          indent: 15,
+          endIndent: 15,
+          height: 20,
+          color: Colors.black,
+        ),
+        SizedBox(height: 8,),
+        Row(
+          children: [
+            SizedBox(
+              width: 25,
+            ),
+            RichText(
+              text: TextSpan(
+                text: LocaleKeys.login_not_registered.tr(),
+                style: DefaultTextStyle.of(context).style,
+                children: [
+                  TextSpan(
+                      text: LocaleKeys.login_signup_link.tr(),
+                      style: TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            Navigator.pushNamed(context, "/register")),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

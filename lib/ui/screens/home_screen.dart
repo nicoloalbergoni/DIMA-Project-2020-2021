@@ -22,59 +22,72 @@ class HomeScreen extends StatelessWidget {
       ),
       drawer: SideMenu(),
       body: Padding(
-        padding: EdgeInsets.only(top: 14.0, bottom: 4.0, left: 4.0, right: 4.0),
+        padding: EdgeInsets.only(left: 4.0, right: 4.0, bottom: 4.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Spacer(flex: 1,),
             HomeProductShowcase(LocaleKeys.home_deals.tr(), getHotDeals()),
+            Spacer(flex: 1,),
             HomeProductShowcase(LocaleKeys.home_popular.tr(), getPopulars()),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                HomeFilterCard(
-                  'assets/images/home_card_1.jpg',
-                  LocaleKeys.home_card_1.tr(),
-                  width: 210,
-                  height: 120,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/search',
-                      arguments: SearchFilters(
-                        showAROnly: true,
-                        showFilters: true,
-                        categoriesBool: {
-                          "Furniture": true,
-                          "Design": false,
-                          "Electronic": false,
-                          "Handmade": false,
-                          "Rustic": false,
-                          "Practical": false,
-                          "Unbranded": false,
-                          "Ergonomic": false,
-                          "Mechanical": false,
-                          "Wood": false,
-                          "Iron": false,
-                          "Plastic": false
-                        }));
-                  }
-                ),
-                HomeFilterCard(
-                  'assets/images/home_card_4.jpg',
-                  LocaleKeys.home_card_2.tr(),
-                  width: 170,
-                  height: 120,
-                  blurX: 0.2,
-                  blurY: 0.2,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/search',
-                      arguments: SearchFilters(
-                        queryText: "awesome",
-                        showFilters: true,
-                        priceRangeValues: RangeValues(0, 200),
-                      )
-                    );
-                  },
-                ),
-              ],
+            Spacer(flex: 1,),
+            Expanded(
+              flex: 8,
+              child: Row(
+                //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    flex: 52,
+                    child: HomeFilterCard(
+                      'assets/images/home_card_1.jpg',
+                      LocaleKeys.home_card_1.tr(),
+                      //width: 210,
+                      //height: 120,
+                      onTap: () {
+                        Navigator.pushNamed(context, '/search',
+                            arguments: SearchFilters(
+                                showAROnly: true,
+                                showFilters: true,
+                                categoriesBool: {
+                                  "Furniture": true,
+                                  "Design": false,
+                                  "Electronic": false,
+                                  "Handmade": false,
+                                  "Rustic": false,
+                                  "Practical": false,
+                                  "Unbranded": false,
+                                  "Ergonomic": false,
+                                  "Mechanical": false,
+                                  "Wood": false,
+                                  "Iron": false,
+                                  "Plastic": false
+                                }));
+                      }
+                    ),
+                  ),
+                  Spacer(flex: 2,),
+                  Expanded(
+                    flex: 40,
+                    child: HomeFilterCard(
+                      'assets/images/home_card_4.jpg',
+                      LocaleKeys.home_card_2.tr(),
+                      //width: 170,
+                      //height: 120,
+                      blurX: 0.2,
+                      blurY: 0.2,
+                      onTap: () {
+                        Navigator.pushNamed(context, '/search',
+                            arguments: SearchFilters(
+                              queryText: "awesome",
+                              showFilters: true,
+                              priceRangeValues: RangeValues(0, 200),
+                            )
+                        );
+                      },
+                    ),
+                  )
+                ],
+              )
             )
           ],
         ),
