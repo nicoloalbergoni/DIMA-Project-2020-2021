@@ -1,19 +1,33 @@
-# dima_test
+# Realiteye
 
-A new Flutter application.
+Project for Design and Implementation of Mobile Applications (DIMA) course of Politecnico di Milano.
+Authors: Nicolò Albergoni, Andrea Falanti.
 
-## Getting Started
+## Description
 
-This project is a starting point for a Flutter application.
+Realiteye is a prototype application for an e-commerce integrated with augmented reality (AR) services.
+Augmented reality integration allows users to view the products directly in the surroundings, which can be valuable for various kind of products like furnitures or decors to get an estimate of their dimensions and on how they integrate in the environment.
+This project does not focus on exploiting all the potentiality of augmented reality applications, but instead focus on the general design and user experience since it was the main goal of the exam, but could be a good starting point for a real application deployment.
 
-A few resources to get you started if this is your first Flutter project:
+The application has been tested on various Android versions, using dummy data generated through our seed script to populate the application, simulating a real case scenario. The majority of the code is cross-platform, but some plugins could require some adjustments to work properly on iOS.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Technologies
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Realiteye has been developed with [Flutter](https://flutter.dev/), a framework for multi-platform mobile development.
+The application structure is based on Model-View-Presenter (MVP) pattern, using Redux as state manager.
+The AR scene has been developed with Unity and integrated inside Flutter as a widget.
+The backend is provided through Firebase services, in particular Cloud Firestore, Firebase Authentication and Cloud Storage.
+
+To learn more about the application design, check the design document provided in __documentation__ folder.
+
+## Commands
+
+Use this command to install the project dependencies:
+```
+flutter pub get
+```
+
+To produce and install the APK, refer to the [official documentation](https://docs.flutter.dev/deployment/android).
 
 Generate translation keys using this command:
 ```
