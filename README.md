@@ -1,6 +1,7 @@
 # Realiteye
 
 Project for Design and Implementation of Mobile Applications (DIMA) course of Politecnico di Milano.
+
 Authors: Nicolò Albergoni, Andrea Falanti.
 
 ## Description
@@ -14,9 +15,9 @@ The application has been tested on various Android versions, using dummy data ge
 ## Technologies
 
 Realiteye has been developed with [Flutter](https://flutter.dev/), a framework for multi-platform mobile development.
-The application structure is based on Model-View-Presenter (MVP) pattern, using Redux as state manager.
-The AR scene has been developed with Unity and integrated inside Flutter as a widget.
-The backend is provided through Firebase services, in particular Cloud Firestore, Firebase Authentication and Cloud Storage.
+The application structure is based on Model-View-Presenter (MVP) pattern, using [Redux](https://redux.js.org/) as state manager.
+The AR scene has been developed with [Unity](https://unity.com/) and integrated inside Flutter as a widget.
+The backend is provided through [Firebase](https://firebase.google.com/) services, in particular Cloud Firestore, Firebase Authentication and Cloud Storage.
 
 To learn more about the application design, check the design document provided in __documentation__ folder.
 
